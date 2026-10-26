@@ -758,6 +758,7 @@ function frame(now) {
   dx += (mx - dx) * 0.14; dy += (my - dy) * 0.14;
   $(`dot`).style.transform = `translate(${dx - 4}px,${dy - 4}px)`;
   if (S.era === 0) zStrayTick(dt); else strayTick(dt);
+  vizFrame(now);
   requestAnimationFrame(frame);
 }
 
