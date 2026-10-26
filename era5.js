@@ -157,7 +157,7 @@ ERA[5] = {
   // ----- era mechanics -----
   enter() { S.x.bat = 100; S.bought.settings = 1; note(N(`bat`)); },
   load() {
-    if (!$(`home`)) document.body.insertAdjacentHTML(`beforeend`, `<button id="home" data-act="home" aria-label="home"></button><div id="notif" data-act="notif"></div><div id="dead"></div>`);
+    if (!$(`home`)) document.body.insertAdjacentHTML(`beforeend`, `<div id="ear"></div><button id="home" data-act="home" aria-label="home"></button><div id="notif" data-act="notif"></div><div id="dead"></div>`);
     if (S.x.dead) $(`dead`).classList.add(`on`);
   },
   drain() { return use(`bat`) / cap(`bat`) * 0.8 * (flag(`lowpower`) ? 0.6 : 1); },
@@ -210,7 +210,9 @@ ERA[5] = {
     dq.length = 0;
   },
   render() {
-    const x = S.x;
+    const x = S.x, back = T([`Home`, `Accueil`]);
+    // the close button of an app is the iPhone OS back button
+    for (const id in W) { const b = W[id].el.querySelector(`.x`); if (b && b.textContent !== back) b.textContent = back; }
     for (const id in W) W[id].el.classList.toggle(`cur`, id === x.cur);
     document.body.classList.toggle(`apphome`, !x.cur || !W[x.cur]);
   },
@@ -238,6 +240,7 @@ ERA[5] = {
     },
   },
   winClass: () => `app`,
+  dock: [`game`, `notes`, `install`, `settings`],
   extraBody(id) {
     const u = S.x.upd;
     if (!u || u.id !== id) return ``;
