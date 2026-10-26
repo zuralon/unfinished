@@ -318,7 +318,7 @@ function defPos(id) {
   const m = {
     game: [w / 2 - 130, 60], install: [w - 380, 40], score: [w / 2 - 95, 250], notes: [w - 380, h - 380],
     cursor: [w / 2 - 260, h - 210], cga: [w / 2 + 20, h - 230], help: [120, 60], trophy: [120, 250],
-    clock: [w / 2 + 150, 60], calc: [w / 2 - 330, 230], hack: [w / 2 - 165, 110], saver: [w / 2 - 120, h - 320], defrag: [w / 2 + 60, 300],
+    clock: [w / 2 + 60, h - 250], calc: [w / 2 - 330, 230], hack: [w / 2 - 165, 110], saver: [w / 2 - 120, h - 320], defrag: [w / 2 + 60, 300],
   };
   return m[id] || [w / 2 - 320 + (prog(id).i % 5) * 50, 280 + (prog(id).i % 5) * 30];
 }
@@ -333,9 +333,9 @@ function makeWin(id) {
   const p = prog(id), el = document.createElement(`div`);
   el.className = `win` + (p.multi || MID.has(id) ? ` mid` : ``) + (E().winClass ? ` ` + E().winClass(id) : ``);
   el.id = `w-` + id;
-  el.innerHTML = `<div class="title" data-drag="${id}">${p.fixed ? `` : `<button class="x" data-act="close:${id}" aria-label="close">x</button>`}<b>${p.file}</b></div><div class="body" id="b-${id}"></div>`;
+  el.innerHTML = `<div class="title" data-drag="${id}">${p.fixed ? `` : `<button class="x" data-act="close:${id}" aria-label="close">x</button>`}<i class="ti"></i><b>${p.file}</b><span class="cbs"><button class="cb mn" data-act="nyi:min" aria-label="minimize"></button><button class="cb mx" data-act="nyi:max" aria-label="maximize"></button></span></div><div class="body" id="b-${id}"></div>`;
   $(`desk`).appendChild(el);
-  W[id] = { el, h: `` };
+  W[id] = { el, h: ``, ti: el.querySelector(`.ti`) };
   if (id === `game`) $(`b-game`).innerHTML = `<button id="pix" aria-label="pixel"><i></i></button>`;
   winBody(id);
   const [x, y] = S.pos[id] || defPos(id);
@@ -484,7 +484,8 @@ MENU.start = u => {
 function toggleMenu(m) {
   const d = $(`drop`), name = m.dataset.menu;
   if (d.classList.contains(`on`) && d.dataset.m === name) return closeMenu();
-  d.innerHTML = MENU[name](U()).map(([a, t, c]) => `<div class="mi ${c || ``}"${a ? ` data-act="${a}"` : ``}>${t}</div>`).join(``);
+  const items = MENU[name](U());
+  d.innerHTML = name === `start` ? startHtml(items) : items.map(([a, t, c]) => `<div class="mi ${c || ``}"${a ? ` data-act="${a}"` : ``}>${t}</div>`).join(``);
   d.dataset.m = name;
   const r = m.getBoundingClientRect();
   d.style.left = r.left + `px`;
@@ -492,6 +493,20 @@ function toggleMenu(m) {
   else { d.style.top = `24px`; d.style.bottom = `auto`; }
   d.classList.add(`on`);
   document.querySelectorAll(`[data-menu]`).forEach(x => x.classList.toggle(`on`, x === m));
+}
+// the start menu of each Winbows: 95 has its side banner, XD its two columns, 12 its centered panel
+const MI_ICON = { save: `floppy`, exp: `arrows`, imp: `box`, hard: `stop`, lang: `globe`, sci: `calc`, anim: `star`, tip: `help`, about: `window`, shutdown: `stop` };
+function startHtml(items) {
+  const sk = E().skin, st = sk === 3 ? `w95` : sk === 4 ? `xp` : `w11`;
+  const mi = ([a, t, c], cls = ``) => `<div class="mi ${c || ``} ${cls}"${a ? ` data-act="${a}"` : ``}><i style="background-image:url('${iconUrl(MI_ICON[a] || `window`, st)}')"></i><span>${t}</span></div>`;
+  const user = T([`Player`, `Joueur`]);
+  if (sk === 3) return `<div class="sm95"><div class="band"><span><b>Winbows</b>95</span></div><div class="lst">${items.map(i => mi(i)).join(``)}</div></div>`;
+  const off = items.filter(i => i[0] === `hard` || i[0] === `shutdown`), rest = items.filter(i => !off.includes(i));
+  if (sk === 4) {
+    const half = Math.ceil(rest.length / 2);
+    return `<div class="smxp"><div class="hd"><i></i><b>${user}</b></div><div class="cols"><div class="l">${rest.slice(0, half).map(i => mi(i)).join(``)}</div><div class="r">${rest.slice(half).map(i => mi(i)).join(``)}</div></div><div class="ft">${off.map(i => mi(i)).join(``)}</div></div>`;
+  }
+  return `<div class="sm11"><div class="srch">${T([`Search for apps, settings and documents`, `Rechercher des applications, paramètres et documents`])}</div><div class="sh">${T([`Pinned`, `Épinglé`])}</div><div class="pins">${rest.map(i => mi(i, `tile`)).join(``)}</div><div class="ft"><span class="usr"><i></i>${user}</span>${off.map(i => mi(i, `pw`)).join(``)}</div></div>`;
 }
 function closeMenu() { $(`drop`).classList.remove(`on`); document.querySelectorAll(`[data-menu]`).forEach(x => x.classList.remove(`on`)); }
 
@@ -541,15 +556,18 @@ function meter(r) {
 function deskRender() {
   const u = U(), e = E();
   if (!e.startMenu) setH(`bar`, `<span class="logo"></span><span class="m" data-menu="file">${u.file}</span><span class="m" data-menu="edit">${u.edit}</span><span class="m" data-menu="help">${u.help}</span><span class="r">${e.os}</span>`);
-  setH(`icons`, e.P.filter(p => (e.allIcons ? (S.bought[p.id] || p.fixed) && !p.hidden : !p.fixed && S.bought[p.id] && !S.run[p.id])).map(p => `<div class="ic" data-act="open:${p.id}"><i class="p${p.i % 3}"></i><span>${p.file}</span></div>`).join(``));
+  const ics = e.P.filter(p => (e.allIcons ? (S.bought[p.id] || p.fixed) && !p.hidden : !p.fixed && S.bought[p.id] && !S.run[p.id])), ich = p => `<div class="ic" data-act="open:${p.id}">${icon(p.id)}<span>${p.file}</span></div>`;
+  setH(`icons`, e.dock ? ics.filter(p => !e.dock.includes(p.id)).map(ich).join(``) + `<div class="dots"><i class="on"></i><i></i></div><div class="dock">${ics.filter(p => e.dock.includes(p.id)).map(ich).join(``)}</div>` : ics.map(ich).join(``));
   let r = ``;
   for (const p of e.P) { const n = (S.run[p.id] || 0) * kbOf(p.id); for (let i = 0; i < n; i++) r += `<i class="p${p.i % 3}" title="${p.file}"></i>`; }
   setH(`ram`, r + `<i class="f"></i>`.repeat(S.frag) + `<i></i>`.repeat(Math.max(0, free())));
   setH(`ramT`, u.ram(ramTxt(use(`ram`)), ramTxt(cap(`ram`)), S.frag));
   setH(`res`, [`cpu`, `bw`, `bat`].filter(x => e.start[x] && x !== `bat`).map(meter).join(``) + (e.taskExtra ? e.taskExtra() : ``));
   setH(`startB`, e.startMenu ? `<span class="m sb" data-menu="start"><i></i>${T(e.startMenu)}</span>` : ``);
-  setH(`clk`, S.run.clock ? new Date().toTimeString().slice(0, 5) : ``);
-  for (const id in W) winBody(id);
+  const now = new Date();
+  setH(`clk`, S.run.clock ? now.toTimeString().slice(0, 5) + (e.skin === 6 ? `<small>${now.toLocaleDateString(loc())}</small>` : ``) : ``);
+  setH(`tapps`, e.skin === 6 ? e.P.filter(p => S.run[p.id] && !p.hidden).map(p => `<span class="ta" data-act="open:${p.id}" title="${esc(p.file)}">${icon(p.id)}</span>`).join(``) : ``);
+  for (const id in W) { winBody(id); if (e.skin === 3 || e.skin === 4 || e.skin === 6) { const u = iconUrl(iconName(id), iconStyle(id)); if (W[id].ti.dataset.u !== u) { W[id].ti.dataset.u = u; W[id].ti.style.backgroundImage = `url('${u}')`; } } }
   if (e.render) e.render();
 }
 
@@ -558,7 +576,7 @@ const ACHK = {
   click1: () => S.clicks >= 1, click100: () => S.clicks >= 100, click1k: () => S.clicks >= 1e3, click10k: () => S.clicks >= 1e4,
   oom: () => S.st.oom > 0, blind: () => S.st.blind >= 500, hack1: () => S.st.hacks >= 1, hack5: () => S.st.hacks >= 5,
   stray1: () => S.st.good >= 1, stray20: () => S.st.good >= 20, strayBad: () => S.st.bad >= 1,
-  gui: () => S.era >= 1, shop: () => S.once.shopClosed, auto5: () => S.era === 1 && (S.run.auto || 0) >= 5, cga: () => S.era > 1 || (S.era === 1 && S.bought.cga),
+  gui: () => S.era >= 1, shop: () => S.once.shopClosed, auto5: () => S.era >= 1 && (S.run.auto || 0) >= 5, cga: () => S.era > 1 || (S.era === 1 && S.bought.cga),
   saver: () => S.once.saverOn, defrag: () => S.once.defragged, offline: () => S.once.offline,
   ram16: () => S.era > 1 || (S.era === 1 && cap(`ram`) >= 16), ram32: () => S.era > 1 || (S.era === 1 && cap(`ram`) >= 32), ram64: () => S.era > 1 || (S.era === 1 && cap(`ram`) >= 64),
   patch10: () => S.era >= 1 && Object.keys(S.patch).length >= 10, px1k: () => S.life >= 1e3, px1m: () => S.life >= 1e6,
@@ -640,10 +658,11 @@ const A = {
   sci() { S.opt.sci = S.opt.sci ? 0 : 1; },
   anim() { S.opt.anim = S.opt.anim ? 0 : 1; },
   tip() { dlg(T(E().HELP[Math.random() * E().HELP.length | 0])); },
-  about() { dlg(E().about ? T(E().about) : U().aboutT); },
+  about() { dlg((E().about ? T(E().about) : U().aboutT) + `\n\n` + fill(T([`Act {n} of 6 - {os} ({y})`, `Acte {n} sur 6 - {os} ({y})`]), { n: S.era, os: E().os, y: E().year }) + (S.ng ? ` - ` + T([`New Game+`, `Nouvelle partie+`]) + (S.ng > 1 ? ` x${S.ng}` : ``) : ``)); },
   dlgOk() { const cb = dlgCb; const v = $(`dlgI`).value; dlgCb = dlgNoCb = null; dlgClose(); if (cb) cb(v); },
   dlgNo() { const cb = dlgNoCb; dlgCb = dlgNoCb = null; dlgClose(); if (cb) cb(); },
   pclaim: () => tkClaim(),
+  nyi(k) { const l = NYI[k]; toast(T(l[Math.random() * l.length | 0])); },
   pfold() { S.opt.pfold = S.opt.pfold ? 0 : 1; },
 };
 const SAFE = new Set([`lang`, `exp`, `imp`, `hard`, `dlgOk`, `dlgNo`, `save`, `keep`, `ngplus`, `bsodOk`, `safeOk`]);
@@ -723,7 +742,7 @@ function tick() {
   else if (!busy) {
     idle += dt;
     const on = !!S.run.saver && idle >= 20;
-    if (on !== saverOn) { saverOn = on; $(`saver`).classList.toggle(`on`, on); if (on) S.once.saverOn = 1; }
+    if (on !== saverOn) { saverOn = on; $(`saver`).classList.toggle(`on`, on); if (on) { S.once.saverOn = 1; saverStart(); } else saverStop(); }
     gain(perSec() * dt); fragTick(dt); milestones();
     if (E().tick) E().tick(dt);
     piTick(dt);
@@ -747,6 +766,7 @@ function frame(now) {
 function restart(d) {
   for (const id in W) killWin(id);
   for (const k in cache) delete cache[k];
+  if (saverOn) { saverOn = false; saverStop(); }
   busy = false; noSave = false; H = null; dlgCb = dlgNoCb = null; dq.length = 0; tq.length = 0; drag = null; saverOn = false;
   for (const id of [`boot`, `bsod`, `safe`, `dead`, `notif`, `fin`, `saver`, `dlg`, `drop`, `toast`, `stray`, `tStray`]) if ($(id)) $(id).classList.remove(`on`, `green`);
   document.body.classList.remove(`flick`, `lag`, `shake`);

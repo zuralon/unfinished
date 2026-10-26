@@ -48,6 +48,12 @@ const UI = {
   },
 };
 
+// the minimize and maximize buttons of the Winbows title bars
+const NYI = {
+  min: [[`Minimize: not coded yet. Closing works, though.`, `Réduire : pas encore codé. Fermer, ça marche.`], [`This button is decorative. Like the developer's gym membership.`, `Ce bouton est décoratif. Comme l'abonnement à la salle de sport du dev.`]],
+  max: [[`Maximize: planned for version 2. Of the game, not of the window.`, `Agrandir : prévu pour la version 2. Du jeu, pas de la fenêtre.`], [`The window is already as big as the developer's ambition.`, `La fenêtre est déjà aussi grande que l'ambition du dev.`]],
+};
+
 // ---------- Era 0: the terminal tutorial ----------
 const P0 = [
   { id: `game0`, file: `GAME.EXE`, kb: 1, fixed: 1 },
