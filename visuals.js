@@ -15,7 +15,9 @@ const VT = {
   page: [`My home page`, `Ma page perso`], build: [`UNDER CONSTRUCTION`, `EN CONSTRUCTION`], visits: [`Visitors`, `Visiteurs`],
   search: [`Searching: pixel`, `Recherche : pixel`], skip: [`Skip ad`, `Passer l'annonce`], ad: [`Ad`, `Annonce`],
   ask: [`Make me some pixels.`, `Fais-moi des pixels.`], answer: [`Of course! Here are 4 pixels: ■■■■ Want more?`, `Bien sûr ! Voici 4 pixels : ■■■■ Tu en veux d'autres ?`],
-  sync: [`Syncing`, `Synchronisation`], harvest: [`Harvest!`, `Récolte !`], lat: [`Latency`, `Latence`], rec: [`Reconnecting...`, `Reconnexion...`],
+  sync: [`Syncing`, `Synchronisation`], clicks: [`CLICKS`, `CLICS`], free: [`FREE`, `LIBRE`], bbs: [`[D]ownloads  [M]essages  [G]oodbye`, `[T]élécharger  [M]essages  [Q]uitter`],
+  news: [`PIXEL NEWS: one pixel reached 1 million clicks... PIXCORP stock up 2%... The dev says "soon"...`, `INFOS PIXEL : un pixel atteint 1 million de clics... L'action PIXCORP prend 2 %... Le dev dit « bientôt »...`],
+  data: [`Data analysis`, `Analyse des données`], rec2: [`REC`, `ENR`], harvest: [`Harvest!`, `Récolte !`], lat: [`Latency`, `Latence`], rec: [`Reconnecting...`, `Reconnexion...`],
   q: [`exists and doesn't exist`, `existe et n'existe pas`], comp: [`Compiling pixel.c`, `Compilation de pixel.c`],
 };
 const FONT = e => (e <= 2 ? `'VT323',monospace` : e <= 4 ? `Tahoma,Verdana,sans-serif` : e === 5 ? `Helvetica,Arial,sans-serif` : `'Segoe UI',system-ui,sans-serif`);
@@ -55,12 +57,12 @@ const VIZ = {
     box(x, `#000`, 0, 0, w, h);
     const L = [`C:\\>AUTOCLIK.BAT`, `@ECHO OFF`, `:LOOP`, `CLICK`, `GOTO LOOP`], cur = 2 + Math.floor(t * 3) % 3;
     L.forEach((l, i) => { if (i === cur) box(x, `#aaa`, 4, 6 + i * 13, w - 8, 12); say(x, l, 8, 12 + i * 13, 13, i === cur ? `#000` : `#aaa`); });
-    say(x, `CLICKS: ${Math.floor(t * 3) + 1}`, 8, h - 8, 13, `#55ff55`);
+    say(x, `${T(VT.clicks)}: ${Math.floor(t * 3) + 1}`, 8, h - 8, 13, `#55ff55`);
   },
   tsr(x, w, h, t) {
     box(x, `#0000aa`, 0, 0, w, h);
     say(x, `C:\\>MEM /C`, 6, 9, 13, `#aaa`);
-    const seg = [[`MSDOS`, 0.18, `#aaa`], [`COMMAND`, 0.1, `#55ffff`], [`PIXEL.TSR`, 0.3 + 0.04 * Math.sin(t), `#ffff55`], [`FREE`, 0.42, `#555`]];
+    const seg = [[`MSDOS`, 0.18, `#aaa`], [`COMMAND`, 0.1, `#55ffff`], [`PIXEL.TSR`, 0.3 + 0.04 * Math.sin(t), `#ffff55`], [T(VT.free), 0.42, `#555`]];
     let X = 6;
     for (const [n, f, c] of seg) { const W = (w - 12) * f; box(x, c, X, 22, W - 2, 18); X += W; }
     seg.forEach(([n, f, c], i) => say(x, n, 6 + (i % 2) * (w / 2), 52 + (i >> 1) * 13, 13, c));
@@ -70,7 +72,7 @@ const VIZ = {
     box(x, `#000`, 0, 0, w, h);
     const C = [`#ff5555`, `#ffff55`, `#55ff55`, `#55ffff`, `#5555ff`, `#ff55ff`];
     `PIXEL BBS`.split(``).forEach((ch, i) => say(x, ch, 10 + i * 14, 14, 20, C[(i + Math.floor(t * 4)) % 6], `left`, true));
-    say(x, `[D]ownloads  [M]essages  [G]oodbye`, 8, 34, 13, `#aaa`);
+    say(x, T(VT.bbs), 8, 34, 13, `#aaa`);
     const k = fr(t / 8);
     say(x, `ZMODEM: PIXELS.ZIP`, 8, 52, 13, `#55ffff`);
     box(x, `#555`, 8, 62, w - 16, 8); box(x, `#55ff55`, 8, 62, (w - 16) * k, 8);
@@ -90,7 +92,7 @@ const VIZ = {
   macro(x, w, h, t) {
     box(x, `#c0c0c0`, 0, 0, w, h);
     if (fr(t) < 0.6) ball(x, 16, 16, 7, `#ff0000`);
-    say(x, `REC  00:${String(Math.floor(t) % 60).padStart(2, `0`)}`, 30, 16, 12, `#000`, `left`, true);
+    say(x, `${T(VT.rec2)}  00:${String(Math.floor(t) % 60).padStart(2, `0`)}`, 30, 16, 12, `#000`, `left`, true);
     box(x, `#fff`, 8, 36, w - 16, 26); box(x, `#808080`, 8, 36, w - 16, 1);
     for (let i = 0; i < 12; i++) box(x, i % 3 ? `#000080` : `#008080`, 12 + i * ((w - 30) / 12), 42, 8, 14);
     box(x, `#ff0000`, 8 + fr(t / 4) * (w - 16), 34, 2, 30);
@@ -107,7 +109,7 @@ const VIZ = {
     const cx = 34, cy = h - 12;
     x.strokeStyle = `#000080`; x.lineWidth = 2; x.beginPath(); x.moveTo(cx - 10, cy); x.lineTo(cx, cy - 40); x.lineTo(cx + 10, cy); x.stroke();
     for (let i = 0; i < 3; i++) { const r = 10 + ((t * 20 + i * 12) % 36); x.strokeStyle = `rgba(0,0,128,${1 - r / 46})`; x.beginPath(); x.arc(cx, cy - 40, r, -1.2, 0.2); x.stroke(); }
-    const news = `PIXEL NEWS: one pixel reached 1 million clicks... PIXCORP stock up 2%... The dev says "soon"...`;
+    const news = T(VT.news);
     box(x, `#000080`, 70, h - 22, w - 70, 16); x.save(); x.beginPath(); x.rect(70, h - 22, w - 70, 16); x.clip();
     say(x, news, w - ((t * 50) % (w + 600)), h - 14, 11, `#ff0`); x.restore();
   },
@@ -160,7 +162,7 @@ const VIZ = {
   seti(x, w, h, t) {
     box(x, `#000`, 0, 0, w, h);
     for (let i = 0; i < 24; i++) for (let j = 0; j < 6; j++) { const v = Math.abs(Math.sin(i * 0.6 + j + t * 2)) * 30 * (j / 6 + 0.3), X = 10 + i * ((w - 60) / 24) + j * 6, Y = h - 14 - j * 6; box(x, `hsl(${200 + j * 25},90%,${40 + v}%)`, X, Y - v, 3, v); }
-    say(x, `SETI@Pixel`, 6, 10, 11, `#9cf`, `left`, true); say(x, `Data analysis: ${Math.floor(fr(t / 30) * 100)}%`, w - 6, 10, 10, `#9cf`, `right`);
+    say(x, `SETI@Pixel`, 6, 10, 11, `#9cf`, `left`, true); say(x, `${T(VT.data)} : ${Math.floor(fr(t / 30) * 100)} %`, w - 6, 10, 10, `#9cf`, `right`);
   },
   weblog(x, w, h, t) {
     box(x, `#000`, 0, 0, w, h);

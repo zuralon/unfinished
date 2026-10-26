@@ -14,6 +14,19 @@ const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.r
 const rnd = (a, b) => a + Math.random() * (b - a);
 const PDX = [];
 ERA.forEach((E, e) => { if (!E) return; PDX[e] = {}; E.P.forEach((p, i) => { p.i = i; PDX[e][p.id] = p; }); E.PA.sort((a, b) => a.cost - b.cost); });
+// program names follow the language (data.js NAME_FR), and so do the French texts that mention them
+const NAME_RE = new RegExp(Object.keys(NAME_FR).filter(n => n !== `Chat`).sort((a, b) => b.length - a.length).map(n => n.replace(/[.*+?^${}()|[\]\\\/]/g, `\\$&`)).join(`|`), `g`);
+ERA.forEach((E, e) => {
+  if (!E) return;
+  for (const p of E.P) {
+    const d = Object.getOwnPropertyDescriptor(p, `file`), base = d.get || (() => d.value);
+    Object.defineProperty(p, `file`, { get() { const n = base.call(this); return S && S.lang === `fr` ? frName(n, e) : n; }, configurable: true });
+  }
+  const fix = pair => { if (Array.isArray(pair) && typeof pair[1] === `string`) pair[1] = pair[1].replace(NAME_RE, m => frName(m, e)); };
+  for (const p of E.PA) { fix(p.t); fix(p.d); }
+  for (const k of [`D`, `N`]) for (const id in E[k] || {}) fix(E[k][id]);
+  for (const l of [E.HELP, E.LOGS]) for (const pair of l || []) fix(pair);
+});
 
 let S, busy = false, noSave = false;
 
@@ -654,7 +667,7 @@ const A = {
     } });
   },
   hard() { dlg(U().resetQ, { cancel: true, ok: () => restart(null) }); },
-  lang() { S.lang = S.lang === `fr` ? `en` : `fr`; document.documentElement.lang = S.lang; for (const k in cache) delete cache[k]; for (const id in W) W[id].h = ``; },
+  lang() { S.lang = S.lang === `fr` ? `en` : `fr`; document.documentElement.lang = S.lang; for (const k in cache) delete cache[k]; for (const id in W) { W[id].h = ``; W[id].el.querySelector(`.title b`).textContent = prog(id).file; } },
   sci() { S.opt.sci = S.opt.sci ? 0 : 1; },
   anim() { S.opt.anim = S.opt.anim ? 0 : 1; },
   tip() { dlg(T(E().HELP[Math.random() * E().HELP.length | 0])); },
