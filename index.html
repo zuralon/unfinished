@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>PIXEL-OS</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box}
 html,body{height:100%;margin:0;overflow:hidden}
@@ -369,6 +369,23 @@ body.noanim .aiorb{animation:none}
 #fin .big{font-size:44px;margin:4vh 0 3vh}
 #fin pre{font:inherit;white-space:pre-wrap}
 #fin .fb .btn{background:none;color:#3dff7a;border:1px solid #3dff7a;font:inherit;padding:6px 14px;margin:8px}
+/* ---------- the developer's post-it (all desktop eras) ---------- */
+#postit{position:fixed;left:14px;bottom:52px;width:210px;z-index:99990;padding:8px 12px 10px;background:linear-gradient(#fff7a8,#fdeb71);color:#2d2a1f;font:600 19px/1.15 Caveat,'Segoe Print','Comic Sans MS',cursive;box-shadow:2px 6px 14px rgba(0,0,0,.35);transform:rotate(-2deg);transform-origin:top left;border-radius:1px 1px 18px 1px}
+#postit:before{content:'';position:absolute;left:50%;top:-9px;width:70px;height:20px;margin-left:-35px;background:rgba(255,255,255,.45);transform:rotate(3deg)}
+#postit p{margin:4px 0}
+#postit .pt{display:flex;gap:6px;align-items:baseline;cursor:pointer;border-bottom:2px solid rgba(45,42,31,.35);padding-bottom:2px}
+#postit .pt b{font-weight:700;font-size:22px}
+#postit .pt span{margin-left:auto;font-size:15px;opacity:.6}
+#postit .pd{opacity:.72;font-size:17px}
+#postit .pb{color:#b3261e;font-weight:700}
+#postit .pbar{height:7px;border:2px solid #2d2a1f;border-radius:3px;margin:6px 0 2px}
+#postit .pbar i{display:block;height:100%;background:#2d2a1f}
+#postit .go{font-weight:700;font-size:21px;color:#1d6b2a;cursor:pointer;animation:blink .8s steps(1) infinite}
+#postit.ready{cursor:pointer;box-shadow:0 0 0 3px #1d6b2a,2px 6px 14px rgba(0,0,0,.35)}
+body.noanim #postit .go{animation:none}
+body.s5 #postit{left:max(14px,calc(50% - var(--pw)/2 - 250px));bottom:auto;top:calc(50% - var(--ph)/2)}
+body.e1 #icons{bottom:230px}
+body.s5 #icons{bottom:auto}
 body.flick{animation:fl .12s steps(2) 8}
 @keyframes fl{50%{filter:invert(1)}}
 </style>
@@ -397,17 +414,19 @@ body.flick{animation:fl .12s steps(2) 8}
   <button id="stray" aria-label="stray pixel"></button>
   <div id="toast" class="win"></div>
 </div>
+<div id="postit" hidden></div>
 <div id="drop"></div>
 <div id="saver"><i></i><i style="left:20%;top:10%;animation-delay:-2s"></i><i style="left:70%;top:30%;animation-delay:-4s"></i><i style="left:40%;top:70%;animation-delay:-1s"></i><i style="left:85%;top:80%;animation-delay:-5s"></i><i style="left:10%;top:50%;animation-delay:-3s"></i><span>PIXEL-OS</span></div>
 <div id="boot"><div><i></i>PIXEL-OS 1<br><br><span class="dim">Welcome. Mostly.</span></div></div>
 <div id="dlg"><div class="win"><div class="title"><b id="dlgH">PIXEL-OS</b></div><div class="body"><div id="dlgT"></div><textarea id="dlgI" spellcheck="false"></textarea><div id="dlgB"></div></div></div></div>
 
-<script src="data.js?v=12"></script>
-<script src="era2.js?v=12"></script>
-<script src="era3.js?v=12"></script>
-<script src="era4.js?v=12"></script>
-<script src="era5.js?v=12"></script>
-<script src="era6.js?v=12"></script>
-<script src="game.js?v=12"></script>
+<script src="data.js?v=13"></script>
+<script src="era2.js?v=13"></script>
+<script src="era3.js?v=13"></script>
+<script src="era4.js?v=13"></script>
+<script src="era5.js?v=13"></script>
+<script src="era6.js?v=13"></script>
+<script src="postit.js?v=13"></script>
+<script src="game.js?v=13"></script>
 </body>
 </html>

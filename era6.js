@@ -84,6 +84,10 @@ ERA[6] = {
   end: { c: 4e15, t: [`Let the AI finish the game`, `Laisser l'IA finir le jeu`], d: [`Requires every hardware upgrade. This is the end.`, `Nécessite toutes les améliorations matérielles. C'est la fin.`], go: [`Finish it`, `Finir`] },
   MS: [[`m1m`, 1e6], [`m1b`, 1e9], [`m1t`, 1e12]],
   PA: [
+    { id: `premium`, cost: 2.7e13, g: 1.5, t: [`Premium tier`, `Formule Premium`], d: [`All production x1.5. Same thing, with a golden badge.`, `Toute la production x1,5. La même chose, avec un badge doré.`] },
+    { id: `prompt`, cost: 1.5e14, g: 1.5, t: [`Prompt engineering`, `Ingénierie de prompt`], d: [`All production x1.5. You say please. The AI works harder. Spooky.`, `Toute la production x1,5. Tu dis s'il te plaît. L'IA bosse plus. Flippant.`] },
+    { id: `water`, cost: 3.2e14, g: 1.5, t: [`Water cooling`, `Watercooling`], d: [`All production x1.5. There is a fish in it now.`, `Toute la production x1,5. Il y a un poisson dedans, maintenant.`] },
+    { id: `dcgarden`, cost: 7e14, g: 1.5, t: [`Data center in the garden`, `Datacenter dans le jardin`], d: [`All production x1.5. The neighbors complain about the hum. And the glow.`, `Toute la production x1,5. Les voisins se plaignent du bourdonnement. Et de la lueur.`] },
     { id: `c1`, cost: 72000, c: 2, t: [`Haptic mouse`, `Souris haptique`], d: [`Clicks x2. It vibrates. Why does a mouse vibrate?`, `Clics x2. Elle vibre. Pourquoi une souris vibre ?`] },
     { id: `auto1`, cost: 120000, req: `auto`, m: [`auto`, 2], t: [`AutoClicker 12 Pro`, `AutoClicker 12 Pro`], d: [`AutoClicker x2.`, `AutoClicker x2.`] },
     { id: `annual`, cost: 300000, f: `annual`, t: [`Annual plan`, `Abonnement annuel`], d: [`Every subscription costs 40% less. You'll forget to cancel it.`, `Tous les abonnements coûtent 40 % de moins. Tu oublieras de résilier.`] },

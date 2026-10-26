@@ -54,6 +54,10 @@ ERA[5] = {
   end: { c: 6e12, t: [`Answer the door`, `Ouvrir la porte`], d: [`Requires every hardware upgrade. Someone is knocking.`, `Nécessite toutes les améliorations matérielles. Quelqu'un frappe.`], go: [`Open`, `Ouvrir`] },
   MS: [[`m1m`, 1e6], [`m1b`, 1e9], [`m1t`, 1e12]],
   PA: [
+    { id: `g3`, cost: 3.5e10, g: 1.5, t: [`3G`, `3G`], d: [`All production x1.5. Pixels load while you walk. Into lampposts.`, `Toute la production x1,5. Les pixels chargent pendant que tu marches. Dans les poteaux.`] },
+    { id: `retina`, cost: 1.6e11, g: 1.5, t: [`Retina pixels`, `Pixels Retina`], d: [`All production x1.5. So small you can't see them. So many you don't care.`, `Toute la production x1,5. Si petits qu'on ne les voit pas. Si nombreux qu'on s'en fiche.`] },
+    { id: `bgrefresh`, cost: 8e11, g: 1.5, t: [`Background refresh`, `Actualisation en arrière-plan`], d: [`All production x1.5. Apps work while you sleep. Apps never sleep.`, `Toute la production x1,5. Les applis bossent pendant que tu dors. Les applis ne dorment jamais.`] },
+    { id: `dualsim`, cost: 1.8e12, g: 1.5, t: [`Dual SIM`, `Double SIM`], d: [`All production x1.5. Two numbers. The dev ignores both.`, `Toute la production x1,5. Deux numéros. Le dev les ignore tous les deux.`] },
     { id: `screen`, cost: 30000, c: 2, t: [`Bigger screen`, `Écran plus grand`], d: [`Clicks x2. 3.5 inches. Huge.`, `Clics x2. 3,5 pouces. Immense.`] },
     { id: `auto1`, cost: 50000, req: `auto`, m: [`auto`, 2], t: [`Tap Tap Pro`, `Tap Tap Pro`], d: [`Tap Tap x2. 0.99 px. Worth it.`, `Tap Tap x2. 0,99 px. Ça les vaut.`] },
     { id: `charger`, cost: 100000, f: `fastcharge`, t: [`Fast charger`, `Chargeur rapide`], d: [`Charges twice as fast. Gets warm. That's normal. Probably.`, `Charge deux fois plus vite. Chauffe. C'est normal. Sûrement.`] },

@@ -60,6 +60,10 @@ ERA[4] = {
   end: { c: 3e11, t: [`Open the heavy parcel`, `Ouvrir le colis lourd`], d: [`Requires every hardware upgrade.`, `Nécessite toutes les améliorations matérielles.`], go: [`Open`, `Ouvrir`] },
   MS: [[`m1m`, 1e6], [`m1b`, 1e9], [`m1t`, 1e12]],
   PA: [
+    { id: `trial`, cost: 2.3e9, g: 1.5, t: [`Antivirus trial expired`, `Antivirus : essai expiré`], d: [`All production x1.5. It stopped scanning everything. Everything runs faster. Suspicious.`, `Toute la production x1,5. Il a arrêté de tout scanner. Tout va plus vite. Suspect.`] },
+    { id: `regclean`, cost: 1.3e10, g: 1.5, t: [`Registry cleaner`, `Nettoyeur de registre`], d: [`All production x1.5. Downloaded from a pop-up. It worked anyway.`, `Toute la production x1,5. Téléchargé depuis un pop-up. Ça a marché quand même.`] },
+    { id: `dualcore`, cost: 2.8e10, g: 1.5, t: [`Dual core`, `Double cœur`], d: [`All production x1.5. Two cores. One works, the other watches.`, `Toute la production x1,5. Deux cœurs. Un qui bosse, l'autre qui regarde.`] },
+    { id: `sp2`, cost: 6e10, g: 1.5, t: [`Service Pack 2`, `Service Pack 2`], d: [`All production x1.5. The update took three hours and one restart. Then four.`, `Toute la production x1,5. La mise à jour a pris trois heures et un redémarrage. Puis quatre.`] },
     { id: `c1`, cost: 15000, c: 2, t: [`Optical mouse`, `Souris optique`], d: [`Clicks x2. No more ball to clean.`, `Clics x2. Plus de boule à nettoyer.`] },
     { id: `auto1`, cost: 30000, req: `auto`, m: [`auto`, 2], t: [`AutoClicker XD SP1`, `AutoClicker XD SP1`], d: [`Autoclicks x2.`, `Autoclics x2.`] },
     { id: `tabs`, cost: 180000, req: `browser`, m: [`browser`, 2], t: [`Tabs`, `Onglets`], d: [`Internet Exploder x2. Tabs! (Another browser had them first. Shh.)`, `Internet Exploder x2. Des onglets ! (Un autre navigateur les avait avant. Chut.)`] },

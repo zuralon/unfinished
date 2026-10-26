@@ -13,7 +13,7 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
 const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.random() * (i + 1) | 0; [a[i], a[j]] = [a[j], a[i]]; } return a; };
 const rnd = (a, b) => a + Math.random() * (b - a);
 const PDX = [];
-ERA.forEach((E, e) => { if (!E) return; PDX[e] = {}; E.P.forEach((p, i) => { p.i = i; PDX[e][p.id] = p; }); });
+ERA.forEach((E, e) => { if (!E) return; PDX[e] = {}; E.P.forEach((p, i) => { p.i = i; PDX[e][p.id] = p; }); E.PA.sort((a, b) => a.cost - b.cost); });
 
 let S, busy = false, noSave = false;
 
@@ -98,14 +98,15 @@ function basePerSec() {
   if (!S.era) return 0;
   let s = 0;
   for (const p of E().P) if (p.prod && S.run[p.id]) s += S.run[p.id] * progRate(p);
+  for (const p of OWN) if (p.g) s *= p.g;
   return s * cpuF() * achMul() * (E().mul2 ? E().mul2() : 1);
 }
-const perSec = () => (S.era === 0 ? zPerSec() : basePerSec() * saverMul());
+const perSec = () => (S.era === 0 ? zPerSec() : basePerSec() * saverMul() * boostOf(`p`));
 function clickPow() {
   if (S.era === 0) return zClick();
   let c = typeof E().click === `function` ? E().click() : E().click || 1;
   for (const p of OWN) if (p.c) c *= p.c;
-  c *= achMul();
+  c *= achMul() * boostOf(`c`);
   if (flag(`macro`)) c += basePerSec() * 0.05;
   return c;
 }
@@ -121,14 +122,17 @@ function fx(e, txt) {
   document.body.appendChild(s);
   setTimeout(() => s.remove(), 700);
 }
+// toasts wait their turn, so an event result is not hidden by an achievement popping at the same time
 let toastT = 0;
+const tq = [];
 function toast(txt) {
   if (S.era === 0) return;
+  if (toastT) return tq.length < 6 && tq.push(txt);
   $(`toast`).textContent = txt; $(`toast`).classList.add(`on`);
-  clearTimeout(toastT); toastT = setTimeout(() => $(`toast`).classList.remove(`on`), 3500);
+  toastT = setTimeout(() => { $(`toast`).classList.remove(`on`); toastT = 0; if (tq.length) setTimeout(() => toast(tq.shift()), 150); }, tq.length ? 2500 : 3500);
 }
 const dq = [];
-let dlgCb = null;
+let dlgCb = null, dlgNoCb = null;
 function dlg(text, o = {}) {
   if ($(`dlg`).classList.contains(`on`)) return dq.push([text, o]);
   $(`dlgT`).textContent = text;
@@ -136,7 +140,7 @@ function dlg(text, o = {}) {
   $(`dlg`).classList.toggle(`inp`, !!o.input);
   $(`dlgI`).value = o.value || ``;
   $(`dlgB`).innerHTML = (o.cancel ? `<button class="btn" data-act="dlgNo">${o.cancel === true ? U().cancel : o.cancel}</button>` : ``) + `<button class="btn" data-act="dlgOk">${o.okT || U().ok}</button>`;
-  dlgCb = o.ok || null;
+  dlgCb = o.ok || null; dlgNoCb = o.no || null;
   $(`dlg`).classList.add(`on`);
   if (o.input) setTimeout(() => $(`dlgI`).select(), 0);
 }
@@ -359,7 +363,7 @@ function buyProg(id) {
   got(id);
 }
 function got(id) {
-  S.bought[id] = (S.bought[id] || 0) + 1;
+  S.bought[id] = (S.bought[id] || 0) + 1; S.st.buys = (S.st.buys || 0) + 1;
   if (S.bought[id] === 1) note(N(id));
   openProg(id, true);
 }
@@ -590,13 +594,13 @@ const A = {
     const t = track(r), lv = S.hw[r] || 0, st = t.s[lv];
     if (!st) return;
     if (S.px < st.c) return noPx();
-    S.px -= st.c; S.hw[r] = lv + 1;
+    S.px -= st.c; S.hw[r] = lv + 1; S.st.buys = (S.st.buys || 0) + 1;
     note(N(r === `ram` ? `r` + st.to : r + st.to));
   },
   hg: w => hackGuess(w),
   hexit() { H = null; },
   buy: id => buyProg(id),
-  pat(id) { const p = E().PA.find(x => x.id === id); if (S.patch[id]) return; if (S.px < p.cost) return noPx(); S.px -= p.cost; S.patch[id] = 1; refreshOwn(); },
+  pat(id) { const p = E().PA.find(x => x.id === id); if (S.patch[id]) return; if (S.px < p.cost) return noPx(); S.px -= p.cost; S.patch[id] = 1; S.st.buys = (S.st.buys || 0) + 1; refreshOwn(); },
   end() { const en = E().end; if (S.px < en.c) return noPx(); endEra(); },
   open: id => openProg(id),
   close: id => closeProg(id),
@@ -620,8 +624,10 @@ const A = {
   anim() { S.opt.anim = S.opt.anim ? 0 : 1; },
   tip() { dlg(T(E().HELP[Math.random() * E().HELP.length | 0])); },
   about() { dlg(E().about ? T(E().about) : U().aboutT); },
-  dlgOk() { const cb = dlgCb; const v = $(`dlgI`).value; dlgCb = null; dlgClose(); if (cb) cb(v); },
-  dlgNo() { dlgCb = null; dlgClose(); },
+  dlgOk() { const cb = dlgCb; const v = $(`dlgI`).value; dlgCb = dlgNoCb = null; dlgClose(); if (cb) cb(v); },
+  dlgNo() { const cb = dlgNoCb; dlgCb = dlgNoCb = null; dlgClose(); if (cb) cb(); },
+  pclaim: () => tkClaim(),
+  pfold() { S.opt.pfold = S.opt.pfold ? 0 : 1; },
 };
 const SAFE = new Set([`lang`, `exp`, `imp`, `hard`, `dlgOk`, `dlgNo`, `save`, `keep`, `ngplus`, `bsodOk`, `safeOk`]);
 function act(s) {
@@ -685,6 +691,7 @@ function render() {
   b.toggle(`cga`, S.era === 1 && !!S.run.cga);
   b.toggle(`noanim`, !S.opt.anim);
   if (S.era === 0) zRender(); else deskRender();
+  piRender();
 }
 let prev = performance.now(), achT = 0, saveT = 0;
 function tick() {
@@ -698,6 +705,7 @@ function tick() {
     if (on !== saverOn) { saverOn = on; $(`saver`).classList.toggle(`on`, on); if (on) S.once.saverOn = 1; }
     gain(perSec() * dt); fragTick(dt); milestones();
     if (E().tick) E().tick(dt);
+    piTick(dt);
   }
   if ((achT += dt) >= 1) { achT = 0; checkAch(); }
   if ((saveT += dt) >= 10) { saveT = 0; save(); }
@@ -718,7 +726,7 @@ function frame(now) {
 function restart(d) {
   for (const id in W) killWin(id);
   for (const k in cache) delete cache[k];
-  busy = false; noSave = false; H = null; dlgCb = null; drag = null; saverOn = false;
+  busy = false; noSave = false; H = null; dlgCb = dlgNoCb = null; dq.length = 0; tq.length = 0; drag = null; saverOn = false;
   for (const id of [`boot`, `bsod`, `safe`, `dead`, `notif`, `fin`, `saver`, `dlg`, `drop`, `toast`, `stray`, `tStray`]) if ($(id)) $(id).classList.remove(`on`, `green`);
   document.body.classList.remove(`flick`, `lag`, `shake`);
   load(d === undefined ? undefined : d && JSON.parse(JSON.stringify(d)));

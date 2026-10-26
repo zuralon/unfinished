@@ -49,6 +49,8 @@ ERA[2] = {
   end: { c: 1.2e10, t: [`Insert the IDM floppy`, `Insérer la disquette IDM`], d: [`Requires every hardware upgrade.`, `Nécessite toutes les améliorations matérielles.`] },
   MS: [[`m1m`, 1e6], [`m100m`, 1e8]],
   PA: [
+    { id: `ac`, cost: 3e7, g: 1.5, t: [`Air conditioning`, `Climatisation`], d: [`All production x1.5. The PC stops sweating. So do you.`, `Toute la production x1,5. Le PC arrête de transpirer. Toi aussi.`] },
+    { id: `autoexec`, cost: 7e7, g: 1.5, t: [`AUTOEXEC.BAT tuning`, `Réglage d'AUTOEXEC.BAT`], d: [`All production x1.5. Three hours of editing to save 4 KB. Worth it.`, `Toute la production x1,5. Trois heures de bidouille pour gagner 4 Ko. Ça valait le coup.`] },
     { id: `turbo1`, cost: 2000, c: 2, t: [`TURBO button`, `Bouton TURBO`], d: [`Clicks x2. Nobody ever knew what that button really did.`, `Clics x2. Personne n'a jamais su ce que faisait vraiment ce bouton.`] },
     { id: `auto1`, cost: 3000, req: `auto`, m: [`auto`, 2], t: [`AUTOCLIK v2`, `AUTOCLIK v2`], d: [`Autoclicks x2.`, `Autoclics x2.`] },
     { id: `v42`, cost: 5000, f: `dlfast`, t: [`Error correction (V.42)`, `Correction d'erreurs (V.42)`], d: [`Downloads twice as fast.`, `Téléchargements deux fois plus rapides.`] },
