@@ -233,25 +233,43 @@ async function toEra1() {
 
 // ---------- password minigame (era 0 in the terminal, then hack.exe) ----------
 let H = null;
-const GARB = `!@#$%^&*()-_=+[]{}<>?/|;:'",.`;
+// no brackets in the noise: they only appear as the clickable pairs
+const GARB = `!@#$%^&*-_=+?/|;:'",.`;
+const PAIRS = [`()`, `[]`, `{}`, `<>`];
+const likeness = (a, b) => { let n = 0; for (let i = 0; i < a.length; i++) if (a[i] === b[i]) n++; return n; };
 function hackStart(era) {
   const len = era === 0 || S.st.hacks < 3 ? 5 : 7;
-  const words = shuffle(WORDS[len].slice()).slice(0, 8);
-  const rows = shuffle([...Array(16).keys()]).slice(0, 8);
+  // like Fallout: most other words look like the password, so every guess teaches something
+  const pool = shuffle(WORDS[len].slice()), pass = pool[0];
+  const rest = pool.slice(1).sort((a, b) => likeness(b, pass) - likeness(a, pass));
+  const words = shuffle([pass, ...rest.slice(0, 5), ...shuffle(rest.slice(5)).slice(0, 2)]);
+  const rows = shuffle([...Array(16).keys()]), wordRows = rows.slice(0, 8), pairRows = rows.slice(8, 12);
   const g = n => Array.from({ length: n }, () => GARB[Math.random() * GARB.length | 0]).join(``);
   const lines = [];
   for (let i = 0; i < 16; i++) {
-    const k = rows.indexOf(i);
-    if (k < 0) { lines.push({ a: g(12) }); continue; }
-    const s = Math.random() * (13 - len) | 0;
-    lines.push({ a: g(s), w: words[k], b: g(12 - len - s) });
+    const k = wordRows.indexOf(i), j = pairRows.indexOf(i);
+    if (k >= 0) { const a = Math.random() * (13 - len) | 0; lines.push([{ g: g(a) }, { w: words[k] }, { g: g(12 - len - a) }]); }
+    else if (j >= 0) {
+      const pr = PAIRS[Math.random() * 4 | 0], n = 1 + (Math.random() * 3 | 0), a = Math.random() * (11 - n) | 0;
+      lines.push([{ g: g(a) }, { k: j, s: pr[0] + g(n) + pr[1] }, { g: g(10 - n - a) }]);
+    } else lines.push([{ g: g(12) }]);
   }
-  H = { era, pass: words[Math.random() * 8 | 0], tries: 4, lines, log: [], base: 0xf000 + (Math.random() * 0xe00 | 0) };
+  H = { era, pass, words, tries: 4, lines, log: [], used: [], dud: [], base: 0xf000 + (Math.random() * 0xe00 | 0) };
 }
 function hackHtml() {
   const u = U();
-  const col = f => H.lines.slice(f, f + 8).map((l, i) => `0x${(H.base + (f + i) * 12).toString(16).toUpperCase()} ${esc(l.a)}${l.w ? `<span class="hw" data-act="hg:${l.w}">${l.w}</span>${esc(l.b)}` : ``}`).join(`\n`);
+  const part = x => x.w ? (H.dud.includes(x.w) ? `.`.repeat(x.w.length) : `<span class="hw" data-act="hg:${x.w}">${x.w}</span>`)
+    : x.s ? (H.used.includes(x.k) ? esc(x.s) : `<span class="hw" data-act="hb:${x.k}">${esc(x.s)}</span>`) : esc(x.g);
+  const col = f => H.lines.slice(f, f + 8).map((l, i) => `0x${(H.base + (f + i) * 12).toString(16).toUpperCase()} ${l.map(part).join(``)}`).join(`\n`);
   return `<div>${u.hackTitle}</div><div>${u.hackTries(H.tries)} ${`█ `.repeat(H.tries)}</div><div class="hk"><div>${col(0)}</div><div>${col(8)}</div></div>${H.log.map(x => `<div>${esc(x)}</div>`).join(``)}<div class="tl" data-act="hexit">&gt; ${T(TERM.exit)}</div>`;
+}
+// a bracket pair, once: usually removes a wrong word, sometimes gives the tries back
+function hackBracket(k) {
+  if (!H || H.used.includes(k)) return;
+  H.used.push(k);
+  const duds = H.words.filter(w => w !== H.pass && !H.dud.includes(w));
+  if (duds.length && Math.random() < 0.75) { H.dud.push(duds[Math.random() * duds.length | 0]); H.log.push(U().hackDud); }
+  else { H.tries = 4; H.log.push(U().hackReset); }
 }
 function hackGuess(w) {
   if (!H) return;
@@ -268,9 +286,7 @@ function hackGuess(w) {
     else { if (log) { S.lastLog = log; note(log); } toast(U().hackReward(fmt(r))); }
     return;
   }
-  let n = 0;
-  for (let i = 0; i < w.length; i++) if (w[i] === H.pass[i]) n++;
-  H.log.push(U().likeness(w, n));
+  H.log.push(U().likeness(w, likeness(w, H.pass)));
   if (--H.tries > 0) return;
   H = null; S.hackCd = era === 0 ? 30 : 90;
   if (era === 0) zSay(UP(`hackFail`)); else toast(U().hackFail);
@@ -598,6 +614,7 @@ const A = {
     note(N(r === `ram` ? `r` + st.to : r + st.to));
   },
   hg: w => hackGuess(w),
+  hb: k => hackBracket(+k),
   hexit() { H = null; },
   buy: id => buyProg(id),
   pat(id) { const p = E().PA.find(x => x.id === id); if (S.patch[id]) return; if (S.px < p.cost) return noPx(); S.px -= p.cost; S.patch[id] = 1; S.st.buys = (S.st.buys || 0) + 1; refreshOwn(); },
@@ -666,15 +683,19 @@ document.addEventListener(`click`, e => {
   if (m) return toggleMenu(m);
   const a = t.closest(`[data-act]`);
   closeMenu();
-  if (a) { if (!a.classList.contains(`dis`)) act(a.dataset.act); }
-  // the button was redrawn between press and release: the click lands on its parent, so use the pressed one
-  else if (down && down.act && Math.hypot(e.clientX - down.x, e.clientY - down.y) < 12) act(down.act);
+  if (a && !a.classList.contains(`dis`)) act(a.dataset.act);
   down = null;
 });
+// the button was redrawn between press and release: the browser then sends no click at all, so act on release
 let down = null;
 addEventListener(`pointerdown`, e => {
   const a = e.target.closest(`[data-act]`);
-  down = a && !a.classList.contains(`dis`) ? { act: a.dataset.act, x: e.clientX, y: e.clientY } : null;
+  down = a && !a.classList.contains(`dis`) ? { el: a, act: a.dataset.act, x: e.clientX, y: e.clientY } : null;
+}, true);
+addEventListener(`pointerup`, e => {
+  if (!down || down.el.isConnected || Math.hypot(e.clientX - down.x, e.clientY - down.y) >= 12) return;
+  const a = down.act;
+  down = null; closeMenu(); act(a);
 }, true);
 // windows opened before the page had its real size (background tab) get placed again
 const relayout = () => { for (const id in W) { const [x, y] = S.pos[id] || defPos(id); place(W[id].el, x, y); } };
