@@ -250,8 +250,7 @@ ERA[6] = {
     keep() { $(`fin`).classList.remove(`on`, `green`); busy = false; },
     ngplus() {
       const keep = { ach: S.ach, st: S.st, lang: S.lang, opt: S.opt, life: S.life, time: S.time, clicks: S.clicks, logs: S.logs, ng: (S.ng || 0) + 1 };
-      S = Object.assign(fresh(), keep);
-      save(); location.reload();
+      restart(Object.assign(fresh(), keep));
     },
   },
   async finale() {

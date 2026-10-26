@@ -31,9 +31,9 @@ function fresh() {
     lang: (navigator.language || ``).startsWith(`fr`) ? `fr` : `en`, opt: { sci: 0, anim: 1 }, last: Date.now(),
   });
 }
-function load() {
-  let d = null;
-  try { d = JSON.parse(localStorage.getItem(KEY)); } catch (e) {}
+// d: a state to start from (era change, import); undefined = read the save
+function load(d) {
+  if (d === undefined) { d = null; try { d = JSON.parse(localStorage.getItem(KEY)); } catch (e) {} }
   S = Object.assign(fresh(), d || {});
   if (d) for (const k of [`z`, `st`, `opt`, `x`, `hw`]) S[k] = Object.assign(fresh()[k] || {}, d[k]);
   if (d && d.rl && !d.hw) S.hw.ram = d.rl;
@@ -224,7 +224,7 @@ async function toEra1() {
   document.body.classList.add(`flick`);
   await wait(1000);
   Object.assign(S, eraFresh(1));
-  H = null; save(); location.reload();
+  restart(S);
 }
 
 // ---------- password minigame (era 0 in the terminal, then hack.exe) ----------
@@ -564,7 +564,7 @@ function endEra() {
     await wait(1100);
     const keep = { pos: {} };
     Object.assign(S, eraFresh(S.era + 1), keep);
-    save(); location.reload();
+    restart(S);
   } });
 }
 
@@ -610,11 +610,11 @@ const A = {
       try {
         const d = JSON.parse(decodeURIComponent(escape(atob(v.trim()))));
         if (!d || d.v !== 1) throw 0;
-        localStorage.setItem(KEY, JSON.stringify(d)); noSave = true; location.reload();
+        restart(d);
       } catch (e) { dlg(U().badImp); }
     } });
   },
-  hard() { dlg(U().resetQ, { cancel: true, ok: () => { noSave = true; try { localStorage.removeItem(KEY); } catch (e) {} location.reload(); } }); },
+  hard() { dlg(U().resetQ, { cancel: true, ok: () => restart(null) }); },
   lang() { S.lang = S.lang === `fr` ? `en` : `fr`; document.documentElement.lang = S.lang; for (const k in cache) delete cache[k]; for (const id in W) W[id].h = ``; },
   sci() { S.opt.sci = S.opt.sci ? 0 : 1; },
   anim() { S.opt.anim = S.opt.anim ? 0 : 1; },
@@ -660,8 +660,16 @@ document.addEventListener(`click`, e => {
   if (m) return toggleMenu(m);
   const a = t.closest(`[data-act]`);
   closeMenu();
-  if (a && !a.classList.contains(`dis`)) act(a.dataset.act);
+  if (a) { if (!a.classList.contains(`dis`)) act(a.dataset.act); }
+  // the button was redrawn between press and release: the click lands on its parent, so use the pressed one
+  else if (down && down.act && Math.hypot(e.clientX - down.x, e.clientY - down.y) < 12) act(down.act);
+  down = null;
 });
+let down = null;
+addEventListener(`pointerdown`, e => {
+  const a = e.target.closest(`[data-act]`);
+  down = a && !a.classList.contains(`dis`) ? { act: a.dataset.act, x: e.clientX, y: e.clientY } : null;
+}, true);
 // windows opened before the page had its real size (background tab) get placed again
 const relayout = () => { for (const id in W) { const [x, y] = S.pos[id] || defPos(id); place(W[id].el, x, y); } };
 addEventListener(`resize`, relayout);
@@ -706,29 +714,43 @@ function frame(now) {
 }
 
 // ---------- start ----------
-load();
-refreshOwn();
-document.documentElement.lang = S.lang;
-render();
-if (S.era === 0) {
-  if (S.z.paid) toEra1();
-  else if (!S.z.seen.boot) zBoot();
-} else {
-  for (const id in S.run) if (S.run[id] && prog(id)) makeWin(id);
-  setTimeout(relayout, 300);
-  if (!S.once[`boot` + S.era]) {
-    S.once[`boot` + S.era] = 1; note(N(`start`));
-    if (E().enter) E().enter();
-    $(`boot`).innerHTML = `<div><i></i>${E().os}<br><br><span class="dim">${esc(T(E().bootT || [`Welcome. Mostly.`, `Bienvenue. En gros.`]))}</span></div>`;
-    $(`boot`).classList.add(`on`);
-    setTimeout(() => $(`boot`).classList.remove(`on`), 2200);
-  }
-  const away = (Date.now() - S.last) / 1000;
-  if (S.run.clock && away > 60) {
-    const g = basePerSec() * Math.min(away, 8 * 3600) * (flag(`offline`) ? 1 : 0.5);
-    if (g > 0) { gain(g); S.once.offline = 1; dlg(U().away(dur(away), fmt(g))); }
-  }
-  if (E().load) E().load();
+// era changes, imports and resets restart in place: the page is never reloaded (some hosts, like the artifact viewer, refuse it)
+function restart(d) {
+  for (const id in W) killWin(id);
+  for (const k in cache) delete cache[k];
+  busy = false; noSave = false; H = null; dlgCb = null; drag = null; saverOn = false;
+  for (const id of [`boot`, `bsod`, `safe`, `dead`, `notif`, `fin`, `saver`, `dlg`, `drop`, `toast`, `stray`, `tStray`]) if ($(id)) $(id).classList.remove(`on`, `green`);
+  document.body.classList.remove(`flick`, `lag`, `shake`);
+  load(d === undefined ? undefined : d && JSON.parse(JSON.stringify(d)));
+  start();
+  save();
 }
+function start() {
+  refreshOwn();
+  document.documentElement.lang = S.lang;
+  render();
+  if (S.era === 0) {
+    if (S.z.paid) toEra1();
+    else if (!S.z.seen.boot) zBoot();
+  } else {
+    for (const id in S.run) if (S.run[id] && prog(id)) makeWin(id);
+    setTimeout(relayout, 300);
+    if (!S.once[`boot` + S.era]) {
+      S.once[`boot` + S.era] = 1; note(N(`start`));
+      if (E().enter) E().enter();
+      $(`boot`).innerHTML = `<div><i></i>${E().os}<br><br><span class="dim">${esc(T(E().bootT || [`Welcome. Mostly.`, `Bienvenue. En gros.`]))}</span></div>`;
+      $(`boot`).classList.add(`on`);
+      setTimeout(() => $(`boot`).classList.remove(`on`), 2200);
+    }
+    const away = (Date.now() - S.last) / 1000;
+    if (S.run.clock && away > 60) {
+      const g = basePerSec() * Math.min(away, 8 * 3600) * (flag(`offline`) ? 1 : 0.5);
+      if (g > 0) { gain(g); S.once.offline = 1; dlg(U().away(dur(away), fmt(g))); }
+    }
+    if (E().load) E().load();
+  }
+}
+load();
+start();
 setInterval(tick, 100);
 requestAnimationFrame(frame);
