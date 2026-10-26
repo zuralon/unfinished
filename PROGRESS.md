@@ -57,3 +57,11 @@ Regles :
 - tools/smoke.js : test de fumee de l'ere courante.
 - tools/scale.py : reechelonne les couts d'un fichier d'ere par tranches.
 - tools/cover.py : regenere cover.png.
+
+## 26/10/2026 - rendre le jeu moins ennuyeux
+
+- Achats bloqués dans le lecteur claude.ai : le jeu ne recharge plus jamais la page (changement d'ère, import, reset, NG+ redémarrent sur place).
+- Post-it du dev (postit.js) : une petite tâche à la fois (cliquer, attraper un pixel, fermer des fenêtres, acheter, tâches propres à chaque ère), clic sur le post-it pour encaisser ~75 s de production. Repliable.
+- Dilemmes : toutes les 5-8 min, une boîte à 2 choix (café, chat, canard, loterie...) qui donne des bonus temporaires (affichés sur le post-it) ou des px.
+- Trous d'achat : 19 améliorations "toute la production x1,5" (patchs `g`) placées dans les zones mortes des ères 2-6. Bot : plus de trou de plus de 4-5 min (avant : 9 à 19 min). Bot total ~5 h 45 (avant ~9 h 30), hors post-it et dilemmes.
+- tools/sim.js : option `ps` pour noter la production à chaque achat.

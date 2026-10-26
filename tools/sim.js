@@ -15,7 +15,7 @@ function simEra(era, o = {}) {
   if (e.enter) e.enter();
   const buy = id => { S.px -= costOf(id); if (!(e.buy && e.buy(id))) S.bought[id] = (S.bought[id] || 0) + 1; };
   let t = 0, end = 0;
-  const log = s => ev.push(Math.round(t / 60) + `:` + s);
+  const log = s => ev.push(Math.round(t / 60) + `:` + s + (o.ps ? `@` + Math.round(basePerSec()) : ``));
   function alloc() {
     for (const id in S.run) if (!prog(id).prod && ![`game`, `install`, `score`, ...keep].includes(id)) S.run[id] = 0;
     for (const id of prodIds) S.run[id] = 0;
