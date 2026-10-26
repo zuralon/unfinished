@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PIXEL-OS</title>
+<style>
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;overflow:hidden}
+body{font:bold 12px/1.35 ui-monospace,Consolas,monospace;color:#000;background:#fff repeating-conic-gradient(#000 0 25%,#fff 0 50%) 0 0/4px 4px;user-select:none}
+body.color{background:#008080;font:12px/1.35 Tahoma,Verdana,sans-serif}
+body.nocursor,body.nocursor *{cursor:none!important}
+#dot{position:fixed;left:0;top:0;width:9px;height:9px;border-radius:50%;background:#fff;mix-blend-mode:difference;pointer-events:none;z-index:999;display:none}
+body.nocursor #dot{display:block}
+#menubar{position:fixed;top:0;left:0;right:0;height:24px;background:#fff;border-bottom:2px solid #000;display:flex;gap:18px;align-items:center;padding:0 12px;z-index:40}
+#menubar .r{margin-left:auto;display:flex;gap:6px}
+#menubar button{font:inherit;background:#fff;border:2px solid #000;padding:0 6px;cursor:pointer}
+body.color #menubar{background:#c0c0c0;border-bottom:2px solid #808080}
+body.color #menubar button{background:#c0c0c0;border-color:#fff #404040 #404040 #fff}
+#icons{position:fixed;left:12px;top:40px;display:flex;flex-direction:column;gap:14px;z-index:5}
+.ic{width:84px;text-align:center;background:none;border:0;font:inherit;cursor:pointer;color:#000;padding:0}
+.ic b{display:block;width:34px;height:30px;margin:0 auto 4px;border:2px solid #000;background:#fff;box-shadow:2px 2px 0 #000}
+.ic span{background:#fff;padding:0 3px}
+body.color .ic{color:#fff}
+body.color .ic span{background:none}
+body.color .ic b{background:var(--c);border-color:#fff #404040 #404040 #fff;box-shadow:none}
+.win{position:absolute;background:#fff;border:2px solid #000;box-shadow:4px 4px 0 #000}
+body.color .win{background:#c0c0c0;border:2px solid;border-color:#fff #404040 #404040 #fff;box-shadow:1px 1px 0 #000}
+.tb{display:flex;align-items:center;gap:6px;padding:3px 4px;border-bottom:2px solid #000;background:repeating-linear-gradient(#000 0 1px,#fff 1px 3px);cursor:grab}
+.tb span{background:#fff;padding:0 6px;margin:0 auto}
+body.color .tb{background:linear-gradient(90deg,#000080,#1084d0);color:#fff;border-bottom:0}
+body.color .tb span{background:none;margin:0 auto 0 2px;font-weight:bold}
+.x{width:18px;height:16px;border:2px solid #000;background:#fff;font:bold 11px/1 monospace;padding:0;cursor:pointer;flex:none}
+body.color .x{background:#c0c0c0;border-color:#fff #404040 #404040 #fff}
+.bd{padding:10px}
+.kb{opacity:.6;font-weight:normal}
+#px{display:block;margin:22px auto;width:16px;height:16px;background:#000;border:0;padding:0;cursor:pointer;position:relative}
+#px:active{transform:scale(.8)}
+body.color #px{background:#ff2a8a;box-shadow:0 0 14px #ff2a8a}
+.fx{position:absolute;left:50%;top:-8px;pointer-events:none;font-size:12px;animation:fx .7s ease-out forwards;white-space:nowrap;color:#000}
+@keyframes fx{to{transform:translate(-50%,-28px);opacity:0}}
+.big{font-size:28px;text-align:center}
+.row{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:5px 0;border-bottom:1px dotted #000}
+.row small{display:block;font-weight:normal;opacity:.75}
+.btn{font:inherit;border:2px solid #000;background:#fff;cursor:pointer;padding:2px 7px;white-space:nowrap}
+body.color .btn{background:#c0c0c0;border-color:#fff #404040 #404040 #fff}
+.btn:disabled{opacity:.35;cursor:default}
+.prog{height:14px;border:2px solid #000;margin-top:8px}
+.prog i{display:block;height:100%;background:#000;width:0}
+body.color .prog i{background:#000080}
+.notes{max-height:200px;overflow-y:auto;font-weight:normal}
+.notes p{margin:0 0 6px}
+.pal{display:flex;gap:3px;flex-wrap:wrap}
+.pal i{width:16px;height:16px;border:1px solid #000}
+#taskbar{position:fixed;left:0;right:0;bottom:0;height:36px;background:#fff;border-top:2px solid #000;display:flex;align-items:center;gap:12px;padding:0 12px;z-index:40}
+body.color #taskbar{background:#c0c0c0;border-top:2px solid #fff}
+#ram{display:flex;gap:2px}
+#ram i{width:14px;height:18px;border:1px solid #000;background:#fff}
+#ram i.u{background:#000}
+#ram i.p{background:repeating-linear-gradient(45deg,#000 0 2px,#fff 2px 4px)}
+body.color #ram i.u{background:var(--c)}
+#stray{position:fixed;width:10px;height:10px;border:0;padding:0;background:#777;cursor:pointer;z-index:60;display:none}
+#stray.on{display:block}
+body.color #stray.gold{background:#ffd24a;box-shadow:0 0 12px #ffd24a}
+body.color #stray.red{background:#ff3030;box-shadow:0 0 12px #ff3030}
+#boot{position:fixed;inset:0;background:#000;color:#d0d0d0;padding:40px;white-space:pre-line;z-index:500;font:14px/1.7 ui-monospace,Consolas,monospace;cursor:pointer}
+#boot.off{display:none}
+</style>
+</head>
+<body class="nocursor">
+<div id="boot"></div>
+<div id="menubar"><b>PIXEL-OS</b><span id="m1"></span><span id="m2"></span><span id="m3"></span><div class="r"><button id="lang"></button><button id="reset"></button></div></div>
+<div id="icons"></div>
+<div id="desk"></div>
+<div id="taskbar"><b>RAM</b><div id="ram"></div><span id="ramtxt"></span></div>
+<button id="stray" aria-label="stray pixel"></button>
+<div id="dot"></div>
+<script>
+const L = {
+  en: {
+    m: [`File`, `Edit`, `Help (not installed)`], lang: `FR`, reset: `reboot`, resetQ: `Reboot and lose everything?`,
+    boot: [`PIXEL-OS v0.1`, `Memory check: 8 KB ... OK`, `Looking for game.exe ... found`, `Checking game.exe ... unfinished`, `Launching anyway.`, ``, `(click to skip)`],
+    shop: `Programs`, ramUp: `RAM stick +4 KB`, ramDesc: `More room for programs.`, buy: c => `${c} px`, open: `open`, running: `running`, installing: n => `Installing ${n}`,
+    err: `Not enough memory.\nClose a program (X button) to make room.`, ok: `OK`, clicking: `clicking...`, cursorOn: `pointer driver loaded.\nPrecise. Instant.`, colorOn: `16 colors loaded.`,
+    ramtxt: (u, t) => `${u} / ${t} KB`, noScore: `?`,
+    end: (c, t) => `End of the playable slice.\n\nMemory: 16 KB.\nPrograms you closed to make room: ${c}\nTime: ${t}\n\nWant more? Tell the developer.`,
+  },
+  fr: {
+    m: [`Fichier`, `Édition`, `Aide (non installée)`], lang: `EN`, reset: `redémarrer`, resetQ: `Redémarrer et tout perdre ?`,
+    boot: [`PIXEL-OS v0.1`, `Test mémoire : 8 Ko ... OK`, `Recherche de game.exe ... trouvé`, `Vérification de game.exe ... inachevé`, `Lancement quand même.`, ``, `(clique pour passer)`],
+    shop: `Programmes`, ramUp: `Barrette RAM +4 Ko`, ramDesc: `Plus de place pour tes programmes.`, buy: c => `${c} px`, open: `ouvrir`, running: `lancé`, installing: n => `Installation de ${n}`,
+    err: `Mémoire insuffisante.\nFerme un programme (bouton X) pour faire de la place.`, ok: `OK`, clicking: `clic...`, cursorOn: `pilote de souris chargé.\nPrécis. Instantané.`, colorOn: `16 couleurs chargées.`,
+    ramtxt: (u, t) => `${u} / ${t} Ko`, noScore: `?`,
+    end: (c, t) => `Fin de la tranche jouable.\n\nMémoire : 16 Ko.\nProgrammes fermés pour faire de la place : ${c}\nTemps : ${t}\n\nTu en veux plus ? Dis-le au développeur.`,
+  },
+};
+
+// kb: memory used while running. multi: several copies can run, each bought separately.
+const P = [
+  { id: `game`, file: `game.exe`, kb: 2, fixed: 1, c: `#ff2a8a` },
+  { id: `install`, file: `install.exe`, kb: 1, c: `#7a7a7a` },
+  { id: `score`, file: `score.exe`, kb: 1, cost: 10, c: `#2ecc71` },
+  { id: `notes`, file: `notes.txt`, kb: 1, cost: 15, c: `#f5f5dc` },
+  { id: `auto`, file: `autoclick.exe`, kb: 2, cost: 25, multi: 1, c: `#3498db` },
+  { id: `cursor`, file: `cursor.drv`, kb: 1, cost: 40, c: `#e67e22` },
+  { id: `color`, file: `color.drv`, kb: 3, cost: 80, c: `#9b59b6` },
+];
+const D = {
+  en: { score: `Shows your score.`, notes: `The developer's notes.`, auto: `+2 px/s. Run as many as your memory allows.`, cursor: `Your real mouse. The white dot is always late.`, color: `Colors. Stray pixels show if they're good (gold) or bad (red).` },
+  fr: { score: `Affiche ton score.`, notes: `Les notes du développeur.`, auto: `+2 px/s. Lance-en autant que ta mémoire le permet.`, cursor: `Ta vraie souris. Le point blanc est toujours en retard.`, color: `Les couleurs. Les pixels égarés montrent s'ils sont bons (dorés) ou mauvais (rouges).` },
+};
+const N = {
+  start: [`game.exe: one pixel. It takes 2 KB. I know, that's a lot for one pixel.`, `game.exe : un pixel. Il prend 2 Ko. Je sais, c'est beaucoup pour un pixel.`],
+  score: [`score.exe: 1 KB for a number. The price of truth.`, `score.exe : 1 Ko pour un nombre. C'est le prix de la vérité.`],
+  notes: [`notes.txt: it's me. Hello. I'm using 1 KB of your memory to talk to you.`, `notes.txt : c'est moi. Bonjour. Je prends 1 Ko de ta mémoire pour te parler.`],
+  auto: [`autoclick.exe: clicks for you. You can run several. Your memory doesn't multiply, though.`, `autoclick.exe : clique à ta place. Tu peux en lancer plusieurs. Ta mémoire, elle, ne se multiplie pas.`],
+  cursor: [`cursor.drv: your real mouse. The white dot did its best.`, `cursor.drv : ta vraie souris. Le point blanc a fait de son mieux.`],
+  color: [`color.drv: 16 colors, 3 KB. Stray pixels finally have a color. The good ones are gold.`, `color.drv : 16 couleurs, 3 Ko. Les pixels égarés ont enfin une couleur. Les bons sont dorés.`],
+  mem: [`Your machine has 8 KB. You'll have to choose. I wanted more too.`, `Ta machine a 8 Ko. Il va falloir choisir. Moi aussi, j'aurais voulu plus.`],
+  shopClosed: [`You closed the shop to make room. Respect. Its icon is on the desktop if you change your mind.`, `Tu as fermé la boutique pour faire de la place. Respect. Son icône est sur le bureau si tu changes d'avis.`],
+  ram: [`4 KB stick installed. The fan is making a noise I've never heard before.`, `Barrette de 4 Ko installée. Le ventilateur fait un bruit que je ne connaissais pas.`],
+  stray: [`Known bug: some pixels escape game.exe. Some are worth a lot. Some steal from you. In black and white, good luck.`, `Bug connu : des pixels s'échappent de game.exe. Certains valent cher. D'autres te volent. En noir et blanc, bonne chance.`],
+};
+const RAMUP = [300, 900];
+
+const S = { px: 0, total: 0, time: 0, ram: 8, ramLv: 0, bought: { game: 1, install: 1 }, run: { game: 1, install: 1 }, inst: [], notes: [N.start], once: {}, closed: 0, done: 0,
+  lang: navigator.language.startsWith(`fr`) ? `fr` : `en` };
+const $ = id => document.getElementById(id);
+const t = () => L[S.lang];
+const li = () => S.lang === `fr` ? 1 : 0;
+const prog = id => P.find(p => p.id === id);
+const run = id => S.run[id] || 0;
+const used = () => P.reduce((a, p) => a + run(p.id) * p.kb, 0) + S.inst.reduce((a, i) => a + prog(i.id).kb, 0);
+const price = p => Math.ceil(p.cost * (p.multi ? 1.5 ** ((S.bought[p.id] || 0)) : 1));
+const perSec = () => run(`auto`) * 2;
+function note(key) { if (S.once[key]) return; S.once[key] = 1; S.notes.push(N[key]); notesDirty = true; }
+
+// ---- actions ----
+function openProg(id) {
+  const p = prog(id);
+  if (run(id) + S.inst.filter(i => i.id === id).length >= (S.bought[id] || 0)) return;
+  if (S.ram - used() < p.kb) { error(); return; }
+  S.inst.push({ id, left: p.kb * 1.2, full: p.kb * 1.2 });
+}
+function closeProg(id) {
+  if (prog(id).fixed || !run(id)) return;
+  S.run[id]--; S.closed++;
+  if (id === `install`) note(`shopClosed`);
+}
+function buy(id) {
+  const p = prog(id), c = price(p);
+  if (S.px < c) return;
+  S.px -= c; S.bought[id] = (S.bought[id] || 0) + 1;
+  openProg(id);
+}
+function buyRam() {
+  const c = RAMUP[S.ramLv];
+  if (c === undefined || S.px < c) return;
+  S.px -= c; S.ram += 4; S.ramLv++; note(`ram`);
+  if (S.ram >= 16) { S.done = 1; showEnd(); }
+}
+function gain(n) { S.px += n; S.total += n; }
+
+// ---- windows ----
+const wins = {}, pos = {};
+let z = 10, errors = 0, notesDirty = true, shopSig = ``;
+function defPos(key) {
+  const W = innerWidth, H = innerHeight, [id, n] = key.split(`#`), i = +n || 0;
+  const map = { game: [W / 2 - 120, 60], install: [W - 340, 44], score: [W / 2 - 85, 210], notes: [W - 340, H - 330], cursor: [W / 2 - 220, H - 170], color: [W / 2 + 20, H - 200], error: [W / 2 - 150, H / 2 - 80] };
+  if (id === `auto`) return [120 + i * 26, H - 230 + i * 22];
+  if (id === `inst`) return [W / 2 - 140 + i * 20, H / 2 + i * 20];
+  return map[id] || [200, 200];
+}
+function makeWin(key, title, width, closable, onClose) {
+  const w = document.createElement(`div`);
+  w.className = `win`; w.style.width = width + `px`;
+  const [x, y] = pos[key] || defPos(key);
+  // keep new windows inside the screen, whatever its size
+  w.style.left = Math.max(96, Math.min(x, innerWidth - width - 6)) + `px`; w.style.top = Math.max(26, Math.min(y, innerHeight - 140)) + `px`; w.style.zIndex = ++z;
+  w.innerHTML = `<div class="tb">${closable ? `<button class="x" title="close">x</button>` : ``}<span></span></div><div class="bd"></div>`;
+  w.querySelector(`.tb span`).textContent = title;
+  if (closable) w.querySelector(`.x`).onclick = e => { e.stopPropagation(); onClose(); };
+  w.addEventListener(`pointerdown`, () => { w.style.zIndex = ++z; });
+  // drag by the title bar
+  w.querySelector(`.tb`).addEventListener(`pointerdown`, e => {
+    if (e.target.classList.contains(`x`)) return;
+    const ox = e.clientX - w.offsetLeft, oy = e.clientY - w.offsetTop;
+    const mv = ev => { w.style.left = ev.clientX - ox + `px`; w.style.top = Math.max(26, ev.clientY - oy) + `px`; pos[key] = [ev.clientX - ox, ev.clientY - oy]; };
+    const up = () => { removeEventListener(`pointermove`, mv); removeEventListener(`pointerup`, up); };
+    addEventListener(`pointermove`, mv); addEventListener(`pointerup`, up);
+  });
+  $(`desk`).append(w);
+  wins[key] = w;
+  return w.querySelector(`.bd`);
+}
+function fillWin(id, bd) {
+  const tx = t();
+  if (id === `game`) {
+    const b = document.createElement(`button`); b.id = `px`; b.setAttribute(`aria-label`, `pixel`);
+    b.onclick = () => { if (S.done) return; gain(1); const fx = document.createElement(`span`); fx.className = `fx`; fx.textContent = `+1`; b.append(fx); setTimeout(() => fx.remove(), 700); };
+    bd.append(b);
+  } else if (id === `score`) bd.innerHTML = `<div class="big" data-score></div>`;
+  else if (id === `notes`) bd.innerHTML = `<div class="notes" data-notes></div>`;
+  else if (id === `auto`) bd.innerHTML = `<div data-auto></div><div class="kb">+2 px/s</div>`;
+  else if (id === `cursor`) bd.textContent = tx.cursorOn;
+  else if (id === `color`) { bd.innerHTML = `<div class="pal"></div><div class="kb"></div>`; bd.querySelector(`.kb`).textContent = tx.colorOn; for (const c of [`#000`, `#800000`, `#008000`, `#808000`, `#000080`, `#800080`, `#008080`, `#c0c0c0`, `#808080`, `#f00`, `#0f0`, `#ff0`, `#00f`, `#f0f`, `#0ff`, `#fff`]) { const i = document.createElement(`i`); i.style.background = c; bd.querySelector(`.pal`).append(i); } }
+}
+function error() {
+  note(`mem`);
+  const key = `error#` + errors++;
+  const bd = makeWin(key, `error`, 300, true, () => { wins[key].remove(); delete wins[key]; });
+  bd.innerHTML = `<div style="white-space:pre-line"></div><div style="text-align:right;margin-top:10px"><button class="btn">OK</button></div>`;
+  bd.firstElementChild.textContent = t().err;
+  bd.querySelector(`.btn`).onclick = () => { wins[key].remove(); delete wins[key]; };
+}
+function syncWins() {
+  const want = [];
+  for (const p of P) for (let i = 0; i < run(p.id); i++) want.push(p.id + `#` + i);
+  S.inst.forEach((it, i) => want.push(`inst#` + i));
+  for (const key of Object.keys(wins)) if (!key.startsWith(`error`) && !want.includes(key)) { wins[key].remove(); delete wins[key]; }
+  for (const key of want) {
+    if (wins[key]) continue;
+    const [id] = key.split(`#`);
+    if (id === `inst`) { const bd = makeWin(key, ``, 280, false); bd.innerHTML = `<div data-label></div><div class="prog"><i></i></div>`; continue; }
+    const p = prog(id), bd = makeWin(key, p.file + ` (${p.kb} ${S.lang === `fr` ? `Ko` : `KB`})`, { game: 240, install: 320, notes: 320, score: 170, auto: 170, cursor: 190, color: 200 }[id], !p.fixed, () => closeProg(id));
+    fillWin(id, bd);
+    if (id === `install`) shopSig = ``;
+    if (id === `notes`) notesDirty = true;
+  }
+}
+function renderShop() {
+  const w = Object.keys(wins).find(k => k.startsWith(`install#`));
+  if (!w) return;
+  const bd = wins[w].querySelector(`.bd`), tx = t(), list = P.filter(p => p.cost);
+  const sig = S.lang + list.map(p => (S.bought[p.id] || 0) + `/` + run(p.id)).join() + S.ramLv;
+  if (sig !== shopSig) {
+    shopSig = sig; bd.innerHTML = ``;
+    const h = document.createElement(`div`); h.textContent = tx.shop; h.style.marginBottom = `4px`; bd.append(h);
+    for (const p of list) {
+      const r = document.createElement(`div`); r.className = `row`;
+      r.innerHTML = `<div><span></span> <span class="kb"></span><small></small></div><button class="btn"></button>`;
+      r.querySelector(`span`).textContent = p.file; r.querySelector(`.kb`).textContent = `${p.kb} ${S.lang === `fr` ? `Ko` : `KB`}`; r.querySelector(`small`).textContent = D[S.lang][p.id];
+      const b = r.querySelector(`.btn`); b.dataset.id = p.id;
+      const owned = S.bought[p.id] || 0;
+      if (owned && !p.multi) { b.textContent = run(p.id) ? tx.running : tx.open; b.onclick = () => openProg(p.id); b.dataset.mode = `open`; }
+      else { b.onclick = () => buy(p.id); }
+      bd.append(r);
+    }
+    if (RAMUP[S.ramLv] !== undefined) {
+      const r = document.createElement(`div`); r.className = `row`;
+      r.innerHTML = `<div><span></span><small></small></div><button class="btn" data-id="ram"></button>`;
+      r.querySelector(`span`).textContent = tx.ramUp; r.querySelector(`small`).textContent = tx.ramDesc;
+      r.querySelector(`.btn`).onclick = buyRam; bd.append(r);
+    }
+  }
+  for (const b of bd.querySelectorAll(`.btn`)) {
+    if (b.dataset.mode === `open`) { b.disabled = run(b.dataset.id) > 0; continue; }
+    const c = b.dataset.id === `ram` ? RAMUP[S.ramLv] : price(prog(b.dataset.id));
+    b.textContent = tx.buy(c); b.disabled = S.px < c;
+  }
+}
+function render() {
+  syncWins();
+  renderShop();
+  for (const el of document.querySelectorAll(`[data-score]`)) el.textContent = Math.floor(S.px);
+  for (const el of document.querySelectorAll(`[data-auto]`)) el.textContent = t().clicking.slice(0, 3 + Math.floor(S.time * 4) % (t().clicking.length - 2));
+  S.inst.forEach((it, i) => { const w = wins[`inst#` + i]; if (!w) return; w.querySelector(`[data-label]`).textContent = t().installing(prog(it.id).file); w.querySelector(`.prog i`).style.width = (1 - it.left / it.full) * 100 + `%`; });
+  if (notesDirty) for (const el of document.querySelectorAll(`[data-notes]`)) { el.innerHTML = ``; for (const n of [...S.notes].reverse()) { const p = document.createElement(`p`); p.textContent = `> ` + n[li()]; el.append(p); } notesDirty = false; }
+  // desktop icons: programs owned but not running
+  const ic = $(`icons`), want = P.filter(p => !p.fixed && (S.bought[p.id] || 0) > run(p.id) + S.inst.filter(i => i.id === p.id).length);
+  const sig = want.map(p => p.id).join() + S.lang;
+  if (ic.dataset.sig !== sig) {
+    ic.dataset.sig = sig; ic.innerHTML = ``;
+    for (const p of want) { const b = document.createElement(`button`); b.className = `ic`; b.style.setProperty(`--c`, p.c); b.innerHTML = `<b></b><span></span>`; b.querySelector(`span`).textContent = p.file; b.onclick = () => openProg(p.id); ic.append(b); }
+  }
+  // memory bar: one block per KB, colored by the program using it
+  const blocks = [];
+  for (const p of P) for (let i = 0; i < run(p.id) * p.kb; i++) blocks.push([`u`, p.c]);
+  for (const it of S.inst) for (let i = 0; i < prog(it.id).kb; i++) blocks.push([`p`, prog(it.id).c]);
+  const ram = $(`ram`);
+  ram.innerHTML = ``;
+  for (let i = 0; i < S.ram; i++) { const b = document.createElement(`i`); if (blocks[i]) { b.className = blocks[i][0]; b.style.setProperty(`--c`, blocks[i][1]); } ram.append(b); }
+  $(`ramtxt`).textContent = t().ramtxt(used(), S.ram);
+  document.body.classList.toggle(`color`, run(`color`) > 0);
+  document.body.classList.toggle(`nocursor`, !run(`cursor`));
+}
+function renderStatic() {
+  document.documentElement.lang = S.lang;
+  [`m1`, `m2`, `m3`].forEach((id, i) => $(id).textContent = t().m[i]);
+  $(`lang`).textContent = t().lang; $(`reset`).textContent = t().reset;
+  for (const k of Object.keys(wins)) if (!k.startsWith(`error`)) { wins[k].remove(); delete wins[k]; }
+  notesDirty = true; shopSig = ``; $(`icons`).dataset.sig = ``;
+}
+function showEnd() {
+  const key = `error#end`, s = Math.floor(S.time);
+  const bd = makeWin(key, `PIXEL-OS`, 340, false);
+  bd.innerHTML = `<div style="white-space:pre-line"></div>`;
+  bd.firstElementChild.textContent = t().end(S.closed, `${Math.floor(s / 60)} min ${String(s % 60).padStart(2, `0`)} s`);
+}
+
+// ---- dot cursor: follows the mouse late ----
+let mx = innerWidth / 2, my = innerHeight / 2, dx = mx, dy = my;
+addEventListener(`pointermove`, e => { mx = e.clientX; my = e.clientY; });
+(function dotLoop() { dx += (mx - dx) * 0.14; dy += (my - dy) * 0.14; $(`dot`).style.transform = `translate(${dx - 4}px,${dy - 4}px)`; requestAnimationFrame(dotLoop); })();
+
+// ---- stray pixels: gold pays, red steals; grey for everyone without color.drv ----
+let strayNext = 20, strayLeft = 0, strayGood = true, sx = 0, sy = 0, svx = 0, svy = 0;
+function strayTick(dt) {
+  const el = $(`stray`);
+  if (strayLeft > 0) {
+    strayLeft -= dt; sx += svx * dt; sy += svy * dt;
+    if (sx < 0 || sx > innerWidth - 10) svx = -svx;
+    if (sy < 30 || sy > innerHeight - 50) svy = -svy;
+    el.style.left = sx + `px`; el.style.top = sy + `px`;
+    if (strayLeft <= 0) el.className = ``;
+    return;
+  }
+  if (S.total < 60 || (strayNext -= dt) > 0) return;
+  strayNext = 20 + Math.random() * 20; strayLeft = 5; strayGood = Math.random() < 0.65;
+  sx = innerWidth / 2; sy = 120; const a = Math.random() * Math.PI * 2, sp = 150 + Math.random() * 90; svx = Math.cos(a) * sp; svy = Math.sin(a) * sp;
+  el.className = `on ` + (strayGood ? `gold` : `red`);
+  note(`stray`);
+}
+$(`stray`).onclick = () => {
+  if (strayLeft <= 0) return;
+  strayLeft = 0; $(`stray`).className = ``;
+  if (strayGood) gain(30 + perSec() * 25); else S.px = Math.floor(S.px * 0.8);
+};
+
+$(`lang`).onclick = () => { S.lang = S.lang === `fr` ? `en` : `fr`; renderStatic(); render(); runBoot(true); };
+$(`reset`).onclick = () => { if (confirm(t().resetQ)) location.reload(); };
+
+// ---- boot ----
+let booted = false;
+function runBoot(skip) {
+  const b = $(`boot`);
+  if (skip || booted) { b.classList.add(`off`); booted = true; return; }
+  let i = 0; b.textContent = ``;
+  const step = () => { if (booted) return; if (i < t().boot.length) { b.textContent += t().boot[i++] + `\n`; setTimeout(step, 450); } else setTimeout(() => runBoot(true), 600); };
+  b.onclick = () => runBoot(true);
+  step();
+}
+
+renderStatic();
+runBoot();
+let prev = performance.now();
+setInterval(() => {
+  const now = performance.now(), dt = Math.min(1, (now - prev) / 1000); prev = now;
+  if (booted && !S.done) {
+    S.time += dt; gain(perSec() * dt); strayTick(dt);
+    for (const it of S.inst) it.left -= dt;
+    for (const it of S.inst.filter(i => i.left <= 0)) { S.run[it.id] = run(it.id) + 1; note(it.id); }
+    S.inst = S.inst.filter(i => i.left > 0);
+  }
+  render();
+}, 100);
+</script>
+</body>
+</html>
