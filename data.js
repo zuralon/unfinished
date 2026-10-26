@@ -48,6 +48,17 @@ const UI = {
   },
 };
 
+// French names of the Windows and phone programs, as in the French versions of the time
+const NAME_FR = {
+  'Add/Remove Programs': `Ajout/Suppression de programmes`, 'Notepad - notes.txt': `Bloc-notes - notes.txt`, 'Help Topics': `Rubriques d'aide`,
+  'Trophies': `Trophées`, 'Clock': `Horloge`, 'Calculator': `Calculatrice`, 'Macro Recorder': `Enregistreur de macros`, 'Disk Defragmenter': `Défragmenteur de disque`,
+  'Media Player': `Lecteur multimédia`, '3D Pipes': `Tuyaux 3D`, 'Add or Remove Programs': `Ajout ou suppression de programmes`, 'Mailbox': `Boîte mail`,
+  'Help and Support': `Aide et support`, 'Command Prompt': `Invite de commandes`, 'Pop-up Stopper': `Bloqueur de pop-ups`, 'Tips': `Astuces`,
+  'Flashlight': `Lampe torche`, 'Get Help': `Obtenir de l'aide`, 'Achievements': `Succès`, 'Clock & Alarms': `Horloge et alarmes`, 'Focus Session': `Session de concentration`, 'Chat': `Converser`,
+};
+const NAME_FR_ERA = { 5: { 'Calculator': `Calculette` } };
+const frName = (n, e) => (NAME_FR_ERA[e] && NAME_FR_ERA[e][n]) || NAME_FR[n] || n;
+
 // the minimize and maximize buttons of the Winbows title bars
 const NYI = {
   min: [[`Minimize: not coded yet. Closing works, though.`, `Réduire : pas encore codé. Fermer, ça marche.`], [`This button is decorative. Like the developer's gym membership.`, `Ce bouton est décoratif. Comme l'abonnement à la salle de sport du dev.`]],

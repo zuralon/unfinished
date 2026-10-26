@@ -177,7 +177,7 @@ ERA[4] = {
     [`ORDER CONFIRMATION: "1x iBrick. Delivery: soon. Size: brick. Battery: yes."`, `CONFIRMATION DE COMMANDE : « 1x iBrick. Livraison : bientôt. Taille : brique. Batterie : oui. »`],
   ],
   // ----- era mechanics -----
-  enter() { dlg(T(X4.y2k), { title: `Y2K` }); },
+  enter() { dlg(T(X4.y2k), { title: T([`Y2K`, `Bug de l'an 2000`]) }); },
   tick(dt) {
     const x = S.x, over = use(`cpu`) / cap(`cpu`);
     document.body.classList.toggle(`lag`, over > 1);
