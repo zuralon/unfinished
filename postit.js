@@ -69,8 +69,10 @@ function tkNew() {
 function tkNow() {
   const k = S.x.tk, t = k && TK.find(t => t.id === k.id);
   if (!t) return null;
-  const v = t.abs ? t.abs() : t.k() - k.b;
-  return { t, k, v: Math.min(v, k.n), done: v >= k.n };
+  // once reached, a task stays done: moving the mouse to cash in must not undo "touch nothing for 30 s"
+  if (!k.done && (t.abs ? t.abs() : t.k() - k.b) >= k.n) k.done = 1;
+  const v = k.done ? k.n : t.abs ? t.abs() : t.k() - k.b;
+  return { t, k, v: Math.min(v, k.n), done: !!k.done };
 }
 function tkClaim() {
   const c = tkNow();
