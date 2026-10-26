@@ -10,7 +10,7 @@ const UI = {
     oom: `Not enough memory.\nClose a program (X) to make room.`, ok: `OK`, ram: (u, t, f) => `${u} / ${t}` + (f ? `  (${f} fragmented)` : ``),
     perSec: v => `${v} px/s`, perClick: v => `${v} px per click`, achs: (n, t) => `Achievements ${n}/${t} (+${n}% production)`,
     away: (t, g) => `Clock: you were away for ${t}.\nThe screensaver worked for you: +${g} px.`, achGot: n => `Achievement: ${n}`,
-    hackTitle: `PASSWORD REQUIRED`, hackTries: n => `ATTEMPTS LEFT: ${n}`, likeness: (w, n) => `> ${w}  LIKENESS=${n}`, hackOk: `ACCESS GRANTED`, hackFail: `TERMINAL LOCKED. TRY AGAIN LATER.`,
+    hackTitle: `PASSWORD REQUIRED`, hackTries: n => `ATTEMPTS LEFT: ${n}`, likeness: (w, n) => `> ${w}  LIKENESS=${n}`, hackOk: `ACCESS GRANTED`, hackFail: `TERMINAL LOCKED. TRY AGAIN LATER.`, hackDud: `> Dud removed.`, hackReset: `> Tries reset.`,
     hackReady: `> ACCESS LOCKED FILE`, hackWait: s => `TERMINAL LOCKED (${s} s)`, hackReward: v => `+${v} px recovered from the file.`,
     soon: `The floppy won't go in.\nThe drive for it hasn't been invented yet.\n\n(End of phase 1. The next era is coming.)`,
     era2: `Insert the Minosoft floppy`, era2d: `Requires 64 KB of RAM.`, sticks: (a, b) => `RAM stick ${a} -> ${b} KB`, stickD: `More room for programs.`,
@@ -32,7 +32,7 @@ const UI = {
     oom: `Mémoire insuffisante.\nFerme un programme (X) pour faire de la place.`, ok: `OK`, ram: (u, t, f) => `${u} / ${t}` + (f ? `  (${f} fragmentés)` : ``),
     perSec: v => `${v} px/s`, perClick: v => `${v} px par clic`, achs: (n, t) => `Succès ${n}/${t} (+${n} % de production)`,
     away: (t, g) => `Horloge : tu étais absent ${t}.\nL'économiseur d'écran a travaillé pour toi : +${g} px.`, achGot: n => `Succès : ${n}`,
-    hackTitle: `MOT DE PASSE REQUIS`, hackTries: n => `ESSAIS RESTANTS : ${n}`, likeness: (w, n) => `> ${w}  CORRESPONDANCE=${n}`, hackOk: `ACCÈS AUTORISÉ`, hackFail: `TERMINAL VERROUILLÉ. RÉESSAIE PLUS TARD.`,
+    hackTitle: `MOT DE PASSE REQUIS`, hackTries: n => `ESSAIS RESTANTS : ${n}`, likeness: (w, n) => `> ${w}  CORRESPONDANCE=${n}`, hackOk: `ACCÈS AUTORISÉ`, hackFail: `TERMINAL VERROUILLÉ. RÉESSAIE PLUS TARD.`, hackDud: `> Mot inutile retiré.`, hackReset: `> Essais réinitialisés.`,
     hackReady: `> OUVRIR LE FICHIER VERROUILLÉ`, hackWait: s => `TERMINAL VERROUILLÉ (${s} s)`, hackReward: v => `+${v} px récupérés dans le fichier.`,
     soon: `La disquette ne rentre pas.\nLe lecteur qui va avec n'a pas encore été inventé.\n\n(Fin de la phase 1. L'époque suivante arrive.)`,
     era2: `Insérer la disquette Minosoft`, era2d: `Nécessite 64 Ko de RAM.`, sticks: (a, b) => `Barrette RAM ${a} -> ${b} Ko`, stickD: `Plus de place pour tes programmes.`,
@@ -95,7 +95,7 @@ const TERM = {
     patch: [`> PATCHES IMPROVE PROGRAMS FOREVER. THEY USE NO MEMORY. FINALLY SOMETHING FREE. (IT IS NOT FREE.)`, `> LES PATCHS AMÉLIORENT LES PROGRAMMES POUR TOUJOURS. ILS N'UTILISENT PAS DE MÉMOIRE. ENFIN UN TRUC GRATUIT. (CE N'EST PAS GRATUIT.)`],
     memUp: [`> MEMORY MODULE AVAILABLE. MORE ROOM, MORE PROGRAMS.`, `> MODULE MÉMOIRE DISPONIBLE. PLUS DE PLACE, PLUS DE PROGRAMMES.`],
     stray: [`> WARNING: STRAY PIXEL DETECTED (*). CLICK IT BEFORE IT LEAVES. SOME ARE GOOD. SOME ARE NOT.`, `> ALERTE : PIXEL ÉGARÉ DÉTECTÉ (*). CLIQUE DESSUS AVANT QU'IL PARTE. CERTAINS SONT BONS. D'AUTRES NON.`],
-    hack: [`> LOCKED FILE FOUND: DEV_LOG.TXT. PASSWORD REQUIRED. LIKENESS = LETTERS IN THE RIGHT PLACE.`, `> FICHIER VERROUILLÉ TROUVÉ : DEV_LOG.TXT. MOT DE PASSE REQUIS. CORRESPONDANCE = LETTRES BIEN PLACÉES.`],
+    hack: [`> LOCKED FILE FOUND: DEV_LOG.TXT. PASSWORD REQUIRED. LIKENESS = LETTERS IN THE RIGHT PLACE. CLICK A BRACKET PAIR LIKE (..) OR [..] FOR HELP.`, `> FICHIER VERROUILLÉ TROUVÉ : DEV_LOG.TXT. MOT DE PASSE REQUIS. CORRESPONDANCE = LETTRES BIEN PLACÉES. CLIQUE SUR UNE PAIRE COMME (..) OU [..] POUR T'AIDER.`],
     os1: [`> SOMETHING SLID UNDER THE DOOR: A PUNCHED CARD. 80 COLUMNS. NO RETURN ADDRESS.`, `> QUELQUE CHOSE A GLISSÉ SOUS LA PORTE : UNE CARTE PERFORÉE. 80 COLONNES. PAS D'EXPÉDITEUR.`],
   },
 };
@@ -219,6 +219,7 @@ const HELP = [
   [`clock.exe must be running when you leave, or the computer won't notice time passing.`, `clock.exe doit tourner quand tu pars, sinon l'ordinateur ne remarque pas que le temps passe.`],
   [`screensaver.scr: stop moving the mouse for 20 s and production goes x3. Go make a coffee.`, `screensaver.scr : ne bouge plus la souris pendant 20 s et la production passe x3. Va te faire un café.`],
   [`hack.exe: LIKENESS is the number of letters in the right place.`, `hack.exe : la CORRESPONDANCE, c'est le nombre de lettres bien placées.`],
+  [`hack.exe: click a bracket pair like (..) or [..]. It removes a wrong word, or gives your tries back.`, `hack.exe : clique sur une paire comme (..) ou [..]. Ça retire un mauvais mot, ou ça rend tes essais.`],
   [`Have you tried turning it off and on again? Don't. It's not implemented yet.`, `Tu as essayé d'éteindre et de rallumer ? Ne le fais pas. Ce n'est pas encore codé.`],
 ];
 
