@@ -61,7 +61,8 @@ function save() {
 const SUF = [``, `K`, `M`, `B`, `T`, `Qa`, `Qi`, `Sx`, `Sp`, `Oc`, `No`, `Dc`, `UDc`, `DDc`, `TDc`, `QaDc`, `QiDc`];
 function fmt(n) {
   n = Math.floor(n);
-  if (n < 1e6) return n.toLocaleString(loc());
+  // French groups digits with a narrow no-break space that pixel fonts lack: use a plain no-break space
+  if (n < 1e6) return n.toLocaleString(loc()).replace(/\u202f/g, `\u00a0`);
   if (S.opt.sci) return n.toExponential(2).replace(`e+`, `e`);
   const e = Math.min(Math.floor(Math.log10(n) / 3), SUF.length - 1);
   return (n / 1000 ** e).toFixed(2) + SUF[e];
