@@ -623,6 +623,10 @@ body.s5.split .win[id^="w-"] .title{height:86px;padding-top:30px;box-sizing:bord
 body.s5.split .win[id^="w-"] .mt{top:34px}
 body.s5.split .win[id^="w-"].cur{border-radius:16px 12px 12px 16px}
 body.s5.split .win[id^="w-"].cur2{border-radius:12px 16px 16px 12px}
+/* one home bar under each app, like iPadOS; the real bar stays as the gesture zone but is not drawn */
+body.s5.split #home{background-color:transparent!important}
+body.s5.split .win[id^="w-"].cur:after,body.s5.split .win[id^="w-"].cur2:after{content:'';position:absolute;left:50%;bottom:8px;width:110px;height:5px;margin-left:-55px;border-radius:3px;background:rgba(0,0,0,.75);pointer-events:none}
+body.s5.split .win[id^="w-"]#w-game:after{background:rgba(255,255,255,.85)}
 body.s5.split #pickb{display:block;position:fixed;left:50%;top:50%;width:4px;height:44px;margin:-22px 0 0 -2px;padding:0;border-radius:2px;background:#8e8e93;z-index:61;box-shadow:none;font-size:0}
 body.s5.notch .win[id^="w-"]{border-radius:0 0 42px 42px;overflow:hidden}
 body.s5.notch #dead.on{border-radius:42px}
@@ -848,16 +852,16 @@ body.flick{animation:fl .12s steps(2) 8}
 <div id="boot"><div><i></i>PIXEL-OS 1<br><br><span class="dim">Welcome. Mostly.</span></div></div>
 <div id="dlg"><div class="win"><div class="title"><b id="dlgH">PIXEL-OS</b></div><div class="body"><div id="dlgT"></div><textarea id="dlgI" spellcheck="false"></textarea><div id="dlgB"></div></div></div></div>
 
-<script src="data.js?v=40"></script>
-<script src="era2.js?v=40"></script>
-<script src="era3.js?v=40"></script>
-<script src="era4.js?v=40"></script>
-<script src="era5.js?v=40"></script>
-<script src="era6.js?v=40"></script>
-<script src="icons.js?v=40"></script>
-<script src="savers.js?v=40"></script>
-<script src="visuals.js?v=40"></script>
-<script src="postit.js?v=40"></script>
-<script src="game.js?v=40"></script>
+<script src="data.js?v=41"></script>
+<script src="era2.js?v=41"></script>
+<script src="era3.js?v=41"></script>
+<script src="era4.js?v=41"></script>
+<script src="era5.js?v=41"></script>
+<script src="era6.js?v=41"></script>
+<script src="icons.js?v=41"></script>
+<script src="savers.js?v=41"></script>
+<script src="visuals.js?v=41"></script>
+<script src="postit.js?v=41"></script>
+<script src="game.js?v=41"></script>
 </body>
 </html>
