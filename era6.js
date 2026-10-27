@@ -37,7 +37,7 @@ const X6 = {
   thanks: [`THANK YOU FOR PLAYING`, `MERCI D'AVOIR JOUÉ`],
   credits: [`PIXEL-OS\nA game by zuralon\n\nThe pixel was clicked {c} times.\nTime played: {t}.\n\nNo pixels were harmed. One was finished.`, `PIXEL-OS\nUn jeu de zuralon\n\nLe pixel a été cliqué {c} fois.\nTemps de jeu : {t}.\n\nAucun pixel n'a été maltraité. Un a été fini.`],
   keep: [`Keep playing`, `Continuer à jouer`],
-  ng: [`New Game+ (start over, +50% production forever)`, `Nouvelle partie+ (tout recommencer, +50 % de production pour toujours)`],
+  ng: [`New Game+ (start over, production x{m} forever)`, `Nouvelle partie+ (tout recommencer, production x{m} pour toujours)`],
   finished: [`The game is finished.`, `Le jeu est fini.`],
 };
 const AI_FIRST = [`install`, `notes`, `score`, `game`];
@@ -275,7 +275,7 @@ ERA[6] = {
   finScreen() {
     if (!$(`fin`)) document.body.insertAdjacentHTML(`beforeend`, `<div id="fin"><div id="finT"></div></div>`);
     $(`fin`).classList.add(`on`, `green`);
-    $(`finT`).innerHTML = `<div class="big">${T(X6.thanks)}</div><pre>${esc(fill(T(X6.credits), { c: fmt(S.clicks), t: dur(S.time) }))}</pre><div class="fb"><button class="btn" data-act="keep">${T(X6.keep)}</button> <button class="btn" data-act="ngplus">${T(X6.ng)}</button></div>`;
+    $(`finT`).innerHTML = `<div class="big">${T(X6.thanks)}</div><pre>${esc(fill(T(X6.credits), { c: fmt(S.clicks), t: dur(S.time) }))}</pre><div class="fb"><button class="btn" data-act="keep">${T(X6.keep)}</button> <button class="btn" data-act="ngplus">${fill(T(X6.ng), { m: fmt(2 * ngMul()) })}</button></div>`;
   },
   BODY: {
     ai() {

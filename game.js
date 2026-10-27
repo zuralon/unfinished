@@ -83,7 +83,9 @@ function dur(s) {
 // ---------- economy ----------
 const E = () => ERA[S.era];
 const prog = id => PDX[S.era][id];
-const achMul = () => (1 + S.ach.length / 100) * (1 + 0.5 * (S.ng || 0));
+// each New Game+ doubles everything again: x2, x4, x8... like a prestige
+const ngMul = () => 2 ** (S.ng || 0);
+const achMul = () => (1 + S.ach.length / 100) * ngMul();
 const scoreVisible = () => (S.era === 0 ? S.z.countOn : S.run.score);
 function gain(n) { S.px += n; S.total += n; S.life += n; if (!scoreVisible()) S.st.blind += n; }
 
@@ -707,7 +709,7 @@ const A = {
   sci() { S.opt.sci = S.opt.sci ? 0 : 1; },
   anim() { S.opt.anim = S.opt.anim ? 0 : 1; },
   tip() { dlg(T(E().HELP[Math.random() * E().HELP.length | 0])); },
-  about() { dlg((E().about ? T(E().about) : U().aboutT) + `\n\n` + fill(T([`Act {n} of 6 - {os} ({y})`, `Acte {n} sur 6 - {os} ({y})`]), { n: S.era, os: E().os, y: E().year }) + (S.ng ? ` - ` + T([`New Game+`, `Nouvelle partie+`]) + (S.ng > 1 ? ` x${S.ng}` : ``) : ``)); },
+  about() { dlg((E().about ? T(E().about) : U().aboutT) + `\n\n` + fill(T([`Act {n} of 6 - {os} ({y})`, `Acte {n} sur 6 - {os} ({y})`]), { n: S.era, os: E().os, y: E().year }) + (S.ng ? ` - ` + T([`New Game+`, `Nouvelle partie+`]) + (S.ng > 1 ? ` ${S.ng}` : ``) + ` (` + T([`production`, `production`]) + ` x${fmt(ngMul())})` : ``)); },
   dlgOk() { const cb = dlgCb; const v = $(`dlgI`).value; dlgCb = dlgNoCb = null; dlgClose(); if (cb) cb(v); },
   dlgNo() { const cb = dlgNoCb; dlgCb = dlgNoCb = null; dlgClose(); if (cb) cb(); },
   pclaim: () => tkClaim(),
