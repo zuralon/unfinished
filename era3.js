@@ -61,6 +61,11 @@ ERA[3] = {
   end: { c: 4e10, t: [`Insert the CD from the future`, `Insérer le CD du futur`], d: [`Requires every hardware upgrade.`, `Nécessite toutes les améliorations matérielles.`] },
   MS: [[`m1m`, 1e6], [`m1b`, 1e9]],
   PA: [
+    { id: `y2kready`, cost: 3.4e7, g: 1.5, t: [`"Year 2000 ready" sticker`, `Autocollant « Prêt pour l'an 2000 »`], d: [`All production x1.5. Nobody checked. Nobody will.`, `Toute la production x1,5. Personne n'a vérifié. Personne ne vérifiera.`] },
+    { id: `pnp`, cost: 4e8, g: 1.5, t: [`Plug and Play`, `Plug and Play`], d: [`All production x1.5. Mostly Plug and Pray.`, `Toute la production x1,5. Surtout Plug and Pray.`] },
+    { id: `directpix`, cost: 8e8, g: 1.5, t: [`DirectPix 5.0`, `DirectPix 5.0`], d: [`All production x1.5. Nobody knows what happened to DirectPix 1 to 4.`, `Toute la production x1,5. Personne ne sait ce que sont devenus DirectPix 1 à 4.`] },
+    { id: `fan2`, cost: 1.6e9, g: 1.5, t: [`Second fan`, `Deuxième ventilateur`], d: [`All production x1.5. Now it sounds like a plane taking off.`, `Toute la production x1,5. Maintenant, on dirait un avion qui décolle.`] },
+    { id: `sp95`, cost: 3.2e9, g: 1.5, t: [`Service Pack 1`, `Service Pack 1`], d: [`All production x1.5. Fixes 400 bugs. Adds 380.`, `Toute la production x1,5. Corrige 400 bugs. En ajoute 380.`] },
     { id: `dbl`, cost: 6000, c: 2, t: [`Double-click`, `Double-clic`], d: [`Clicks x2. Double-click is now a feature.`, `Clics x2. Le double-clic est maintenant une fonctionnalité.`] },
     { id: `auto1`, cost: 10000, req: `auto`, m: [`auto`, 2], t: [`AutoClicker 95 Plus!`, `AutoClicker 95 Plus!`], d: [`Autoclicks x2.`, `Autoclics x2.`] },
     { id: `macro1`, cost: 30000, req: `macro`, m: [`macro`, 2], t: [`Record longer macros`, `Macros plus longues`], d: [`Macro Recorder x2.`, `Macro Recorder x2.`] },

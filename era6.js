@@ -37,7 +37,7 @@ const X6 = {
   thanks: [`THANK YOU FOR PLAYING`, `MERCI D'AVOIR JOUÉ`],
   credits: [`PIXEL-OS\nA game by zuralon\n\nThe pixel was clicked {c} times.\nTime played: {t}.\n\nNo pixels were harmed. One was finished.`, `PIXEL-OS\nUn jeu de zuralon\n\nLe pixel a été cliqué {c} fois.\nTemps de jeu : {t}.\n\nAucun pixel n'a été maltraité. Un a été fini.`],
   keep: [`Keep playing`, `Continuer à jouer`],
-  ng: [`New Game+ (start over, +50% production forever)`, `Nouvelle partie+ (tout recommencer, +50 % de production pour toujours)`],
+  ng: [`New Game+ (start over, production x{m} forever)`, `Nouvelle partie+ (tout recommencer, production x{m} pour toujours)`],
   finished: [`The game is finished.`, `Le jeu est fini.`],
 };
 const AI_FIRST = [`install`, `notes`, `score`, `game`];
@@ -84,6 +84,10 @@ ERA[6] = {
   end: { c: 4e15, t: [`Let the AI finish the game`, `Laisser l'IA finir le jeu`], d: [`Requires every hardware upgrade. This is the end.`, `Nécessite toutes les améliorations matérielles. C'est la fin.`], go: [`Finish it`, `Finir`] },
   MS: [[`m1m`, 1e6], [`m1b`, 1e9], [`m1t`, 1e12]],
   PA: [
+    { id: `premium`, cost: 2.7e13, g: 1.5, t: [`Premium tier`, `Formule Premium`], d: [`All production x1.5. Same thing, with a golden badge.`, `Toute la production x1,5. La même chose, avec un badge doré.`] },
+    { id: `prompt`, cost: 1.5e14, g: 1.5, t: [`Prompt engineering`, `Ingénierie de prompt`], d: [`All production x1.5. You say please. The AI works harder. Spooky.`, `Toute la production x1,5. Tu dis s'il te plaît. L'IA bosse plus. Flippant.`] },
+    { id: `water`, cost: 3.2e14, g: 1.5, t: [`Water cooling`, `Watercooling`], d: [`All production x1.5. There is a fish in it now.`, `Toute la production x1,5. Il y a un poisson dedans, maintenant.`] },
+    { id: `dcgarden`, cost: 7e14, g: 1.5, t: [`Data center in the garden`, `Datacenter dans le jardin`], d: [`All production x1.5. The neighbors complain about the hum. And the glow.`, `Toute la production x1,5. Les voisins se plaignent du bourdonnement. Et de la lueur.`] },
     { id: `c1`, cost: 72000, c: 2, t: [`Haptic mouse`, `Souris haptique`], d: [`Clicks x2. It vibrates. Why does a mouse vibrate?`, `Clics x2. Elle vibre. Pourquoi une souris vibre ?`] },
     { id: `auto1`, cost: 120000, req: `auto`, m: [`auto`, 2], t: [`AutoClicker 12 Pro`, `AutoClicker 12 Pro`], d: [`AutoClicker x2.`, `AutoClicker x2.`] },
     { id: `annual`, cost: 300000, f: `annual`, t: [`Annual plan`, `Abonnement annuel`], d: [`Every subscription costs 40% less. You'll forget to cancel it.`, `Tous les abonnements coûtent 40 % de moins. Tu oublieras de résilier.`] },
@@ -243,15 +247,15 @@ ERA[6] = {
   },
   A: {
     end() {
-      if (S.once.fin) return dlg(T(X6.finished));
+      // seen already: show the end screen again, free, so New Game+ stays reachable after "Keep playing"
+      if (S.once.fin) { busy = true; return ERA[6].finScreen(); }
       if (S.px < E().end.c) return noPx();
       ERA[6].finale();
     },
     keep() { $(`fin`).classList.remove(`on`, `green`); busy = false; },
     ngplus() {
       const keep = { ach: S.ach, st: S.st, lang: S.lang, opt: S.opt, life: S.life, time: S.time, clicks: S.clicks, logs: S.logs, ng: (S.ng || 0) + 1 };
-      S = Object.assign(fresh(), keep);
-      save(); location.reload();
+      restart(Object.assign(fresh(), keep));
     },
   },
   async finale() {
@@ -265,9 +269,13 @@ ERA[6] = {
       box.appendChild(d); await wait(T(l).length * 35 + 900);
     }
     await wait(1500);
-    f.classList.add(`green`);
-    box.innerHTML = `<div class="big">${T(X6.thanks)}</div><pre>${esc(fill(T(X6.credits), { c: fmt(S.clicks), t: dur(S.time) }))}</pre><div class="fb"><button class="btn" data-act="keep">${T(X6.keep)}</button> <button class="btn" data-act="ngplus">${T(X6.ng)}</button></div>`;
+    ERA[6].finScreen();
     S.st.fin = 1; save();
+  },
+  finScreen() {
+    if (!$(`fin`)) document.body.insertAdjacentHTML(`beforeend`, `<div id="fin"><div id="finT"></div></div>`);
+    $(`fin`).classList.add(`on`, `green`);
+    $(`finT`).innerHTML = `<div class="big">${T(X6.thanks)}</div><pre>${esc(fill(T(X6.credits), { c: fmt(S.clicks), t: dur(S.time) }))}</pre><div class="fb"><button class="btn" data-act="keep">${T(X6.keep)}</button> <button class="btn" data-act="ngplus">${fill(T(X6.ng), { m: fmt(2 * ngMul()) })}</button></div>`;
   },
   BODY: {
     ai() {

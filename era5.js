@@ -2,6 +2,10 @@
 const X5 = {
   plug: [`Charge`, `Charger`], unplug: [`Unplug`, `Débrancher`],
   short: [`The cable is too short. You can't tap while charging.`, `Le câble est trop court. Impossible de taper pendant la charge.`],
+  hot: [`Your iBrick is warm. A battery kept plugged in at 100% wears out.`, `Ton iBrick chauffe. Une batterie laissée branchée à 100 % s'use.`],
+  slow: [`Your battery is worn. The iBrick slows itself down to protect it. It's a feature.`, `Ta batterie est usée. L'iBrick se ralentit tout seul pour la ménager. C'est une fonctionnalité.`],
+  health: [`Battery health: {n}%`, `Santé de la batterie : {n} %`], throttled: [`Performance reduced: x{n}`, `Performances réduites : x{n}`],
+  newbat: [`Replace the battery ({c} px)`, `Remplacer la batterie ({c} px)`], newbatDone: [`New battery installed. Like new. For now.`, `Batterie neuve installée. Comme neuf. Pour l'instant.`],
   dead: [`Battery empty.\n\nThe iBrick turned off. Every app was closed.\nIt's charging now. It'll turn back on at 15%.`, `Batterie vide.\n\nL'iBrick s'est éteint. Toutes les applis ont été fermées.\nIl charge, maintenant. Il se rallumera à 15 %.`],
   deadScr: [`Charging... {n}%`, `Charge... {n} %`],
   notifs: [
@@ -15,9 +19,23 @@ const X5 = {
   notifGot: [`+{n} px`, `+{n} px`],
   upd: [`{a} needs to update. It stops producing while it updates.`, `{a} doit se mettre à jour. Il ne produit plus pendant la mise à jour.`],
   updNow: [`Updating... {n}%`, `Mise à jour... {n} %`],
+  hkTitle: [`Locked file`, `Fichier verrouillé`], hkOpen: [`Unlock`, `Déverrouiller`], hkLast: [`Last file opened`, `Dernier fichier ouvert`],
+  hkIntro: [`Guess the password among the words. Each try tells how many letters are in the right place.`, `Devine le mot de passe parmi les mots proposés. Chaque essai dit combien de lettres sont à la bonne place.`],
+  hkWait: [`Too many tries. Wait {s} s.`, `Trop d'essais. Attends {s} s.`], hkTries: [`{n} tries left`, `{n} essais restants`],
+  hkHints: [`Hints: each one removes a wrong word, or sometimes gives the tries back`, `Indices : chacun retire un mauvais mot, ou parfois rend les essais`],
+  hkHist: [`Tries: letters in the right place (out of {n})`, `Essais : lettres à la bonne place (sur {n})`],
+  hkDud: [`Hint: {w} was not it`, `Indice : ce n'était pas {w}`], hkReset: [`Hint: tries given back`, `Indice : essais rendus`],
+  mtFull: [`Full screen`, `Plein écran`], mtSplit: [`Split View`, `Écran partagé`], mtSide: [`Close this side`, `Fermer ce côté`],
+  pick: [`Pick a second app to put next to {a}.`, `Choisis une 2e appli à mettre à côté de {a}.`], cancel: [`Cancel`, `Annuler`],
+  sw: [`Running apps`, `Applis lancées`], swHint2: [`Drag the cards sideways. Throw one up (or tap ×) to close it. Swipe up from the bottom edge to go home.`, `Fais glisser les cartes. Jette-en une vers le haut (ou touche ×) pour la fermer. Glisse depuis le bas de l'écran pour revenir à l'accueil.`], swHint0: [`Tap − to close an app. Tap an icon to open it.`, `Touche − pour fermer une appli. Touche une icône pour l'ouvrir.`],
+  swHint: [`Drag the cards sideways. Throw one up (or tap ×) to close it. Tap a card to open it.`, `Fais glisser les cartes. Jette-en une vers le haut (ou touche ×) pour la fermer. Touche une carte pour l'ouvrir.`],
+  updScore: [`{a}: updating ({s} s), not producing`, `{a} : mise à jour ({s} s), ne produit pas`], deadScore: [`Battery dead: nothing produces`, `Batterie à plat : rien ne produit`],
   later: [`Remind me later`, `Me le rappeler plus tard`],
   settings: [`Settings`, `Réglages`],
 };
+// 0 = iBrick (3G), 1 = iBrick 6, 2 = iBrick X, 3 = iSlab: bought with the bigger screens
+const phoneLv = () => (S.patch.screen3 ? 3 : S.patch.screen2 ? 2 : S.patch.screen ? 1 : 0);
+
 ERA[5] = {
   os: `iBrick OS`, skin: 5, year: 2007, unit: [`MB`, `Mo`], mul: 32, start: { ram: 8, bat: 800 }, color: true, allIcons: true,
   rn: { bat: [`BAT`, `BAT`] }, ru: { bat: [`mAh`, `mAh`] },
@@ -54,7 +72,13 @@ ERA[5] = {
   end: { c: 6e12, t: [`Answer the door`, `Ouvrir la porte`], d: [`Requires every hardware upgrade. Someone is knocking.`, `Nécessite toutes les améliorations matérielles. Quelqu'un frappe.`], go: [`Open`, `Ouvrir`] },
   MS: [[`m1m`, 1e6], [`m1b`, 1e9], [`m1t`, 1e12]],
   PA: [
-    { id: `screen`, cost: 30000, c: 2, t: [`Bigger screen`, `Écran plus grand`], d: [`Clicks x2. 3.5 inches. Huge.`, `Clics x2. 3,5 pouces. Immense.`] },
+    { id: `g3`, cost: 3.5e10, g: 1.5, t: [`3G`, `3G`], d: [`All production x1.5. Pixels load while you walk. Into lampposts.`, `Toute la production x1,5. Les pixels chargent pendant que tu marches. Dans les poteaux.`] },
+    { id: `retina`, cost: 1.6e11, g: 1.5, t: [`Retina pixels`, `Pixels Retina`], d: [`All production x1.5. So small you can't see them. So many you don't care.`, `Toute la production x1,5. Si petits qu'on ne les voit pas. Si nombreux qu'on s'en fiche.`] },
+    { id: `bgrefresh`, cost: 8e11, g: 1.5, t: [`Over-the-air update`, `Mise à jour sans fil`], d: [`All production x1.5. Downloaded overnight. Installed without asking.`, `Toute la production x1,5. Téléchargée pendant la nuit. Installée sans demander.`] },
+    { id: `dualsim`, cost: 1.8e12, g: 1.5, t: [`Dual SIM`, `Double SIM`], d: [`All production x1.5. Two numbers. The dev ignores both.`, `Toute la production x1,5. Deux numéros. Le dev les ignore tous les deux.`] },
+    { id: `screen`, cost: 30000, c: 2, t: [`Bigger screen: iBrick 6`, `Écran plus grand : iBrick 6`], d: [`Clicks x2. 4.7 inches, flat design, aluminium. It bends a little in your pocket.`, `Clics x2. 4,7 pouces, design plat, aluminium. Il plie un peu dans la poche.`] },
+    { id: `screen2`, cost: 2.4e8, c: 2, t: [`Edge-to-edge screen: iBrick X`, `Écran bord à bord : iBrick X`], d: [`Clicks x2. No more home button. A notch instead. Swipe up. Forever.`, `Clics x2. Plus de bouton home. Une encoche à la place. Balaie vers le haut. Pour toujours.`] },
+    { id: `screen3`, cost: 2.5e10, c: 2, t: [`Huge screen: iSlab`, `Écran géant : iSlab`], d: [`Clicks x2. A brick, but flat and huge. Two apps side by side. Fits in no pocket at all.`, `Clics x2. Une brique, mais plate et géante. Deux applis côte à côte. Ne rentre dans aucune poche.`] },
     { id: `auto1`, cost: 50000, req: `auto`, m: [`auto`, 2], t: [`Tap Tap Pro`, `Tap Tap Pro`], d: [`Tap Tap x2. 0.99 px. Worth it.`, `Tap Tap x2. 0,99 px. Ça les vaut.`] },
     { id: `charger`, cost: 100000, f: `fastcharge`, t: [`Fast charger`, `Chargeur rapide`], d: [`Charges twice as fast. Gets warm. That's normal. Probably.`, `Charge deux fois plus vite. Chauffe. C'est normal. Sûrement.`] },
     { id: `farm1`, cost: 300000, req: `farm`, m: [`farm`, 2], t: [`Fertilizer`, `Engrais`], d: [`Pixel Farm x2.`, `Pixel Farm x2.`] },
@@ -63,6 +87,7 @@ ERA[5] = {
     { id: `night`, cost: 2.1e6, f: `noupdate`, t: [`Update at night`, `Mise à jour la nuit`], d: [`Apps no longer stop to update while you play.`, `Les applis ne s'arrêtent plus pour se mettre à jour pendant que tu joues.`] },
     { id: `auto2`, cost: 3e6, req: `auto`, m: [`auto`, 3], t: [`Tap Tap Gold`, `Tap Tap Gold`], d: [`Tap Tap x3.`, `Tap Tap x3.`] },
     { id: `offline`, cost: 4.5e6, req: `clock`, f: `offline`, t: [`Background refresh`, `Actualisation en arrière-plan`], d: [`Offline progress at 100% instead of 50%.`, `Progression hors ligne à 100 % au lieu de 50 %.`] },
+    { id: `optcharge`, cost: 3e7, f: `optcharge`, t: [`Optimized charging`, `Recharge optimisée`], d: [`Charging stops at 80%. You can leave it plugged in without wearing the battery.`, `La charge s'arrête à 80 %. Tu peux le laisser branché sans user la batterie.`] },
     { id: `low`, cost: 9e6, f: `lowpower`, t: [`Low Power Mode`, `Mode économie d'énergie`], d: [`Every app drains 40% less battery. The screen is a bit yellow.`, `Toutes les applis consomment 40 % de batterie en moins. L'écran est un peu jaune.`] },
     { id: `farm2`, cost: 1.8e7, req: `farm`, m: [`farm`, 3], t: [`Tractor (in-app purchase)`, `Tracteur (achat intégré)`], d: [`Pixel Farm x3.`, `Pixel Farm x3.`] },
     { id: `magnet`, cost: 4e7, f: `magnet`, t: [`Spam filter`, `Filtre anti-spam`], d: [`Bad stray pixels can't steal anymore.`, `Les mauvais pixels égarés ne volent plus rien.`] },
@@ -139,6 +164,8 @@ ERA[5] = {
   },
   HELP: [
     [`One app on screen at a time. The round button goes back home. Running apps keep working in the background.`, `Une appli à l'écran à la fois. Le bouton rond revient à l'accueil. Les applis lancées continuent en arrière-plan.`],
+    [`On the iSlab, tap the ••• at the top of an app, then Split View, then pick a second app: both stay side by side.`, `Sur l'iSlab, touche les ••• en haut d'une appli, puis Écran partagé, puis choisis une 2e appli : les deux restent côte à côte.`],
+    [`Press the home button twice to see the running apps and close them. On the iBrick X and the iSlab, swipe up from the bottom edge of the screen: a flick goes home, a slow swipe (or a pause on the way) shows the apps.`, `Appuie deux fois sur le bouton home pour voir les applis lancées et les fermer. Sur l'iBrick X et l'iSlab, glisse vers le haut depuis le bas de l'écran : un geste rapide revient à l'accueil, un geste lent (ou une pause en chemin) montre les applis.`],
     [`Every running app drains the battery. At 0%, the phone turns off and every app closes. Use Charge in the status bar.`, `Chaque appli lancée vide la batterie. À 0 %, le téléphone s'éteint et toutes les applis se ferment. Utilise Charger dans la barre d'état.`],
     [`While charging, you can't tap the pixel. The cable is too short.`, `Pendant la charge, tu ne peux pas taper le pixel. Le câble est trop court.`],
     [`Notifications give pixels if you tap them in time.`, `Les notifications donnent des pixels si tu les touches à temps.`],
@@ -153,10 +180,16 @@ ERA[5] = {
   // ----- era mechanics -----
   enter() { S.x.bat = 100; S.bought.settings = 1; note(N(`bat`)); },
   load() {
-    if (!$(`home`)) document.body.insertAdjacentHTML(`beforeend`, `<button id="home" data-act="home" aria-label="home"></button><div id="notif" data-act="notif"></div><div id="dead"></div>`);
+    if (!$(`home`)) document.body.insertAdjacentHTML(`beforeend`, `<div id="ear"></div><div id="bezel"></div><div id="pickb"></div><div id="sw" data-act="swclose"></div><button id="home" data-act="home" aria-label="home"></button><div id="notif" data-act="notif"></div><div id="dead"></div>`);
     if (S.x.dead) $(`dead`).classList.add(`on`);
   },
+  // a worn battery slows the phone down, like a certain fruit company did
+  throttle() { const h = S.x.health ?? 100; return h < 80 ? 0.5 + (h - 50) / 60 : 1; },
+  mul2: () => ERA[5].throttle(),
+  batCost: () => Math.max(5000, basePerSec() * 120),
   drain() { return use(`bat`) / cap(`bat`) * 0.8 * (flag(`lowpower`) ? 0.6 : 1); },
+  // why the score may suddenly drop: shown under it
+  scoreNote() { const u = S.x.upd; return S.x.dead ? `<small class="warn">${T(X5.deadScore)}</small>` : u && u.on ? `<small class="warn">${fill(T(X5.updScore), { a: prog(u.id).file, s: Math.ceil(u.t) })}</small>` : ``; },
   factor: p => (S.x.dead || (S.x.upd && S.x.upd.on && S.x.upd.id === p.id) ? 0 : 1),
   tap() { if (S.x.dead) return false; if (S.x.plug) { toast(T(X5.short)); return false; } },
   tick(dt) {
@@ -168,8 +201,17 @@ ERA[5] = {
       if (x.bat >= 15) { x.dead = 0; x.plug = 0; if ($(`dead`)) $(`dead`).classList.remove(`on`); }
       return;
     }
-    x.bat += ((x.plug ? 1.5 * (flag(`fastcharge`) ? 2 : 1) : 0) - ERA[5].drain()) * dt;
-    x.bat = Math.min(100, x.bat);
+    const hp = x.health ?? 100, top = flag(`optcharge`) ? Math.min(80, hp) : hp;
+    // plugged in and full: the phone runs on the wall, the charge holds still instead of going 50/49/50
+    if (x.plug && x.bat >= top - 0.5) x.bat = Math.max(x.bat, top);
+    else x.bat += ((x.plug ? 1.5 * (flag(`fastcharge`) ? 2 : 1) : 0) - ERA[5].drain()) * dt;
+    x.bat = Math.min(hp, x.bat);
+    // left plugged in when full: the battery wears out (about 1% every 12 s)
+    if (x.plug && x.bat >= hp - 0.5 && !flag(`optcharge`)) {
+      x.health = Math.max(50, hp - 0.08 * dt);
+      if (!S.once.hot5) { S.once.hot5 = 1; toast(T(X5.hot)); }
+      if (x.health < 80 && !S.once.slow5) { S.once.slow5 = 1; dlg(T(X5.slow)); }
+    }
     if (x.bat <= 0) {
       x.bat = 0; x.dead = 1; x.plug = 1; S.st.dead = (S.st.dead || 0) + 1;
       for (const p of E().P) if (S.run[p.id] && !p.fixed) { S.run[p.id] = 0; killWin(p.id); }
@@ -181,7 +223,9 @@ ERA[5] = {
     if (x.notLeft > 0) x.notLeft -= dt;
     const nb = $(`notif`);
     if (nb) { nb.classList.toggle(`on`, x.notLeft > 0); if (x.notLeft > 0) nb.textContent = T(X5.notifs[x.notI || 0]); }
-    if (!flag(`noupdate`)) {
+    // bought "Update at night" during an update: finish it now instead of freezing it forever
+    if (flag(`noupdate`)) x.upd = null;
+    else {
       const u = x.upd;
       if (u && u.on) { u.t -= dt; if (u.t <= 0) x.upd = null; }
       else if (u && !u.on) { u.t -= dt; if (u.t <= 0) { u.on = 1; u.t = 30; } }
@@ -206,19 +250,63 @@ ERA[5] = {
     dq.length = 0;
   },
   render() {
-    const x = S.x;
-    for (const id in W) W[id].el.classList.toggle(`cur`, id === x.cur);
-    document.body.classList.toggle(`apphome`, !x.cur || !W[x.cur]);
+    const x = S.x, back = T([`Home`, `Accueil`]);
+    // the close button of an app is the iPhone OS back button
+    for (const id in W) { const b = W[id].el.querySelector(`.x`); if (b && b.textContent !== back) b.textContent = back; }
+    // iSlab: the previous app stays open on the right (split view)
+    if (!W[x.cur]) { x.cur = W[x.cur2] ? x.cur2 : null; x.cur2 = null; }
+    if (!W[x.cur2] || x.cur2 === x.cur || phoneLv() < 3) x.cur2 = null;
+    for (const id in W) {
+      const el = W[id].el, t = el.querySelector(`.title`);
+      el.classList.toggle(`cur`, id === x.cur); el.classList.toggle(`cur2`, id === x.cur2);
+      // iPadOS multitasking button at the top of each app
+      if (t && !t.querySelector(`.mt`)) t.insertAdjacentHTML(`afterbegin`, `<span class="mt" data-act="mt:${id}"><i></i><i></i><i></i></span><span class="mtm"></span>`);
+      if (t) { const m = t.querySelector(`.mtm`), h = x.mt === id ? ERA[5].mtMenu(id) : ``; if (m.dataset.h !== h) { m.dataset.h = h; m.innerHTML = h; } }
+    }
+    if (x.pick && (!W[x.pick] || phoneLv() < 3)) x.pick = null;
+    const pb = $(`pickb`);
+    if (pb) { pb.classList.toggle(`on`, !!x.pick && !x.cur); const h = x.pick ? fill(T(X5.pick), { a: esc(prog(x.pick).file) }) + `<b data-act="pickno">${T(X5.cancel)}</b>` : ``; if (pb.dataset.h !== h) { pb.dataset.h = h; pb.innerHTML = h; } }
+    const b = document.body.classList, lv = phoneLv();
+    b.toggle(`apphome`, !x.cur);
+    ERA[5].bindSwipe();
+    ERA[5].switcher(); b.toggle(`darkapp`, x.cur === `game` && !x.cur2); b.toggle(`flat`, lv >= 1); b.toggle(`notch`, lv >= 2); b.toggle(`slab`, lv >= 3); b.toggle(`split`, !!x.cur2);
   },
   taskExtra() {
     const b = Math.max(0, Math.floor(S.x.bat || 0));
-    return `<span class="batt ${b < 20 ? `low` : ``}"><i style="width:${b}%"></i></span> ${b}% <span class="plugb ${S.x.plug ? `on` : ``}" data-act="plug">${T(S.x.plug ? X5.unplug : X5.plug)}</span>`;
+    return `<span class="batt ${b < 20 ? `low` : ``} ${(S.x.health ?? 100) < 80 ? `worn` : ``}"><i style="width:${b}%"></i></span><span class="bpc"> ${b}%</span> <span class="plugb ${S.x.plug ? `on` : ``}" data-act="plug" title="${T(S.x.plug ? X5.unplug : X5.plug)}">${phoneLv() >= 2 ? `⚡` : T(S.x.plug ? X5.unplug : X5.plug)}</span>`;
   },
-  opened(id) { S.x.cur = id; },
+  opened(id) { ERA[5].show(id); },
+  // an app opens full screen, unless the iSlab is waiting for the second app of a split view
+  show(id) {
+    const x = S.x;
+    x.mt = null;
+    if (x.pick && x.pick !== id && W[x.pick] && phoneLv() >= 3) { x.cur = x.pick; x.cur2 = id; x.pick = null; S.st.split = 1; return; }
+    x.pick = null; x.cur = id; x.cur2 = null;
+  },
+  mtMenu(id) {
+    const x = S.x, it = (a, ic, t) => `<span class="mti" data-act="${a}:${id}"><i class="mtic ${ic}"></i>${T(t)}</span>`;
+    return it(`mtfull`, `full`, X5.mtFull) + it(`mtsplit`, `half`, X5.mtSplit) + (x.cur2 ? it(`mtside`, `shut`, X5.mtSide) : ``);
+  },
   A: {
-    open(id) { openProg(id); if (S.run[id]) S.x.cur = id; },
-    home() { S.x.cur = null; },
+    // an app launched for the first time is shown by opened(); one already running is shown here
+    open(id) { S.x.sw = 0; const was = S.run[id]; openProg(id); if (was && S.run[id]) ERA[5].show(id); },
+    // one press: home screen; two quick presses: the running apps, to switch or close them
+    home() {
+      const x = S.x, now = performance.now();
+      if (phoneLv() >= 2) return;
+      if (x.sw) { x.sw = 0; return; }
+      if (now - (ERA[5].lastHome || 0) < 450) { ERA[5].lastHome = 0; x.sw = 1; return; }
+      ERA[5].lastHome = now; x.cur = x.cur2 = x.pick = null;
+    },
+    swclose() { S.x.sw = 0; },
+    mt(id) { S.x.mt = S.x.mt === id ? null : id; },
+    mtfull(id) { const x = S.x; x.mt = x.pick = null; x.cur = id; x.cur2 = null; },
+    // the app goes to the left, the home screen shows to pick the one on the right
+    mtsplit(id) { const x = S.x; x.mt = null; x.pick = id; x.cur = x.cur2 = null; },
+    mtside(id) { const x = S.x; x.mt = null; x.cur = id === x.cur ? x.cur2 : x.cur; x.cur2 = null; },
+    pickno() { const x = S.x; x.cur = x.pick; x.pick = null; },
     plug() { if (!S.x.dead) S.x.plug = S.x.plug ? 0 : 1; },
+    newbat() { const c = ERA[5].batCost(); if (S.px < c) return noPx(); S.px -= c; S.x.health = 100; S.st.newbat = (S.st.newbat || 0) + 1; toast(T(X5.newbatDone)); },
     notif() {
       if (!(S.x.notLeft > 0)) return;
       S.x.notLeft = 0; S.st.notif = (S.st.notif || 0) + 1;
@@ -228,20 +316,158 @@ ERA[5] = {
     later() { const u = S.x.upd; if (u && !u.on) { u.t = 60; S.st.later = (S.st.later || 0) + 1; } },
   },
   BODY: {
+    // the terminal as an iOS app: a locked file, passcode dots for the tries, the words as keys,
+    // the bracket pairs as hint chips and the guesses as a list
+    hack() {
+      const fr = S.lang === `fr`;
+      if (!(H && H.era)) {
+        const wait = S.hackCd > 0;
+        return `<div class="ilock"><div class="ilk">🔒</div><b>${T(X5.hkTitle)}</b><p>${T(X5.hkIntro)}</p>${wait ? `<p class="dim">${fill(T(X5.hkWait), { s: Math.ceil(S.hackCd) })}</p>` : `<button class="ibtn" data-act="hack">${T(X5.hkOpen)}</button>`}</div>${S.lastLog ? `<div class="igrp"><div class="ihd">${T(X5.hkLast)}</div><div class="irow">${esc(T(S.lastLog))}</div></div>` : ``}`;
+      }
+      const len = H.pass.length;
+      const dots = Array.from({ length: 4 }, (_, i) => `<i class="${i < H.tries ? `on` : ``}"></i>`).join(``);
+      const keys = H.words.map(w => H.dud.includes(w) ? `<span class="ikey off">${w}</span>` : `<span class="ikey" data-act="hg:${w}">${w}</span>`).join(``);
+      const chips = H.lines.flat().filter(x => x.s).map(x => H.used.includes(x.k) ? `<span class="ichip off">${esc(x.s)}</span>` : `<span class="ichip" data-act="hb:${x.k}">${esc(x.s)}</span>`).join(``);
+      const rows = H.hist.slice().reverse().map(h => h.w
+        ? `<div class="irow"><span class="mono">${h.w}</span><span class="ilik">${Array.from({ length: len }, (_, i) => `<i class="${i < h.n ? `on` : ``}"></i>`).join(``)} ${h.n}/${len}</span></div>`
+        : `<div class="irow dim">${h.dud ? fill(T(X5.hkDud), { w: h.dud }) : T(X5.hkReset)}</div>`).join(``);
+      return `<div class="ilock sm"><b>${T(X5.hkTitle)}</b><div class="idots">${dots}</div><small>${fill(T(X5.hkTries), { n: H.tries })}</small></div>`
+        + `<div class="ikeys">${keys}</div>`
+        + `<div class="igrp"><div class="ihd">${T(X5.hkHints)}</div><div class="ichips">${chips}</div></div>`
+        + (rows ? `<div class="igrp"><div class="ihd">${fill(T(X5.hkHist), { n: len })}</div>${rows}</div>` : ``)
+        + `<button class="ibtn ghost" data-act="hexit">${fr ? `Annuler` : `Cancel`}</button>`;
+    },
     settings() {
       const u = U(), items = [[`save`, u.save], [`exp`, u.exp], [`imp`, u.imp], [`lang`, u.lang], [`sci`, (S.opt.sci ? `[x] ` : `[ ] `) + u.sci], [`anim`, (S.opt.anim ? `[x] ` : `[ ] `) + u.anim], ...(S.run.help ? [[`tip`, u.tip]] : []), [`about`, u.about], [`hard`, u.hard]];
-      return items.map(([a, t]) => `<div class="row"><span>${t}</span><button class="btn" data-act="${a}">&gt;</button></div>`).join(``);
+      const hp = Math.floor(S.x.health ?? 100), th = ERA[5].throttle();
+      const bat = `<div class="row"><span>${fill(T(X5.health), { n: hp })}${th < 1 ? `<small>${fill(T(X5.throttled), { n: th.toFixed(2).replace(`.`, S.lang === `fr` ? `,` : `.`) })}</small>` : ``}</span>${hp < 100 ? `<button class="btn" data-act="newbat">${fill(T(X5.newbat), { c: fmt(ERA[5].batCost()) })}</button>` : ``}</div>`;
+      return bat + items.map(([a, t]) => `<div class="row"><span>${t}</span><button class="btn" data-act="${a}">&gt;</button></div>`).join(``);
     },
   },
   winClass: () => `app`,
+  dock: [`game`, `notes`, `install`, `settings`],
   extraBody(id) {
-    const u = S.x.upd;
-    if (!u || u.id !== id) return ``;
-    return u.on ? `<div class="upd">${fill(T(X5.updNow), { n: Math.floor((30 - u.t) / 30 * 100) })}</div>` : `<div class="upd">${fill(T(X5.upd), { a: prog(id).file })}<br><button class="btn" data-act="later">${T(X5.later)}</button></div>`;
+    const u = S.x.upd, mem = id === `install` ? ERA[5].memBar(true) : ``;
+    if (!u || u.id !== id) return mem;
+    return mem + (u.on ? `<div class="upd">${fill(T(X5.updNow), { n: Math.floor((30 - u.t) / 30 * 100) })}</div>` : `<div class="upd">${fill(T(X5.upd), { a: prog(id).file })}<br><button class="btn" data-act="later">${T(X5.later)}</button></div>`);
+  },
+  // iBrick X and iSlab have no home button, like Face ID iPhones. The gesture starts anywhere along the
+  // bottom edge of the screen: a flick up goes home, a slow swipe past a third of the screen or a pause
+  // on the way shows the running apps. A tap there still reaches whatever is under it.
+  swipeEnd(dy, sw) {
+    const x = S.x;
+    if (sw) x.sw = 1;
+    else if (dy >= 40) { x.sw = 0; x.cur = x.cur2 = x.pick = x.mt = null; }
+  },
+  bindSwipe() {
+    if (ERA[5].swBound) return;
+    ERA[5].swBound = 1;
+    let g = null;
+    const b = document.body;
+    const still = () => { if (g && g.dy >= 50) { g.held = 1; b.classList.remove(`drag`); S.x.sw = 1; } };
+    const zone = ev => {
+      const t = $(`task`), h = $(`home`);
+      if (S.era !== 5 || phoneLv() < 2 || !t || !h || S.x.dead) return false;
+      const r = t.getBoundingClientRect(), bottom = h.getBoundingClientRect().top + 26;
+      return ev.clientX >= r.left && ev.clientX <= r.right && ev.clientY >= bottom - 44 && ev.clientY <= bottom + 14;
+    };
+    addEventListener(`pointerdown`, ev => {
+      if (ev.button || !zone(ev)) return;
+      const r = $(`task`).getBoundingClientRect(), bottom = $(`home`).getBoundingClientRect().top + 26;
+      g = { y: ev.clientY, dy: 0, on: 0, held: 0, t: 0, h: bottom - r.top, pts: [[performance.now(), ev.clientY]], id: ev.pointerId };
+    }, true);
+    addEventListener(`pointermove`, ev => {
+      if (!g || g.held) return;
+      const dy = Math.max(0, g.y - ev.clientY);
+      if (!g.on) {
+        if (dy < 10) return;
+        // it is a swipe, not a tap: keep the pointer even if it leaves the bar
+        g.on = 1;
+        try { document.documentElement.setPointerCapture(g.id); } catch (er) {}
+      }
+      if (Math.abs(dy - g.dy) > 5) { clearTimeout(g.t); g.t = setTimeout(still, 400); }
+      g.dy = dy;
+      g.pts.push([performance.now(), ev.clientY]); if (g.pts.length > 6) g.pts.shift();
+      b.classList.toggle(`drag`, !!S.x.cur);
+      b.style.setProperty(`--dy`, Math.min(dy, 300));
+    }, true);
+    const end = ev => {
+      if (!g) return;
+      const d = g; g = null;
+      clearTimeout(d.t); b.classList.remove(`drag`);
+      if (!d.on || ev.type !== `pointerup`) return;
+      ERA[5].noClick = performance.now();
+      const dy = Math.max(0, d.y - ev.clientY), [t0, y0] = d.pts[0], v = (y0 - ev.clientY) / Math.max(1, performance.now() - t0);
+      // a quick flick goes home even when long; a slow swipe past a third of the screen shows the apps
+      ERA[5].swipeEnd(dy, d.held || (dy >= d.h / 3 && v < 0.5));
+    };
+    addEventListener(`pointerup`, end, true);
+    addEventListener(`pointercancel`, end, true);
+    // the click that ends a swipe is not a tap
+    addEventListener(`click`, e => { if (performance.now() - (ERA[5].noClick || 0) < 300) { e.stopPropagation(); e.preventDefault(); } }, true);
+  },
+  switcher() {
+    const x = S.x, el = $(`sw`);
+    if (!el) return;
+    const on = !!x.sw && !x.dead;
+    el.classList.toggle(`on`, on);
+    if (!on) return setH(`sw`, ``);
+    const apps = E().P.filter(p => S.run[p.id] && !p.hidden);
+    const card = p => `<div class="swc" data-act="open:${p.id}">${p.fixed ? `` : `<span class="swx" data-act="close:${p.id}">${phoneLv() ? `×` : `−`}</span>`}${icon(p.id)}<b>${esc(p.file)}${S.run[p.id] > 1 ? ` x${S.run[p.id]}` : ``}</b><small>${ramTxt(S.run[p.id] * kbOf(p.id))} - ${fmt(S.run[p.id] * (p.bat || 0))} mAh</small></div>`;
+    setH(`sw`, `<div class="swt">${T(X5.sw)}</div><div class="swl">${apps.map(card).join(``)}</div><div class="swh">${T([X5.swHint0, X5.swHint, X5.swHint2, X5.swHint2][phoneLv()])}</div>`);
+    const l = el.querySelector(`.swl`);
+    if (l && l.scrollLeft !== ERA[5].swX) l.scrollLeft = ERA[5].swX || 0;
+    ERA[5].bindDrag(el);
+  },
+  // drag the cards like a finger: sideways scrolls the list, up throws the app away
+  bindDrag(el) {
+    if (el.dataset.dr) return;
+    el.dataset.dr = 1;
+    let g = null;
+    el.addEventListener(`click`, e => { if (performance.now() - (ERA[5].noClick || 0) < 300) { e.stopPropagation(); e.preventDefault(); } }, true);
+    el.addEventListener(`pointerdown`, ev => {
+      const l = el.querySelector(`.swl`);
+      if (!l || ev.button) return;
+      g = { x: ev.clientX, y: ev.clientY, s: l.scrollLeft, c: ev.target.closest(`.swc`), m: 0 };
+    });
+    el.addEventListener(`pointermove`, ev => {
+      if (!g) return;
+      const dx = ev.clientX - g.x, dy = ev.clientY - g.y, l = el.querySelector(`.swl`);
+      if (!g.m && Math.hypot(dx, dy) > 8) {
+        g.m = Math.abs(dx) >= Math.abs(dy) || !g.c ? `x` : `y`;
+        // only now: capturing on press would turn a plain tap into a tap on the background
+        try { el.setPointerCapture(ev.pointerId); } catch (er) {}
+      }
+      if (g.m === `x` && l) ERA[5].swX = l.scrollLeft = g.s - dx;
+      if (g.m === `y` && g.c) { const u = Math.min(0, dy); g.c.style.transform = `translateY(${u}px)`; g.c.style.opacity = 1 + u / 250; }
+    });
+    const end = ev => {
+      if (!g) return;
+      const d = g; g = null;
+      if (!d.m) return;
+      // a drag is not a tap: swallow the click that follows
+      ERA[5].noClick = performance.now();
+      setTimeout(() => (down = null), 0);
+      const sx = d.c && d.c.querySelector(`.swx`);
+      if (d.m === `y` && d.c) {
+        if (sx && d.y - ev.clientY > 90) act(sx.dataset.act);
+        else { d.c.style.transform = d.c.style.opacity = ``; }
+      }
+    };
+    el.addEventListener(`pointerup`, end);
+    el.addEventListener(`pointercancel`, end);
+  },
+  // the memory as an iPhone storage bar: one colored part per running app, then the free space
+  memBar(list) {
+    const c = cap(`ram`), apps = E().P.filter(p => S.run[p.id] && kbOf(p.id)).map(p => [p, S.run[p.id] * kbOf(p.id)]);
+    const seg = apps.map(([p, k]) => `<i style="width:${k / c * 100}%;background:${ICONS[iconName(p.id)].a}" title="${esc(p.file)}"></i>`).join(``) + (S.frag ? `<i class="fr" style="width:${S.frag / c * 100}%"></i>` : ``);
+    const leg = list ? `<div class="meml">${apps.map(([p, k]) => `<span><i style="background:${ICONS[iconName(p.id)].a}"></i>${esc(p.file)}${S.run[p.id] > 1 ? ` x${S.run[p.id]}` : ``} ${ramTxt(k)}</span>`).join(``)}</div>` : ``;
+    return `<div class="memw"><div class="memt"><b>${T([`Memory`, `Mémoire`])}</b><span>${ramTxt(use(`ram`))} / ${ramTxt(c)} - ${fill(T([`{n} free`, `{n} libres`]), { n: ramTxt(Math.max(0, free())) })}</span></div><div class="memb">${seg}</div>${leg}</div>`;
   },
 };
 
 ACH.push(
+  [`gate`, [`Batterygate`, `Batterygate`], [`Let the phone slow itself down to save its battery.`, `Laisser le téléphone se ralentir pour ménager sa batterie.`], () => S.era === 5 && ERA[5].throttle() < 1, 5],
   [`brick`, [`Slide to unlock`, `Glisser pour déverrouiller`], [`Boot iBrick OS.`, `Démarrer iBrick OS.`], () => S.era >= 5, 5],
   [`dead`, [`Low battery`, `Batterie faible`], [`Let the battery die.`, `Laisser la batterie mourir.`], () => (S.st.dead || 0) >= 1, 5],
   [`notif20`, [`Notification addict`, `Accro aux notifs`], [`Tap 20 notifications.`, `Toucher 20 notifications.`], () => (S.st.notif || 0) >= 20, 5],
