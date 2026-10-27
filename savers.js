@@ -5,6 +5,7 @@
 const SV = { raf: 0, era: 0, t0: 0 };
 const SVT = {
   slide: [`slide to unlock`, `glisser pour déverrouiller`],
+  slide7: [`slide to unlock`, `faire glisser pour déverrouiller`], swipe: [`Swipe up to open`, `Balayez vers le haut pour ouvrir`],
   focus: [`Focus session`, `Session de concentration`],
   boost: [`Production x{m} while you're away`, `Production x{m} pendant ton absence`],
 };
@@ -17,7 +18,7 @@ function saverStart() {
   if (e === 5 || e === 6) {
     const d = new Date();
     el.innerHTML = e === 5
-      ? `<div class="lock"><b class="lt"></b><small class="ld"></small></div><div class="unl"><i></i><span>${T(SVT.slide)}</span></div>`
+      ? `<div class="lock"><b class="lt"></b><small class="ld"></small></div><div class="unl"><i></i><span>${T([SVT.slide, SVT.slide7, SVT.swipe, SVT.swipe][phoneLv()])}</span></div>`
       : `<div class="focus"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" class="tr"/><circle cx="60" cy="60" r="52" class="pr"/></svg><b class="ft"></b><span>${T(SVT.focus)}</span><small>${fill(T(SVT.boost), { m: saverMul() })}</small></div>`;
     svClock();
   } else {

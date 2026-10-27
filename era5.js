@@ -18,6 +18,9 @@ const X5 = {
   later: [`Remind me later`, `Me le rappeler plus tard`],
   settings: [`Settings`, `Réglages`],
 };
+// 0 = iBrick (3G), 1 = iBrick 6, 2 = iBrick X, 3 = iSlab: bought with the bigger screens
+const phoneLv = () => (S.patch.screen3 ? 3 : S.patch.screen2 ? 2 : S.patch.screen ? 1 : 0);
+
 ERA[5] = {
   os: `iBrick OS`, skin: 5, year: 2007, unit: [`MB`, `Mo`], mul: 32, start: { ram: 8, bat: 800 }, color: true, allIcons: true,
   rn: { bat: [`BAT`, `BAT`] }, ru: { bat: [`mAh`, `mAh`] },
@@ -56,9 +59,11 @@ ERA[5] = {
   PA: [
     { id: `g3`, cost: 3.5e10, g: 1.5, t: [`3G`, `3G`], d: [`All production x1.5. Pixels load while you walk. Into lampposts.`, `Toute la production x1,5. Les pixels chargent pendant que tu marches. Dans les poteaux.`] },
     { id: `retina`, cost: 1.6e11, g: 1.5, t: [`Retina pixels`, `Pixels Retina`], d: [`All production x1.5. So small you can't see them. So many you don't care.`, `Toute la production x1,5. Si petits qu'on ne les voit pas. Si nombreux qu'on s'en fiche.`] },
-    { id: `bgrefresh`, cost: 8e11, g: 1.5, t: [`Background refresh`, `Actualisation en arrière-plan`], d: [`All production x1.5. Apps work while you sleep. Apps never sleep.`, `Toute la production x1,5. Les applis bossent pendant que tu dors. Les applis ne dorment jamais.`] },
+    { id: `bgrefresh`, cost: 8e11, g: 1.5, t: [`Over-the-air update`, `Mise à jour sans fil`], d: [`All production x1.5. Downloaded overnight. Installed without asking.`, `Toute la production x1,5. Téléchargée pendant la nuit. Installée sans demander.`] },
     { id: `dualsim`, cost: 1.8e12, g: 1.5, t: [`Dual SIM`, `Double SIM`], d: [`All production x1.5. Two numbers. The dev ignores both.`, `Toute la production x1,5. Deux numéros. Le dev les ignore tous les deux.`] },
-    { id: `screen`, cost: 30000, c: 2, t: [`Bigger screen`, `Écran plus grand`], d: [`Clicks x2. 3.5 inches. Huge.`, `Clics x2. 3,5 pouces. Immense.`] },
+    { id: `screen`, cost: 30000, c: 2, t: [`Bigger screen: iBrick 6`, `Écran plus grand : iBrick 6`], d: [`Clicks x2. 4.7 inches, flat design, aluminium. It bends a little in your pocket.`, `Clics x2. 4,7 pouces, design plat, aluminium. Il plie un peu dans la poche.`] },
+    { id: `screen2`, cost: 2.4e8, c: 2, t: [`Edge-to-edge screen: iBrick X`, `Écran bord à bord : iBrick X`], d: [`Clicks x2. No more home button. A notch instead. Swipe up. Forever.`, `Clics x2. Plus de bouton home. Une encoche à la place. Balaie vers le haut. Pour toujours.`] },
+    { id: `screen3`, cost: 2.5e10, c: 2, t: [`Huge screen: iSlab`, `Écran géant : iSlab`], d: [`Clicks x2. A brick, but flat and huge. Two apps side by side. Fits in no pocket at all.`, `Clics x2. Une brique, mais plate et géante. Deux applis côte à côte. Ne rentre dans aucune poche.`] },
     { id: `auto1`, cost: 50000, req: `auto`, m: [`auto`, 2], t: [`Tap Tap Pro`, `Tap Tap Pro`], d: [`Tap Tap x2. 0.99 px. Worth it.`, `Tap Tap x2. 0,99 px. Ça les vaut.`] },
     { id: `charger`, cost: 100000, f: `fastcharge`, t: [`Fast charger`, `Chargeur rapide`], d: [`Charges twice as fast. Gets warm. That's normal. Probably.`, `Charge deux fois plus vite. Chauffe. C'est normal. Sûrement.`] },
     { id: `farm1`, cost: 300000, req: `farm`, m: [`farm`, 2], t: [`Fertilizer`, `Engrais`], d: [`Pixel Farm x2.`, `Pixel Farm x2.`] },
@@ -213,17 +218,22 @@ ERA[5] = {
     const x = S.x, back = T([`Home`, `Accueil`]);
     // the close button of an app is the iPhone OS back button
     for (const id in W) { const b = W[id].el.querySelector(`.x`); if (b && b.textContent !== back) b.textContent = back; }
-    for (const id in W) W[id].el.classList.toggle(`cur`, id === x.cur);
-    document.body.classList.toggle(`apphome`, !x.cur || !W[x.cur]);
+    // iSlab: the previous app stays open on the right (split view)
+    if (!W[x.cur]) { x.cur = W[x.cur2] ? x.cur2 : null; x.cur2 = null; }
+    if (!W[x.cur2] || x.cur2 === x.cur || phoneLv() < 3) x.cur2 = null;
+    for (const id in W) { W[id].el.classList.toggle(`cur`, id === x.cur); W[id].el.classList.toggle(`cur2`, id === x.cur2); }
+    const b = document.body.classList, lv = phoneLv();
+    b.toggle(`apphome`, !x.cur); b.toggle(`flat`, lv >= 1); b.toggle(`notch`, lv >= 2); b.toggle(`slab`, lv >= 3); b.toggle(`split`, !!x.cur2);
   },
   taskExtra() {
     const b = Math.max(0, Math.floor(S.x.bat || 0));
-    return `<span class="batt ${b < 20 ? `low` : ``}"><i style="width:${b}%"></i></span> ${b}% <span class="plugb ${S.x.plug ? `on` : ``}" data-act="plug">${T(S.x.plug ? X5.unplug : X5.plug)}</span>`;
+    return `<span class="batt ${b < 20 ? `low` : ``}"><i style="width:${b}%"></i></span><span class="bpc"> ${b}%</span> <span class="plugb ${S.x.plug ? `on` : ``}" data-act="plug">${T(S.x.plug ? X5.unplug : X5.plug)}</span>`;
   },
-  opened(id) { S.x.cur = id; },
+  opened(id) { ERA[5].show(id); },
+  show(id) { const x = S.x; if (phoneLv() >= 3 && x.cur && x.cur !== id) x.cur2 = x.cur; x.cur = id; },
   A: {
-    open(id) { openProg(id); if (S.run[id]) S.x.cur = id; },
-    home() { S.x.cur = null; },
+    open(id) { openProg(id); if (S.run[id]) ERA[5].show(id); },
+    home() { S.x.cur = S.x.cur2 = null; },
     plug() { if (!S.x.dead) S.x.plug = S.x.plug ? 0 : 1; },
     notif() {
       if (!(S.x.notLeft > 0)) return;

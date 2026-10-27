@@ -141,6 +141,16 @@ function vectorIcon(ic, style) {
       const c = roleColor(ic, role), t = off ? ` transform="translate(${off[0]} ${off[1]})"` : ``;
       return sw ? `<path d="${d}" fill="none" stroke="${c}" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round"${t}/>` : `<path d="${d}" fill="${role === `w` ? `#ffffff` : grad(c, 0.35, -0.15)}"${t}/>`;
     }).join(``) + `</g><path d="M0 3.6A3.6 3.6 0 0 1 3.6 0H12.4A3.6 3.6 0 0 1 16 3.6V7C11 8.5 5 8.5 0 7Z" fill="#fff" opacity=".28"/>`;
+  } else if (style === `ios7`) {
+    // iOS 7 and later: flat tile, flat white glyph, details in the tile's dark color
+    const tile = lum(ic.a) > 0.75 ? `#8e8e93` : ic.a, dark = shade(tile, -0.45);
+    let hadW = false;
+    body = `<rect width="16" height="16" rx="3.6" fill="${grad(tile, 0.28, -0.04)}"/><g transform="translate(2.4 2.4) scale(.7)">` + ic.L.map(([role, d, sw, off], n) => {
+      const c = role === `w` ? (n ? dark : `#fff`) : role === `k` ? (hadW ? `#fff` : dark) : role === `b` ? (hadW ? dark : `rgba(255,255,255,.75)`) : `#fff`;
+      if (role === `w`) hadW = true;
+      const t = off ? ` transform="translate(${off[0]} ${off[1]})"` : ``;
+      return sw ? `<path d="${d}" fill="none" stroke="${c}" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round"${t}/>` : `<path d="${d}" fill="${c}"${t}/>`;
+    }).join(``) + `</g>`;
   } else {
     // Winbows 12: flat, soft diagonal gradients, no outline
     body = ic.L.map(([role, d, sw, off]) => {
@@ -160,5 +170,5 @@ function iconUrl(name, style) {
 }
 const recoded = id => S.era === 6 && (id === `ai` || !!(S.x.rc && S.x.rc[id]));
 function iconName(id) { const f = ICON_OF[id]; return typeof f === `function` ? f(S.era, recoded(id)) : f || `window`; }
-const iconStyle = id => [, `mac`, `ega`, `w95`, `xp`, `ios`][S.era] || (recoded(id) ? `w11` : `xp`);
+const iconStyle = id => (S.era === 5 && phoneLv() >= 1 ? `ios7` : [, `mac`, `ega`, `w95`, `xp`, `ios`][S.era] || (recoded(id) ? `w11` : `xp`));
 function icon(id) { const st = iconStyle(id); return `<i class="ico ${st}" style="background-image:url('${iconUrl(iconName(id), st)}')"></i>`; }
