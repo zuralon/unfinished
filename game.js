@@ -292,6 +292,8 @@ const HACK_FRAME = {
   // Winbows 95: HyperTerminal, with its toolbar, white terminal area and status bar
   3: (h, on) => { const t = on && H ? Math.floor((Date.now() - (H.t0 || (H.t0 = Date.now()))) / 1000) : 0;
     return `<div class="hk3"><div class="htb">${HT_ICONS}</div><div class="htt">${h}<span class="blk">_</span></div><div class="hts"><span>${on ? `${T([`Connected`, `Connecté`])} ${Math.floor(t / 3600)}:${String(Math.floor(t / 60) % 60).padStart(2, `0`)}:${String(t % 60).padStart(2, `0`)}` : T([`Disconnected`, `Déconnecté`])}</span><span>${T([`Auto detect`, `Détection auto`])}</span><span>2400 8-N-1</span></div></div>`; },
+  // Winbows 12: Windows Terminal, a PowerShell tab, colored prompt
+  6: (h, on) => `<div class="hk6"><div class="wtt"><span class="wtab"><i>&gt;_</i>PowerShell<b>×</b></span><span class="wtp">+</span><span class="wtp">⌄</span></div><div class="wtb"><div class="wtd">PowerShell 7.4.1 · Copixel Edition</div><div><span class="wps">PS C:\\Users\\Pixel&gt;</span> <span class="wcm">.\\hack.ps1</span></div>${h}<div><span class="wps">PS C:\\Users\\Pixel&gt;</span> <span class="blk">▏</span></div></div></div>`,
   // Winbows XD: the black Command Prompt with its banner
   4: (h, on) => `<div class="hk4"><div>PIXCORP Winbows XD [version 5.1.2600]</div><div>(C) Copyright 1985-2001 PIXCORP.</div><br><div>C:\\Documents and Settings\\Pixel&gt;hack.exe</div>${h}<div>C:\\Documents and Settings\\Pixel&gt;<span class="blk">_</span></div></div>`,
 };
@@ -494,7 +496,8 @@ const BODY = {
     return `<div class="grid">${cells}</div><div class="dim">${S.frag ? U().defragOn : U().defragIdle}</div>`;
   },
   hack() {
-    const f = HACK_FRAME[E().skin];
+    // in Winbows 12 (and once Copixel has recoded it) the terminal becomes Windows Terminal
+    const f = HACK_FRAME[E().skin === 6 || (W.hack && W.hack.el.classList.contains(`new`)) ? 6 : E().skin];
     if (H && H.era) return f ? f(hackHtml(), 1) : hackHtml();
     if (f) return f(`<div>${esc(T(E().D.hack))}</div>${S.lastLog ? `<p>${esc(T(S.lastLog))}</p>` : ``}${S.hackCd > 0 ? `<div>${U().hackWait(Math.ceil(S.hackCd))}</div>` : `<div class="tl" data-act="hack">${U().hackReady}</div>`}`, 0);
     const btn = S.hackCd > 0 ? `<span class="dim">${U().hackWait(Math.ceil(S.hackCd))}</span>` : `<button class="btn" data-act="hack">${U().hackReady.replace(/^> /, ``)}</button>`;

@@ -284,7 +284,7 @@ ERA[5] = {
     x.pick = null; x.cur = id; x.cur2 = null;
   },
   mtMenu(id) {
-    const x = S.x, it = (a, ic, t) => `<span class="mti" data-act="${a}:${id}"><i class="mi ${ic}"></i>${T(t)}</span>`;
+    const x = S.x, it = (a, ic, t) => `<span class="mti" data-act="${a}:${id}"><i class="mtic ${ic}"></i>${T(t)}</span>`;
     return it(`mtfull`, `full`, X5.mtFull) + it(`mtsplit`, `half`, X5.mtSplit) + (x.cur2 ? it(`mtside`, `shut`, X5.mtSide) : ``);
   },
   A: {
