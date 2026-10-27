@@ -51,7 +51,7 @@ const TK = [
     t: [`Get {n} nudges. I need to feel popular.`, `Reçois {n} wizz. J'ai besoin de me sentir populaire.`] },
   { id: `notif`, r: 1, ok: () => S.era === 5, n: () => 2, k: () => S.st.notif || 0,
     t: [`Tap {n} notifications. They won't stop anyway.`, `Touche {n} notifications. De toute façon, elles n'arrêteront pas.`] },
-  { id: `rec`, r: 1.2, ok: () => S.era === 6, n: () => 1, k: () => S.st.recoded || 0,
+  { id: `rec`, r: 1.2, ok: () => S.era === 6 && !!S.x.rq, gone: () => !S.x.rq, n: () => 1, k: () => S.st.recoded || 0,
     t: [`Let Copixel recode a program. Watch it closely.`, `Laisse Copixel recoder un programme. Surveille-le de près.`] },
 ];
 // a round number just above v: 1234 -> 1300
@@ -152,6 +152,9 @@ const boostOf = k => { const b = S.x.boost && S.x.boost[k]; return b && b.s > 0 
 function piTick(dt) {
   if (!S.era || busy) return;
   const x = S.x;
+  // a task that can no longer be done (Copixel has nothing left to recode) makes way for another
+  const cur = x.tk && !x.tk.done && TK.find(t => t.id === x.tk.id);
+  if (cur && cur.gone && cur.gone() && !tkNow().done) { x.tk = null; x.tkT = 3; }
   if (!x.tk && (x.tkT = (x.tkT ?? 8) - dt) <= 0) tkNew();
   for (const k in x.boost || {}) if ((x.boost[k].s -= dt) <= 0) delete x.boost[k];
   if ((x.evT = (x.evT ?? rnd(200, 300)) - dt) <= 0 && !$(`dlg`).classList.contains(`on`) && !x.dead) { x.evT = rnd(300, 480); evFire(); }
