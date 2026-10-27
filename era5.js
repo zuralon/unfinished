@@ -19,8 +19,8 @@ const X5 = {
   notifGot: [`+{n} px`, `+{n} px`],
   upd: [`{a} needs to update. It stops producing while it updates.`, `{a} doit se mettre à jour. Il ne produit plus pendant la mise à jour.`],
   updNow: [`Updating... {n}%`, `Mise à jour... {n} %`],
-  sw: [`Running apps`, `Applis lancées`], swHint2: [`Tap × to close an app. Swipe up on the bar to go back.`, `Touche × pour fermer une appli. Glisse la barre vers le haut pour revenir.`], swHint0: [`Tap − to close an app. Tap an icon to open it.`, `Touche − pour fermer une appli. Touche une icône pour l'ouvrir.`],
-  swHint: [`Tap × to close an app. Tap a card to open it.`, `Touche × pour fermer une appli. Touche une carte pour l'ouvrir.`],
+  sw: [`Running apps`, `Applis lancées`], swHint2: [`Drag the cards sideways. Throw one up (or tap ×) to close it. Swipe up on the bar to go back.`, `Fais glisser les cartes. Jette-en une vers le haut (ou touche ×) pour la fermer. Glisse la barre vers le haut pour revenir.`], swHint0: [`Tap − to close an app. Tap an icon to open it.`, `Touche − pour fermer une appli. Touche une icône pour l'ouvrir.`],
+  swHint: [`Drag the cards sideways. Throw one up (or tap ×) to close it. Tap a card to open it.`, `Fais glisser les cartes. Jette-en une vers le haut (ou touche ×) pour la fermer. Touche une carte pour l'ouvrir.`],
   updScore: [`{a}: updating ({s} s), not producing`, `{a} : mise à jour ({s} s), ne produit pas`], deadScore: [`Battery dead: nothing produces`, `Batterie à plat : rien ne produit`],
   later: [`Remind me later`, `Me le rappeler plus tard`],
   settings: [`Settings`, `Réglages`],
@@ -212,7 +212,9 @@ ERA[5] = {
     if (x.notLeft > 0) x.notLeft -= dt;
     const nb = $(`notif`);
     if (nb) { nb.classList.toggle(`on`, x.notLeft > 0); if (x.notLeft > 0) nb.textContent = T(X5.notifs[x.notI || 0]); }
-    if (!flag(`noupdate`)) {
+    // bought "Update at night" during an update: finish it now instead of freezing it forever
+    if (flag(`noupdate`)) x.upd = null;
+    else {
       const u = x.upd;
       if (u && u.on) { u.t -= dt; if (u.t <= 0) x.upd = null; }
       else if (u && !u.on) { u.t -= dt; if (u.t <= 0) { u.on = 1; u.t = 30; } }
@@ -314,6 +316,47 @@ ERA[5] = {
     const apps = E().P.filter(p => S.run[p.id] && !p.hidden);
     const card = p => `<div class="swc" data-act="open:${p.id}">${p.fixed ? `` : `<span class="swx" data-act="close:${p.id}">${phoneLv() ? `×` : `−`}</span>`}${icon(p.id)}<b>${esc(p.file)}${S.run[p.id] > 1 ? ` x${S.run[p.id]}` : ``}</b><small>${ramTxt(S.run[p.id] * kbOf(p.id))} - ${fmt(S.run[p.id] * (p.bat || 0))} mAh</small></div>`;
     setH(`sw`, `<div class="swt">${T(X5.sw)}</div><div class="swl">${apps.map(card).join(``)}</div><div class="swh">${T([X5.swHint0, X5.swHint, X5.swHint2, X5.swHint2][phoneLv()])}</div>`);
+    const l = el.querySelector(`.swl`);
+    if (l && l.scrollLeft !== ERA[5].swX) l.scrollLeft = ERA[5].swX || 0;
+    ERA[5].bindDrag(el);
+  },
+  // drag the cards like a finger: sideways scrolls the list, up throws the app away
+  bindDrag(el) {
+    if (el.dataset.dr) return;
+    el.dataset.dr = 1;
+    let g = null;
+    el.addEventListener(`click`, e => { if (performance.now() - (ERA[5].noClick || 0) < 300) { e.stopPropagation(); e.preventDefault(); } }, true);
+    el.addEventListener(`pointerdown`, ev => {
+      const l = el.querySelector(`.swl`);
+      if (!l || ev.button) return;
+      g = { x: ev.clientX, y: ev.clientY, s: l.scrollLeft, c: ev.target.closest(`.swc`), m: 0 };
+    });
+    el.addEventListener(`pointermove`, ev => {
+      if (!g) return;
+      const dx = ev.clientX - g.x, dy = ev.clientY - g.y, l = el.querySelector(`.swl`);
+      if (!g.m && Math.hypot(dx, dy) > 8) {
+        g.m = Math.abs(dx) >= Math.abs(dy) || !g.c ? `x` : `y`;
+        // only now: capturing on press would turn a plain tap into a tap on the background
+        try { el.setPointerCapture(ev.pointerId); } catch (er) {}
+      }
+      if (g.m === `x` && l) ERA[5].swX = l.scrollLeft = g.s - dx;
+      if (g.m === `y` && g.c) { const u = Math.min(0, dy); g.c.style.transform = `translateY(${u}px)`; g.c.style.opacity = 1 + u / 250; }
+    });
+    const end = ev => {
+      if (!g) return;
+      const d = g; g = null;
+      if (!d.m) return;
+      // a drag is not a tap: swallow the click that follows
+      ERA[5].noClick = performance.now();
+      setTimeout(() => (down = null), 0);
+      const sx = d.c && d.c.querySelector(`.swx`);
+      if (d.m === `y` && d.c) {
+        if (sx && d.y - ev.clientY > 90) act(sx.dataset.act);
+        else { d.c.style.transform = d.c.style.opacity = ``; }
+      }
+    };
+    el.addEventListener(`pointerup`, end);
+    el.addEventListener(`pointercancel`, end);
   },
   // the memory as an iPhone storage bar: one colored part per running app, then the free space
   memBar(list) {
