@@ -273,7 +273,7 @@ function hackStart(era) {
       lines.push([{ g: g(a) }, { k: j, s: pr[0] + g(n) + pr[1] }, { g: g(10 - n - a) }]);
     } else lines.push([{ g: g(12) }]);
   }
-  H = { era, pass, words, tries: 4, lines, log: [], used: [], dud: [], base: 0xf000 + (Math.random() * 0xe00 | 0) };
+  H = { era, pass, words, tries: 4, lines, log: [], hist: [], used: [], dud: [], base: 0xf000 + (Math.random() * 0xe00 | 0) };
 }
 function hackHtml() {
   const u = U();
@@ -287,8 +287,8 @@ function hackBracket(k) {
   if (!H || H.used.includes(k)) return;
   H.used.push(k);
   const duds = H.words.filter(w => w !== H.pass && !H.dud.includes(w));
-  if (duds.length && Math.random() < 0.75) { H.dud.push(duds[Math.random() * duds.length | 0]); H.log.push(U().hackDud); }
-  else { H.tries = 4; H.log.push(U().hackReset); }
+  if (duds.length && Math.random() < 0.75) { const d = duds[Math.random() * duds.length | 0]; H.dud.push(d); H.log.push(U().hackDud); H.hist.push({ dud: d }); }
+  else { H.tries = 4; H.log.push(U().hackReset); H.hist.push({ reset: 1 }); }
 }
 function hackGuess(w) {
   if (!H) return;
@@ -305,7 +305,7 @@ function hackGuess(w) {
     else { if (log) { S.lastLog = log; note(log); } toast(U().hackReward(fmt(r))); }
     return;
   }
-  H.log.push(U().likeness(w, likeness(w, H.pass)));
+  H.log.push(U().likeness(w, likeness(w, H.pass))); H.hist.push({ w, n: likeness(w, H.pass) });
   if (--H.tries > 0) return;
   H = null; S.hackCd = era === 0 ? 30 : 90;
   if (era === 0) zSay(UP(`hackFail`)); else toast(U().hackFail);
