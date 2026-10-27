@@ -247,7 +247,8 @@ ERA[6] = {
   },
   A: {
     end() {
-      if (S.once.fin) return dlg(T(X6.finished));
+      // seen already: show the end screen again, free, so New Game+ stays reachable after "Keep playing"
+      if (S.once.fin) { busy = true; return ERA[6].finScreen(); }
       if (S.px < E().end.c) return noPx();
       ERA[6].finale();
     },
@@ -268,9 +269,13 @@ ERA[6] = {
       box.appendChild(d); await wait(T(l).length * 35 + 900);
     }
     await wait(1500);
-    f.classList.add(`green`);
-    box.innerHTML = `<div class="big">${T(X6.thanks)}</div><pre>${esc(fill(T(X6.credits), { c: fmt(S.clicks), t: dur(S.time) }))}</pre><div class="fb"><button class="btn" data-act="keep">${T(X6.keep)}</button> <button class="btn" data-act="ngplus">${T(X6.ng)}</button></div>`;
+    ERA[6].finScreen();
     S.st.fin = 1; save();
+  },
+  finScreen() {
+    if (!$(`fin`)) document.body.insertAdjacentHTML(`beforeend`, `<div id="fin"><div id="finT"></div></div>`);
+    $(`fin`).classList.add(`on`, `green`);
+    $(`finT`).innerHTML = `<div class="big">${T(X6.thanks)}</div><pre>${esc(fill(T(X6.credits), { c: fmt(S.clicks), t: dur(S.time) }))}</pre><div class="fb"><button class="btn" data-act="keep">${T(X6.keep)}</button> <button class="btn" data-act="ngplus">${T(X6.ng)}</button></div>`;
   },
   BODY: {
     ai() {

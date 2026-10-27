@@ -468,7 +468,9 @@ const BODY = {
         h += row(`hw:${tr.r}`, fill(T(tr.t), { a: resTxt(tr.r, cap(tr.r)), b: resTxt(tr.r, st.to) }), T(tr.d), u.buy(fmt(st.c)), S.px >= st.c);
       }
       const en = E().end;
-      h += maxed ? row(`end`, T(en.t), T(en.d), u.buy(fmt(en.c)), S.px >= en.c) : `<div class="row dim"><span>${T(en.t)}<small>${T(en.d)}</small></span></div>`;
+      // once seen, the ending is free to watch again (and leads to New Game+)
+      h += S.era === 6 && S.once.fin ? row(`end`, T([`See the ending again`, `Revoir la fin`]), T([`And start a New Game+ from there.`, `Et lancer une Nouvelle partie+ depuis là.`]), T([`Watch`, `Voir`]), true)
+        : maxed ? row(`end`, T(en.t), T(en.d), u.buy(fmt(en.c)), S.px >= en.c) : `<div class="row dim"><span>${T(en.t)}<small>${T(en.d)}</small></span></div>`;
     }
     const tabs = `<div class="tabs">${u.tabs.map((n, i) => `<button class="btn ${i === t ? `on` : ``}" data-act="tab:${i}">${n}</button>`).join(``)}</div>`;
     return tabs + h + (owned ? `<div class="h">${u.installedH}</div>${owned}` : ``);
