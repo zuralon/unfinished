@@ -57,8 +57,6 @@ Aucune installation ni compilation : c'est du HTML et du JavaScript sans dépend
 | `savers.js` | Les économiseurs d'écran |
 | `visuals.js` | Les animations dans les fenêtres des programmes |
 | `postit.js` | Le post-it du développeur et les dilemmes |
-| `tools/` | Outils de développement : bot d'équilibrage (`sim.js`), test rapide (`smoke.js`), image de couverture |
-| `DESIGN.md` | Le document de conception |
 
 Les textes sont stockés par paires `[anglais, français]` et affichés avec `T()`.
 
@@ -113,8 +111,6 @@ Nothing to install or build: it's plain HTML and JavaScript with no dependencies
 | `savers.js` | Screensavers |
 | `visuals.js` | Animations inside program windows |
 | `postit.js` | The developer's post-it and the events |
-| `tools/` | Dev tools: balancing bot (`sim.js`), smoke test (`smoke.js`), cover image |
-| `DESIGN.md` | The design document (in French) |
 
 Texts are stored as `[english, french]` pairs and shown with `T()`.
 
