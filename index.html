@@ -308,8 +308,9 @@ body.s5 #task{left:calc(50% - var(--pw)/2);right:auto;width:var(--pw);top:calc(5
 body.s5 #ram{max-width:110px;gap:0}
 body.s5 #ram i{width:2px;height:9px;border:0;margin-right:1px}
 body.s5 #ramT{display:none}
-body.s5 #icons{left:calc(50% - var(--pw)/2 + 12px);top:calc(50% - var(--ph)/2 + 36px);width:calc(var(--pw) - 24px);bottom:auto;height:calc(var(--ph) - 50px);display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:84px;gap:4px;z-index:5}
-body.s5 .ic{width:auto}
+body.s5 #icons{left:calc(50% - var(--pw)/2 + 12px);top:calc(50% - var(--ph)/2 + 36px);width:calc(var(--pw) - 24px);bottom:auto;height:calc(var(--ph) - 50px);display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-rows:84px;gap:4px;z-index:5}
+/* equal columns: a long app name is cut with "..." instead of widening its column */
+body.s5 .ic{width:auto;min-width:0}
 body.s5 .ic i{width:54px;height:54px;border-radius:13px;border:0;box-shadow:0 2px 6px rgba(0,0,0,.4)}
 body.s5 .ic span{background:none;color:#fff;font-size:11px;text-shadow:0 1px 2px #000;display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
 body.s5 .p0{background:linear-gradient(#5ac8fa,#007aff)}
@@ -586,7 +587,7 @@ body.s5.slab #ram{margin-left:4px}
 body.s5.slab #task{border-radius:16px 16px 0 0}
 body.s5.notch .win[id^="w-"]{top:calc(50% - var(--ph)/2 + 30px)!important;height:calc(var(--ph) - 30px)}
 body.s5.notch #icons{top:calc(50% - var(--ph)/2 + 40px);height:calc(var(--ph) - 46px)}
-body.s5.slab #icons{grid-template-columns:repeat(6,1fr)}
+body.s5.slab #icons{grid-template-columns:repeat(6,minmax(0,1fr))}
 /* home screen and dock */
 body.s5.flat .ic span{font:12px -apple-system,'Helvetica Neue',Helvetica,Arial,sans-serif;text-shadow:0 1px 2px rgba(0,0,0,.4)}
 body.s5.flat .ic i.ico{width:60px;height:60px;filter:none}
@@ -853,16 +854,16 @@ body.flick{animation:fl .12s steps(2) 8}
 <div id="boot"><div><i></i>PIXEL-OS 1<br><br><span class="dim">Welcome. Mostly.</span></div></div>
 <div id="dlg"><div class="win"><div class="title"><b id="dlgH">PIXEL-OS</b></div><div class="body"><div id="dlgT"></div><textarea id="dlgI" spellcheck="false"></textarea><div id="dlgB"></div></div></div></div>
 
-<script src="data.js?v=44"></script>
-<script src="era2.js?v=44"></script>
-<script src="era3.js?v=44"></script>
-<script src="era4.js?v=44"></script>
-<script src="era5.js?v=44"></script>
-<script src="era6.js?v=44"></script>
-<script src="icons.js?v=44"></script>
-<script src="savers.js?v=44"></script>
-<script src="visuals.js?v=44"></script>
-<script src="postit.js?v=44"></script>
-<script src="game.js?v=44"></script>
+<script src="data.js?v=45"></script>
+<script src="era2.js?v=45"></script>
+<script src="era3.js?v=45"></script>
+<script src="era4.js?v=45"></script>
+<script src="era5.js?v=45"></script>
+<script src="era6.js?v=45"></script>
+<script src="icons.js?v=45"></script>
+<script src="savers.js?v=45"></script>
+<script src="visuals.js?v=45"></script>
+<script src="postit.js?v=45"></script>
+<script src="game.js?v=45"></script>
 </body>
 </html>
