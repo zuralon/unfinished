@@ -66,6 +66,12 @@ function fmt(n) {
   const e = Math.min(Math.floor(Math.log10(n) / 3), SUF.length - 1);
   return (n / 1000 ** e).toFixed(2) + SUF[e];
 }
+// "+300000 px/s" written in a description follows the number format chosen in the options
+const PS_RE = /^\+[\d.,]+( millions?)? px\/s/;
+function desc(id) {
+  const t = T(E().D[id] || [``, ``]), p = prog(id);
+  return p && p.prod && PS_RE.test(t) ? t.replace(PS_RE, `+${fmt(p.prod)} px/s`) : t;
+}
 const fmtR = n => (n < 100 ? (Math.round(n * 10) / 10).toLocaleString(loc()) : fmt(n));
 function dur(s) {
   s = Math.floor(s);
@@ -416,7 +422,7 @@ const BODY = {
         if (p.fixed || p.id === `install` || p.hidden || p.nostore) continue;
         const c = costOf(p.id), have = S.bought[p.id];
         if (!have && p.cost > lim) { tease(); continue; }
-        const sub = `${progSub(p)} - ${T(E().D[p.id] || [``, ``])}`;
+        const sub = `${progSub(p)} - ${desc(p.id)}`;
         const pend = E().pending ? E().pending(p.id) : ``;
         if (p.multi) h += row(`buy:${p.id}`, `${p.file}${have ? ` x${have}` : ``}${pend}`, sub, u.buy(fmt(c)), S.px >= c);
         else if (!have && !pend) h += row(`buy:${p.id}`, p.file, sub, u.buy(fmt(c)), S.px >= c);
@@ -475,11 +481,11 @@ const BODY = {
 };
 function multiBody(p) {
   const r = S.run[p.id] || 0;
-  return `<div class="dim">${T(E().D[p.id])}</div><div class="h">${U().runN(r, S.bought[p.id] || 0)} - ${fmtR(r * progRate(p) * cpuF() * achMul())} px/s</div><div style="display:flex;gap:6px;margin-top:6px;align-items:center"><button class="btn" data-act="less:${p.id}">-1</button><button class="btn" data-act="more:${p.id}">+1</button><span class="dim">${progSub(p)}</span></div>`;
+  return `<div class="dim">${desc(p.id)}</div><div class="h">${U().runN(r, S.bought[p.id] || 0)} - ${fmtR(r * progRate(p) * cpuF() * achMul())} px/s</div><div style="display:flex;gap:6px;margin-top:6px;align-items:center"><button class="btn" data-act="less:${p.id}">-1</button><button class="btn" data-act="more:${p.id}">+1</button><span class="dim">${progSub(p)}</span></div>`;
 }
 function winBody(id) {
   if (id === `game` || !W[id]) return;
-  const p = prog(id), f = (E().BODY && E().BODY[id]) || BODY[id] || (p.multi ? () => multiBody(p) : () => `<div class="dim">${T(E().D[id] || [``, ``])}</div>`);
+  const p = prog(id), f = (E().BODY && E().BODY[id]) || BODY[id] || (p.multi ? () => multiBody(p) : () => `<div class="dim">${desc(id)}</div>`);
   const h = (E().extraBody ? E().extraBody(id) : ``) + f();
   if (h !== W[id].h) { W[id].h = h; $(`b-` + id).innerHTML = h; }
 }
