@@ -403,6 +403,98 @@ body.s5 #dlgB .btn{flex:1;height:42px;background:linear-gradient(rgba(255,255,25
 body.s5 #notif.on{background:linear-gradient(rgba(74,94,146,.95),rgba(20,36,86,.95));border:2px solid rgba(255,255,255,.88);border-radius:10px;color:#fff;text-align:center;font:15px Helvetica,Arial,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.6)}
 body.s5 #toast{bottom:calc(50% - var(--ph)/2 + 112px);background:rgba(0,0,0,.78);border:1px solid rgba(255,255,255,.25);border-radius:8px;font:bold 13px Helvetica,Arial,sans-serif}
 body.s5 #boot div{font:bold 20px Helvetica,Arial,sans-serif}
+/* ---------- iBrick 6 / iBrick X / iSlab: bigger screens, flat iOS ---------- */
+body.s5.flat{--ph:min(640px,calc(100vh - 170px));--pw:calc(var(--ph) * .5625)}
+body.s5.notch{--ph:min(700px,calc(100vh - 70px));--pw:calc(var(--ph) * .4618)}
+body.s5.slab{--ph:min(600px,calc(100vh - 100px));--pw:calc(var(--ph) * 1.4)}
+body.s5.flat #desk:before{width:calc(var(--pw) + 40px);height:calc(var(--ph) + 150px);border-radius:56px;background:linear-gradient(115deg,rgba(255,255,255,.1) 0 30%,transparent 30.5%),#0b0b0c;box-shadow:0 0 0 3px #a1a1a6,0 0 0 5px #5b5b5f,0 30px 70px rgba(0,0,0,.7)}
+body.s5.flat #ear{top:calc(50% - var(--ph)/2 - 40px);width:50px;height:6px;margin-left:-25px}
+body.s5.flat #home{top:calc(50% + var(--ph)/2 + 14px);width:52px;height:52px;border:2px solid #6e6e73;background:#111;box-shadow:none}
+body.s5.flat #home:after{display:none}
+body.s5.notch #desk:before{width:calc(var(--pw) + 24px);height:calc(var(--ph) + 24px);border-radius:52px;background:#000;box-shadow:0 0 0 3px #c4c4c9,0 0 0 5px #6e6e73,0 30px 70px rgba(0,0,0,.7)}
+body.s5.notch #desk:after{border-radius:42px}
+body.s5.notch #ear{top:calc(50% - var(--ph)/2);width:calc(var(--pw) * .42);height:28px;margin-left:calc(var(--pw) * -.21);border-radius:0 0 18px 18px;background:#000;box-shadow:none;z-index:100004}
+body.s5.notch #home{top:calc(50% + var(--ph)/2 - 14px);width:120px;height:5px;margin-left:-60px;transform:none;border:0;border-radius:3px;background:rgba(255,255,255,.85);box-shadow:0 0 2px rgba(0,0,0,.5);z-index:100004}
+body.s5.notch:not(.apphome) #home{background:rgba(0,0,0,.75)}
+body.s5.slab #desk:before{width:calc(var(--pw) + 48px);height:calc(var(--ph) + 48px);border-radius:30px}
+body.s5.slab #desk:after{border-radius:16px}
+body.s5.slab #ear{left:calc(50% - var(--pw)/2 - 16px);top:50%;width:8px;height:8px;margin:-4px 0 0;border-radius:50%;background:#222}
+body.s5.slab #home{margin-left:-80px;width:160px}
+/* wallpapers */
+body.s5.flat.apphome #desk:after{background:radial-gradient(circle at 20% 15%,#6dd5fa,transparent 50%),radial-gradient(circle at 85% 75%,#c471f5,transparent 55%),linear-gradient(160deg,#2b5876,#4e4376)}
+body.s5.notch.apphome #desk:after{background:radial-gradient(circle at 70% 20%,#ffd36e,transparent 45%),radial-gradient(circle at 20% 80%,#ff5e9c,transparent 55%),linear-gradient(150deg,#ff7a59,#c2367a 55%,#3a1c71)}
+body.s5.slab.apphome #desk:after{background:radial-gradient(circle at 30% 30%,#4facfe,transparent 50%),radial-gradient(circle at 75% 70%,#43e97b,transparent 50%),linear-gradient(135deg,#0f2027,#203a43 50%,#2c5364)}
+/* status bar */
+body.s5.flat #task{background:transparent;color:#fff;font:600 12px -apple-system,'Helvetica Neue',Helvetica,Arial,sans-serif}
+body.s5.flat:not(.apphome) #task{background:#f7f7f7;color:#000}
+body.s5.flat #task:before{content:'\25CF\25CF\25CF\25CF\25CB  PIXCORP';background:none;padding-left:0;letter-spacing:.3px}
+body.s5.flat .batt{border-color:currentColor}
+body.s5.flat #task>span:nth-child(3){display:none}
+body.s5.flat #ram{order:2;margin-left:auto}
+body.s5.flat #res{order:3;margin-left:6px}
+body.s5.flat .plugb{border-color:currentColor}
+body.s5.notch #task{height:30px;padding:0 20px;border-radius:42px 42px 0 0}
+body.s5.notch #task:before{display:none}
+body.s5.notch #task>span:nth-child(3){display:none}
+body.s5.notch #clk{position:static;transform:none;order:-2;margin:0 6px 0 0}
+body.s5.notch #ram{order:-1;margin-left:0}
+body.s5.notch #res{margin-left:auto;font-size:11px}
+body.s5.notch .plugb{font-size:10px;padding:0 4px}
+body.s5.notch:not(.slab) .bpc{display:none}
+body.s5.slab #task>span:nth-child(3){display:inline;order:1;margin-left:auto}
+body.s5.slab #ram{margin-left:4px}
+body.s5.slab #task{border-radius:16px 16px 0 0}
+body.s5.notch .win[id^="w-"]{top:calc(50% - var(--ph)/2 + 30px)!important;height:calc(var(--ph) - 30px)}
+body.s5.notch #icons{top:calc(50% - var(--ph)/2 + 40px);height:calc(var(--ph) - 46px)}
+body.s5.slab #icons{grid-template-columns:repeat(6,1fr)}
+/* home screen and dock */
+body.s5.flat .ic span{font:12px -apple-system,'Helvetica Neue',Helvetica,Arial,sans-serif;text-shadow:0 1px 2px rgba(0,0,0,.4)}
+body.s5.flat .ic i.ico{width:60px;height:60px;filter:none}
+body.s5.flat .dock{background:rgba(255,255,255,.3);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border:0}
+body.s5.flat .dock .ic i.ico{-webkit-box-reflect:none}
+body.s5.notch .dock{left:-4px;right:-4px;bottom:8px;border-radius:28px}
+body.s5.slab .dock{left:25%;right:25%}
+body.s5.flat .dots i{background:rgba(255,255,255,.45)}
+/* apps: flat nav bar, plain back button, grouped tables */
+body.s5.flat .win[id^="w-"] .title{height:44px;background:rgba(248,248,248,.97);border-bottom:1px solid #c8c7cc}
+body.s5.flat .win[id^="w-"] .title b{font:600 17px -apple-system,'Helvetica Neue',Helvetica,Arial,sans-serif;color:#000;text-shadow:none}
+body.s5.flat .x{clip-path:none;background:none;border:0;color:#007aff;font:17px -apple-system,'Helvetica Neue',Helvetica,Arial,sans-serif;text-shadow:none;padding:0 6px 0 18px;position:relative}
+body.s5.flat .x:before{content:'';position:absolute;left:6px;top:50%;width:9px;height:9px;margin-top:-5px;border-left:2.5px solid #007aff;border-bottom:2.5px solid #007aff;transform:rotate(45deg)}
+body.s5.flat .win[id^="w-"] .body{background:#efeff4;padding:0}
+body.s5.flat .win[id^="w-"] .body>:not(.row):not(.h){margin:10px}
+body.s5.flat #w-game .body>*{margin:0}
+body.s5.flat .row,body.s5.flat .body>.row:first-child,body.s5.flat .body>:not(.row)+.row,body.s5.flat .body>.row:last-child,body.s5.flat .body>.row:has(+ :not(.row)){border:0;border-bottom:1px solid #e0e0e5;border-radius:0;margin:0;padding:10px 14px}
+body.s5.flat .h{color:#6d6d72;font:13px -apple-system,'Helvetica Neue',Helvetica,Arial,sans-serif;text-transform:uppercase;text-shadow:none;margin:20px 14px 6px}
+body.s5.flat .btn{background:none;border:1px solid #007aff;border-radius:5px;color:#007aff;font:15px -apple-system,'Helvetica Neue',Helvetica,Arial,sans-serif;text-shadow:none;padding:3px 10px}
+body.s5.flat .row.can .btn{background:#007aff;color:#fff;border-color:#007aff;text-shadow:none}
+body.s5.flat .tabs{margin:10px}
+body.s5.flat .tabs .btn{background:none;border:1px solid #007aff;color:#007aff;text-shadow:none;margin-left:-1px;font-size:13px}
+body.s5.flat .tabs .btn.on{background:#007aff;color:#fff;border-color:#007aff}
+body.s5.notch .win[id^="w-"] .title{justify-content:flex-start;height:56px;align-items:flex-end;padding-bottom:6px}
+body.s5.notch .win[id^="w-"] .title b{position:static;text-align:left;margin-left:6px;font:bold 26px -apple-system,'Helvetica Neue',Helvetica,Arial,sans-serif}
+body.s5.notch .x{order:2;margin-left:auto}
+/* iSlab split view: two apps side by side */
+body.s5.split .win[id^="w-"].cur{width:calc(var(--pw)/2 - 1px)!important}
+body.s5.split .win[id^="w-"].cur2{display:flex;flex-direction:column;left:calc(50% + 1px)!important;width:calc(var(--pw)/2 - 1px)!important}
+body.s5.slab .win[id^="w-"]{border-radius:0 0 16px 16px;overflow:hidden}
+/* flat alerts and banners */
+body.s5.flat #dlg .win{width:min(270px,86vw);background:rgba(248,248,248,.97);border:0;border-radius:14px;color:#000;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+body.s5.flat #dlg .win:before{display:none}
+body.s5.flat #dlg .title b{color:#000;font:600 17px -apple-system,'Helvetica Neue',Helvetica,Arial,sans-serif;text-shadow:none}
+body.s5.flat #dlgT{font:13px/1.35 -apple-system,'Helvetica Neue',Helvetica,Arial,sans-serif;text-shadow:none}
+body.s5.flat #dlg .body{padding:6px 16px 0}
+body.s5.flat #dlgB{margin:14px -16px 0;gap:0;border-top:1px solid #dbdbdf}
+body.s5.flat #dlgB .btn{height:44px;background:none;border:0;border-radius:0;color:#007aff;font:17px -apple-system,'Helvetica Neue',Helvetica,Arial,sans-serif;text-shadow:none}
+body.s5.flat #dlgB .btn+.btn{border-left:1px solid #dbdbdf;font-weight:600}
+body.s5.flat #notif.on{background:rgba(30,30,30,.92);border:0;border-radius:12px;text-align:left;font:14px -apple-system,'Helvetica Neue',Helvetica,Arial,sans-serif}
+/* lock screen of the flat phones: no bars, big thin clock */
+body.flat #saver .lock,body.flat #saver .unl{background:none;border:0}
+body.flat #saver .lock{top:30px}
+body.flat #saver .lt{font:200 66px/1 -apple-system,'Helvetica Neue',Helvetica,Arial,sans-serif}
+body.flat #saver .unl:before,body.flat #saver .unl i{display:none}
+body.flat #saver .unl span{left:10px;right:10px;font-size:18px;background:linear-gradient(90deg,rgba(255,255,255,.55) 0 40%,#fff 50%,rgba(255,255,255,.55) 60% 100%) 0 0/300% 100%;-webkit-background-clip:text;background-clip:text}
+body.flat #saver[data-k="5"]{background:radial-gradient(circle at 20% 15%,#6dd5fa,transparent 50%),radial-gradient(circle at 85% 75%,#c471f5,transparent 55%),linear-gradient(160deg,#2b5876,#4e4376)}
+body.notch #saver[data-k="5"]{border-radius:42px;overflow:hidden}
 /* ---------- era 6: Winbows 12 (and recoded windows inside the XD skin) ---------- */
 body.s6 #desk,body.s6 #drop,body.s6 #dlg,body.s6 #toast{font:14px/1.43 'Segoe UI Variable Text','Segoe UI',system-ui,-apple-system,sans-serif}
 /* the Bloom wallpaper */
@@ -597,16 +689,16 @@ body.flick{animation:fl .12s steps(2) 8}
 <div id="boot"><div><i></i>PIXEL-OS 1<br><br><span class="dim">Welcome. Mostly.</span></div></div>
 <div id="dlg"><div class="win"><div class="title"><b id="dlgH">PIXEL-OS</b></div><div class="body"><div id="dlgT"></div><textarea id="dlgI" spellcheck="false"></textarea><div id="dlgB"></div></div></div></div>
 
-<script src="data.js?v=18"></script>
-<script src="era2.js?v=18"></script>
-<script src="era3.js?v=18"></script>
-<script src="era4.js?v=18"></script>
-<script src="era5.js?v=18"></script>
-<script src="era6.js?v=18"></script>
-<script src="icons.js?v=18"></script>
-<script src="savers.js?v=18"></script>
-<script src="visuals.js?v=18"></script>
-<script src="postit.js?v=18"></script>
-<script src="game.js?v=18"></script>
+<script src="data.js?v=20"></script>
+<script src="era2.js?v=20"></script>
+<script src="era3.js?v=20"></script>
+<script src="era4.js?v=20"></script>
+<script src="era5.js?v=20"></script>
+<script src="era6.js?v=20"></script>
+<script src="icons.js?v=20"></script>
+<script src="savers.js?v=20"></script>
+<script src="visuals.js?v=20"></script>
+<script src="postit.js?v=20"></script>
+<script src="game.js?v=20"></script>
 </body>
 </html>
