@@ -19,7 +19,7 @@ const X5 = {
   notifGot: [`+{n} px`, `+{n} px`],
   upd: [`{a} needs to update. It stops producing while it updates.`, `{a} doit se mettre à jour. Il ne produit plus pendant la mise à jour.`],
   updNow: [`Updating... {n}%`, `Mise à jour... {n} %`],
-  sw: [`Running apps`, `Applis lancées`], swHint2: [`Drag the cards sideways. Throw one up (or tap ×) to close it. Swipe up on the bar to go back.`, `Fais glisser les cartes. Jette-en une vers le haut (ou touche ×) pour la fermer. Glisse la barre vers le haut pour revenir.`], swHint0: [`Tap − to close an app. Tap an icon to open it.`, `Touche − pour fermer une appli. Touche une icône pour l'ouvrir.`],
+  sw: [`Running apps`, `Applis lancées`], swHint2: [`Drag the cards sideways. Throw one up (or tap ×) to close it. Swipe the bar up to go home.`, `Fais glisser les cartes. Jette-en une vers le haut (ou touche ×) pour la fermer. Glisse la barre vers le haut pour revenir à l'accueil.`], swHint0: [`Tap − to close an app. Tap an icon to open it.`, `Touche − pour fermer une appli. Touche une icône pour l'ouvrir.`],
   swHint: [`Drag the cards sideways. Throw one up (or tap ×) to close it. Tap a card to open it.`, `Fais glisser les cartes. Jette-en une vers le haut (ou touche ×) pour la fermer. Touche une carte pour l'ouvrir.`],
   updScore: [`{a}: updating ({s} s), not producing`, `{a} : mise à jour ({s} s), ne produit pas`], deadScore: [`Battery dead: nothing produces`, `Batterie à plat : rien ne produit`],
   later: [`Remind me later`, `Me le rappeler plus tard`],
@@ -156,7 +156,7 @@ ERA[5] = {
   },
   HELP: [
     [`One app on screen at a time. The round button goes back home. Running apps keep working in the background.`, `Une appli à l'écran à la fois. Le bouton rond revient à l'accueil. Les applis lancées continuent en arrière-plan.`],
-    [`Press the home button twice to see the running apps and close them. On the iBrick X and the iSlab, swipe up on the bar: a short swipe goes home, a long one shows the apps.`, `Appuie deux fois sur le bouton home pour voir les applis lancées et les fermer. Sur l'iBrick X et l'iSlab, glisse vers le haut sur la barre : un petit geste revient à l'accueil, un grand montre les applis.`],
+    [`Press the home button twice to see the running apps and close them. On the iBrick X and the iSlab, swipe the bar up to go home, or swipe up and hold to see the apps.`, `Appuie deux fois sur le bouton home pour voir les applis lancées et les fermer. Sur l'iBrick X et l'iSlab, glisse la barre vers le haut pour revenir à l'accueil, ou glisse et garde le doigt une seconde pour voir les applis.`],
     [`Every running app drains the battery. At 0%, the phone turns off and every app closes. Use Charge in the status bar.`, `Chaque appli lancée vide la batterie. À 0 %, le téléphone s'éteint et toutes les applis se ferment. Utilise Charger dans la barre d'état.`],
     [`While charging, you can't tap the pixel. The cable is too short.`, `Pendant la charge, tu ne peux pas taper le pixel. Le câble est trop court.`],
     [`Notifications give pixels if you tap them in time.`, `Les notifications donnent des pixels si tu les touches à temps.`],
@@ -193,7 +193,9 @@ ERA[5] = {
       return;
     }
     const hp = x.health ?? 100, top = flag(`optcharge`) ? Math.min(80, hp) : hp;
-    x.bat += ((x.plug && x.bat < top ? 1.5 * (flag(`fastcharge`) ? 2 : 1) : 0) - ERA[5].drain()) * dt;
+    // plugged in and full: the phone runs on the wall, the charge holds still instead of going 50/49/50
+    if (x.plug && x.bat >= top - 0.5) x.bat = Math.max(x.bat, top);
+    else x.bat += ((x.plug ? 1.5 * (flag(`fastcharge`) ? 2 : 1) : 0) - ERA[5].drain()) * dt;
     x.bat = Math.min(hp, x.bat);
     // left plugged in when full: the battery wears out (about 1% every 12 s)
     if (x.plug && x.bat >= hp - 0.5 && !flag(`optcharge`)) {
@@ -262,7 +264,7 @@ ERA[5] = {
     // one press: home screen; two quick presses: the running apps, to switch or close them
     home() {
       const x = S.x, now = performance.now();
-      if (phoneLv() >= 2) return ERA[5].swipeEnd(0);
+      if (phoneLv() >= 2) return;
       if (x.sw) { x.sw = 0; return; }
       if (now - (ERA[5].lastHome || 0) < 450) { ERA[5].lastHome = 0; x.sw = 1; return; }
       ERA[5].lastHome = now; x.cur = x.cur2 = null;
@@ -293,19 +295,42 @@ ERA[5] = {
     if (!u || u.id !== id) return mem;
     return mem + (u.on ? `<div class="upd">${fill(T(X5.updNow), { n: Math.floor((30 - u.t) / 30 * 100) })}</div>` : `<div class="upd">${fill(T(X5.upd), { a: prog(id).file })}<br><button class="btn" data-act="later">${T(X5.later)}</button></div>`);
   },
-  // iBrick X and iSlab have no home button: swipe up on the bar goes home, a long swipe shows the running apps
-  swipeEnd(dy) {
-    const x = S.x, now = performance.now();
-    if (now - (ERA[5].swT || 0) < 400) return;
-    ERA[5].swT = now;
-    if (dy >= 80) x.sw = 1; else if (x.sw) x.sw = 0; else x.cur = x.cur2 = null;
+  // iBrick X and iSlab have no home button, like Face ID iPhones: swipe the bar up to go home,
+  // swipe up and hold to see the running apps. A tap on the bar does nothing.
+  swipeEnd(dy, held) {
+    const x = S.x;
+    ERA[5].swT = performance.now();
+    if (held) x.sw = 1;
+    else if (dy >= 40) { x.sw = 0; x.cur = x.cur2 = null; }
   },
   bindSwipe() {
     const hb = $(`home`);
     if (!hb || hb.dataset.sw) return;
     hb.dataset.sw = 1;
-    hb.addEventListener(`pointerdown`, ev => { if (phoneLv() < 2) return; ERA[5].swY = ev.clientY; try { hb.setPointerCapture(ev.pointerId); } catch (er) {} });
-    hb.addEventListener(`pointerup`, ev => { if (phoneLv() < 2 || ERA[5].swY == null) return; const dy = ERA[5].swY - ev.clientY; ERA[5].swY = null; ERA[5].swipeEnd(dy); });
+    let g = null;
+    const b = document.body, still = () => { if (g && g.dy >= 60) { g.held = 1; b.classList.remove(`drag`); S.x.sw = 1; } };
+    hb.addEventListener(`pointerdown`, ev => {
+      if (phoneLv() < 2) return;
+      g = { y: ev.clientY, dy: 0, held: 0, t: 0 };
+      try { hb.setPointerCapture(ev.pointerId); } catch (er) {}
+    });
+    hb.addEventListener(`pointermove`, ev => {
+      if (!g || g.held) return;
+      const dy = Math.max(0, g.y - ev.clientY);
+      // the finger stops for a moment halfway up: show the apps
+      if (Math.abs(dy - g.dy) > 4) { clearTimeout(g.t); g.t = setTimeout(still, 450); }
+      g.dy = dy;
+      b.classList.toggle(`drag`, dy > 4 && !!S.x.cur);
+      b.style.setProperty(`--dy`, Math.min(dy, 300));
+    });
+    const end = ev => {
+      if (!g) return;
+      const d = g; g = null;
+      clearTimeout(d.t); b.classList.remove(`drag`);
+      if (ev.type === `pointerup`) ERA[5].swipeEnd(Math.max(0, d.y - ev.clientY), d.held);
+    };
+    hb.addEventListener(`pointerup`, end);
+    hb.addEventListener(`pointercancel`, end);
   },
   switcher() {
     const x = S.x, el = $(`sw`);

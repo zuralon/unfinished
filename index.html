@@ -454,11 +454,11 @@ body.s5.slab #ear{left:calc(50% - var(--pw)/2 - 16px);top:50%;width:8px;height:8
 body.s5.slab #home{margin-left:-80px;width:160px}
 /* wallpapers */
 body.s5.flat.apphome #desk:after{background:radial-gradient(circle at 20% 15%,#6dd5fa,transparent 50%),radial-gradient(circle at 85% 75%,#c471f5,transparent 55%),linear-gradient(160deg,#2b5876,#4e4376)}
-body.s5.notch.apphome #desk:after{background:radial-gradient(circle at 70% 20%,#ffd36e,transparent 45%),radial-gradient(circle at 20% 80%,#ff5e9c,transparent 55%),linear-gradient(150deg,#ff7a59,#c2367a 55%,#3a1c71)}
-body.s5.slab.apphome #desk:after{background:radial-gradient(circle at 30% 30%,#4facfe,transparent 50%),radial-gradient(circle at 75% 70%,#43e97b,transparent 50%),linear-gradient(135deg,#0f2027,#203a43 50%,#2c5364)}
+body.s5.notch.apphome #desk:after,body.s5.notch.drag #desk:after{background:radial-gradient(circle at 70% 20%,#ffd36e,transparent 45%),radial-gradient(circle at 20% 80%,#ff5e9c,transparent 55%),linear-gradient(150deg,#ff7a59,#c2367a 55%,#3a1c71)}
+body.s5.slab.apphome #desk:after,body.s5.slab.drag #desk:after{background:radial-gradient(circle at 30% 30%,#4facfe,transparent 50%),radial-gradient(circle at 75% 70%,#43e97b,transparent 50%),linear-gradient(135deg,#0f2027,#203a43 50%,#2c5364)}
 /* status bar */
 body.s5.flat #task{background:transparent;color:#fff;font:600 12px -apple-system,'Helvetica Neue',Helvetica,Arial,sans-serif}
-body.s5.flat:not(.apphome) #task{background:#f7f7f7;color:#000}
+body.s5.flat:not(.apphome):not(.drag) #task{background:#f7f7f7;color:#000}
 body.s5.flat #task:before{content:'\25CF\25CF\25CF\25CF\25CB  PIXCORP';background:none;padding-left:0;letter-spacing:.3px}
 body.s5.flat .batt{border-color:currentColor}
 body.s5.flat #task>span:nth-child(3){display:none}
@@ -508,7 +508,13 @@ body.s5.notch .x{order:2;margin-left:auto}
 /* iSlab split view: two apps side by side */
 body.s5.split .win[id^="w-"].cur{width:calc(var(--pw)/2 - 1px)!important}
 body.s5.split .win[id^="w-"].cur2{display:flex;flex-direction:column;left:calc(50% + 1px)!important;width:calc(var(--pw)/2 - 1px)!important}
+body.s5.notch .win[id^="w-"]{border-radius:0 0 42px 42px;overflow:hidden}
+body.s5.notch #dead.on{border-radius:42px}
+body.s5.slab #dead.on,body.slab #saver[data-k="5"]{border-radius:16px}
 body.s5.slab .win[id^="w-"]{border-radius:0 0 16px 16px;overflow:hidden}
+body.s5.drag .win[id^="w-"]{transform-origin:50% 100%;transform:translateY(calc(var(--dy) * -.35px)) scale(calc(1 - var(--dy) / 550));border-radius:42px;transition:none}
+body.s5.drag.slab .win[id^="w-"]{border-radius:16px}
+body.s5 .win[id^="w-"]{transition:transform .2s}
 /* flat alerts and banners */
 body.s5.flat #dlg .win{width:min(270px,86vw);background:rgba(248,248,248,.97);border:0;border-radius:14px;color:#000;box-shadow:0 10px 30px rgba(0,0,0,.35)}
 body.s5.flat #dlg .win:before{display:none}
@@ -721,16 +727,16 @@ body.flick{animation:fl .12s steps(2) 8}
 <div id="boot"><div><i></i>PIXEL-OS 1<br><br><span class="dim">Welcome. Mostly.</span></div></div>
 <div id="dlg"><div class="win"><div class="title"><b id="dlgH">PIXEL-OS</b></div><div class="body"><div id="dlgT"></div><textarea id="dlgI" spellcheck="false"></textarea><div id="dlgB"></div></div></div></div>
 
-<script src="data.js?v=27"></script>
-<script src="era2.js?v=27"></script>
-<script src="era3.js?v=27"></script>
-<script src="era4.js?v=27"></script>
-<script src="era5.js?v=27"></script>
-<script src="era6.js?v=27"></script>
-<script src="icons.js?v=27"></script>
-<script src="savers.js?v=27"></script>
-<script src="visuals.js?v=27"></script>
-<script src="postit.js?v=27"></script>
-<script src="game.js?v=27"></script>
+<script src="data.js?v=28"></script>
+<script src="era2.js?v=28"></script>
+<script src="era3.js?v=28"></script>
+<script src="era4.js?v=28"></script>
+<script src="era5.js?v=28"></script>
+<script src="era6.js?v=28"></script>
+<script src="icons.js?v=28"></script>
+<script src="savers.js?v=28"></script>
+<script src="visuals.js?v=28"></script>
+<script src="postit.js?v=28"></script>
+<script src="game.js?v=28"></script>
 </body>
 </html>
