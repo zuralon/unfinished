@@ -444,7 +444,7 @@ const BODY = {
     const tabs = `<div class="tabs">${u.tabs.map((n, i) => `<button class="btn ${i === t ? `on` : ``}" data-act="tab:${i}">${n}</button>`).join(``)}</div>`;
     return tabs + h + (owned ? `<div class="h">${u.installedH}</div>${owned}` : ``);
   },
-  score: () => `<div class="big">${fmt(S.px)}</div><div class="c">px</div><div class="c dim">${U().perSec(fmtR(perSec()))}<br>${U().perClick(fmtR(clickPow()))}</div>`,
+  score: () => `<div class="big">${fmt(S.px)}</div><div class="c">px</div><div class="c dim">${U().perSec(fmtR(perSec()))}<br>${U().perClick(fmtR(clickPow()))}</div>${E().scoreNote ? E().scoreNote() : ``}`,
   notes: () => `<div class="notes">${S.notes.map(n => `<p>${esc(T(n))}</p>`).join(``)}</div>`,
   help: () => `<div class="notes">${E().HELP.map(t => `<p>- ${esc(T(t))}</p>`).join(``)}</div>`,
   cursor: () => `<div class="dim">${T(E().D.cursor)}</div>`,
@@ -570,7 +570,7 @@ function deskRender() {
   const u = U(), e = E();
   if (!e.startMenu) setH(`bar`, `<span class="logo"></span><span class="m" data-menu="file">${u.file}</span><span class="m" data-menu="edit">${u.edit}</span><span class="m" data-menu="help">${u.help}</span><span class="r">${e.os}</span>`);
   const ics = e.P.filter(p => (e.allIcons ? (S.bought[p.id] || p.fixed) && !p.hidden : !p.fixed && S.bought[p.id] && !S.run[p.id])), ich = p => `<div class="ic" data-act="open:${p.id}">${icon(p.id)}<span>${p.file}</span></div>`;
-  setH(`icons`, e.dock ? ics.filter(p => !e.dock.includes(p.id)).map(ich).join(``) + `<div class="dots"><i class="on"></i><i></i></div><div class="dock">${ics.filter(p => e.dock.includes(p.id)).map(ich).join(``)}</div>` : ics.map(ich).join(``));
+  setH(`icons`, e.dock ? ics.filter(p => !e.dock.includes(p.id)).map(ich).join(``) + (e.memBar ? e.memBar(false) : ``) + `<div class="dots"><i class="on"></i><i></i></div><div class="dock">${ics.filter(p => e.dock.includes(p.id)).map(ich).join(``)}</div>` : ics.map(ich).join(``));
   let r = ``;
   for (const p of e.P) { const n = (S.run[p.id] || 0) * kbOf(p.id); for (let i = 0; i < n; i++) r += `<i class="p${p.i % 3}" title="${p.file}"></i>`; }
   setH(`ram`, r + `<i class="f"></i>`.repeat(S.frag) + `<i></i>`.repeat(Math.max(0, free())));
@@ -581,7 +581,7 @@ function deskRender() {
   setH(`clk`, S.run.clock ? now.toTimeString().slice(0, 5) + (e.skin === 6 ? `<small>${now.toLocaleDateString(loc())}</small>` : ``) : ``);
   setH(`tapps`, e.skin === 6 ? e.P.filter(p => S.run[p.id] && !p.hidden).map(p => `<span class="ta" data-act="open:${p.id}" title="${esc(p.file)}">${icon(p.id)}</span>`).join(``) : ``);
   // on the phone only one app shows at a time: the running Score app also shows on top of the Pixel app
-  if ($(`pixs`)) setH(`pixs`, e.skin === 5 && S.run.score ? `<b>${fmt(S.px)}</b> px<small>${u.perSec(fmtR(perSec()))}</small>` : ``);
+  if ($(`pixs`)) setH(`pixs`, e.skin === 5 && S.run.score ? `<b>${fmt(S.px)}</b> px<small>${u.perSec(fmtR(perSec()))}</small>${e.scoreNote ? e.scoreNote() : ``}` : ``);
   for (const id in W) { winBody(id); if (e.skin === 3 || e.skin === 4 || e.skin === 6) { const u = iconUrl(iconName(id), iconStyle(id)); if (W[id].ti.dataset.u !== u) { W[id].ti.dataset.u = u; W[id].ti.style.backgroundImage = `url('${u}')`; } } }
   if (e.render) e.render();
 }

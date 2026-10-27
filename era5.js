@@ -2,6 +2,10 @@
 const X5 = {
   plug: [`Charge`, `Charger`], unplug: [`Unplug`, `Débrancher`],
   short: [`The cable is too short. You can't tap while charging.`, `Le câble est trop court. Impossible de taper pendant la charge.`],
+  hot: [`Your iBrick is warm. A battery kept plugged in at 100% wears out.`, `Ton iBrick chauffe. Une batterie laissée branchée à 100 % s'use.`],
+  slow: [`Your battery is worn. The iBrick slows itself down to protect it. It's a feature.`, `Ta batterie est usée. L'iBrick se ralentit tout seul pour la ménager. C'est une fonctionnalité.`],
+  health: [`Battery health: {n}%`, `Santé de la batterie : {n} %`], throttled: [`Performance reduced: x{n}`, `Performances réduites : x{n}`],
+  newbat: [`Replace the battery ({c} px)`, `Remplacer la batterie ({c} px)`], newbatDone: [`New battery installed. Like new. For now.`, `Batterie neuve installée. Comme neuf. Pour l'instant.`],
   dead: [`Battery empty.\n\nThe iBrick turned off. Every app was closed.\nIt's charging now. It'll turn back on at 15%.`, `Batterie vide.\n\nL'iBrick s'est éteint. Toutes les applis ont été fermées.\nIl charge, maintenant. Il se rallumera à 15 %.`],
   deadScr: [`Charging... {n}%`, `Charge... {n} %`],
   notifs: [
@@ -15,6 +19,9 @@ const X5 = {
   notifGot: [`+{n} px`, `+{n} px`],
   upd: [`{a} needs to update. It stops producing while it updates.`, `{a} doit se mettre à jour. Il ne produit plus pendant la mise à jour.`],
   updNow: [`Updating... {n}%`, `Mise à jour... {n} %`],
+  sw: [`Running apps`, `Applis lancées`], swHint2: [`Tap × to close an app. Swipe up on the bar to go back.`, `Touche × pour fermer une appli. Glisse la barre vers le haut pour revenir.`], swHint0: [`Tap − to close an app. Tap an icon to open it.`, `Touche − pour fermer une appli. Touche une icône pour l'ouvrir.`],
+  swHint: [`Tap × to close an app. Tap a card to open it.`, `Touche × pour fermer une appli. Touche une carte pour l'ouvrir.`],
+  updScore: [`{a}: updating ({s} s), not producing`, `{a} : mise à jour ({s} s), ne produit pas`], deadScore: [`Battery dead: nothing produces`, `Batterie à plat : rien ne produit`],
   later: [`Remind me later`, `Me le rappeler plus tard`],
   settings: [`Settings`, `Réglages`],
 };
@@ -72,6 +79,7 @@ ERA[5] = {
     { id: `night`, cost: 2.1e6, f: `noupdate`, t: [`Update at night`, `Mise à jour la nuit`], d: [`Apps no longer stop to update while you play.`, `Les applis ne s'arrêtent plus pour se mettre à jour pendant que tu joues.`] },
     { id: `auto2`, cost: 3e6, req: `auto`, m: [`auto`, 3], t: [`Tap Tap Gold`, `Tap Tap Gold`], d: [`Tap Tap x3.`, `Tap Tap x3.`] },
     { id: `offline`, cost: 4.5e6, req: `clock`, f: `offline`, t: [`Background refresh`, `Actualisation en arrière-plan`], d: [`Offline progress at 100% instead of 50%.`, `Progression hors ligne à 100 % au lieu de 50 %.`] },
+    { id: `optcharge`, cost: 3e7, f: `optcharge`, t: [`Optimized charging`, `Recharge optimisée`], d: [`Charging stops at 80%. You can leave it plugged in without wearing the battery.`, `La charge s'arrête à 80 %. Tu peux le laisser branché sans user la batterie.`] },
     { id: `low`, cost: 9e6, f: `lowpower`, t: [`Low Power Mode`, `Mode économie d'énergie`], d: [`Every app drains 40% less battery. The screen is a bit yellow.`, `Toutes les applis consomment 40 % de batterie en moins. L'écran est un peu jaune.`] },
     { id: `farm2`, cost: 1.8e7, req: `farm`, m: [`farm`, 3], t: [`Tractor (in-app purchase)`, `Tracteur (achat intégré)`], d: [`Pixel Farm x3.`, `Pixel Farm x3.`] },
     { id: `magnet`, cost: 4e7, f: `magnet`, t: [`Spam filter`, `Filtre anti-spam`], d: [`Bad stray pixels can't steal anymore.`, `Les mauvais pixels égarés ne volent plus rien.`] },
@@ -148,6 +156,7 @@ ERA[5] = {
   },
   HELP: [
     [`One app on screen at a time. The round button goes back home. Running apps keep working in the background.`, `Une appli à l'écran à la fois. Le bouton rond revient à l'accueil. Les applis lancées continuent en arrière-plan.`],
+    [`Press the home button twice to see the running apps and close them. On the iBrick X and the iSlab, swipe up on the bar: a short swipe goes home, a long one shows the apps.`, `Appuie deux fois sur le bouton home pour voir les applis lancées et les fermer. Sur l'iBrick X et l'iSlab, glisse vers le haut sur la barre : un petit geste revient à l'accueil, un grand montre les applis.`],
     [`Every running app drains the battery. At 0%, the phone turns off and every app closes. Use Charge in the status bar.`, `Chaque appli lancée vide la batterie. À 0 %, le téléphone s'éteint et toutes les applis se ferment. Utilise Charger dans la barre d'état.`],
     [`While charging, you can't tap the pixel. The cable is too short.`, `Pendant la charge, tu ne peux pas taper le pixel. Le câble est trop court.`],
     [`Notifications give pixels if you tap them in time.`, `Les notifications donnent des pixels si tu les touches à temps.`],
@@ -162,10 +171,16 @@ ERA[5] = {
   // ----- era mechanics -----
   enter() { S.x.bat = 100; S.bought.settings = 1; note(N(`bat`)); },
   load() {
-    if (!$(`home`)) document.body.insertAdjacentHTML(`beforeend`, `<div id="ear"></div><button id="home" data-act="home" aria-label="home"></button><div id="notif" data-act="notif"></div><div id="dead"></div>`);
+    if (!$(`home`)) document.body.insertAdjacentHTML(`beforeend`, `<div id="ear"></div><div id="sw" data-act="swclose"></div><button id="home" data-act="home" aria-label="home"></button><div id="notif" data-act="notif"></div><div id="dead"></div>`);
     if (S.x.dead) $(`dead`).classList.add(`on`);
   },
+  // a worn battery slows the phone down, like a certain fruit company did
+  throttle() { const h = S.x.health ?? 100; return h < 80 ? 0.5 + (h - 50) / 60 : 1; },
+  mul2: () => ERA[5].throttle(),
+  batCost: () => Math.max(5000, basePerSec() * 120),
   drain() { return use(`bat`) / cap(`bat`) * 0.8 * (flag(`lowpower`) ? 0.6 : 1); },
+  // why the score may suddenly drop: shown under it
+  scoreNote() { const u = S.x.upd; return S.x.dead ? `<small class="warn">${T(X5.deadScore)}</small>` : u && u.on ? `<small class="warn">${fill(T(X5.updScore), { a: prog(u.id).file, s: Math.ceil(u.t) })}</small>` : ``; },
   factor: p => (S.x.dead || (S.x.upd && S.x.upd.on && S.x.upd.id === p.id) ? 0 : 1),
   tap() { if (S.x.dead) return false; if (S.x.plug) { toast(T(X5.short)); return false; } },
   tick(dt) {
@@ -177,8 +192,15 @@ ERA[5] = {
       if (x.bat >= 15) { x.dead = 0; x.plug = 0; if ($(`dead`)) $(`dead`).classList.remove(`on`); }
       return;
     }
-    x.bat += ((x.plug ? 1.5 * (flag(`fastcharge`) ? 2 : 1) : 0) - ERA[5].drain()) * dt;
-    x.bat = Math.min(100, x.bat);
+    const hp = x.health ?? 100, top = flag(`optcharge`) ? Math.min(80, hp) : hp;
+    x.bat += ((x.plug && x.bat < top ? 1.5 * (flag(`fastcharge`) ? 2 : 1) : 0) - ERA[5].drain()) * dt;
+    x.bat = Math.min(hp, x.bat);
+    // left plugged in when full: the battery wears out (about 1% every 12 s)
+    if (x.plug && x.bat >= hp - 0.5 && !flag(`optcharge`)) {
+      x.health = Math.max(50, hp - 0.08 * dt);
+      if (!S.once.hot5) { S.once.hot5 = 1; toast(T(X5.hot)); }
+      if (x.health < 80 && !S.once.slow5) { S.once.slow5 = 1; dlg(T(X5.slow)); }
+    }
     if (x.bat <= 0) {
       x.bat = 0; x.dead = 1; x.plug = 1; S.st.dead = (S.st.dead || 0) + 1;
       for (const p of E().P) if (S.run[p.id] && !p.fixed) { S.run[p.id] = 0; killWin(p.id); }
@@ -223,18 +245,29 @@ ERA[5] = {
     if (!W[x.cur2] || x.cur2 === x.cur || phoneLv() < 3) x.cur2 = null;
     for (const id in W) { W[id].el.classList.toggle(`cur`, id === x.cur); W[id].el.classList.toggle(`cur2`, id === x.cur2); }
     const b = document.body.classList, lv = phoneLv();
-    b.toggle(`apphome`, !x.cur); b.toggle(`flat`, lv >= 1); b.toggle(`notch`, lv >= 2); b.toggle(`slab`, lv >= 3); b.toggle(`split`, !!x.cur2);
+    b.toggle(`apphome`, !x.cur);
+    ERA[5].bindSwipe();
+    ERA[5].switcher(); b.toggle(`flat`, lv >= 1); b.toggle(`notch`, lv >= 2); b.toggle(`slab`, lv >= 3); b.toggle(`split`, !!x.cur2);
   },
   taskExtra() {
     const b = Math.max(0, Math.floor(S.x.bat || 0));
-    return `<span class="batt ${b < 20 ? `low` : ``}"><i style="width:${b}%"></i></span><span class="bpc"> ${b}%</span> <span class="plugb ${S.x.plug ? `on` : ``}" data-act="plug">${T(S.x.plug ? X5.unplug : X5.plug)}</span>`;
+    return `<span class="batt ${b < 20 ? `low` : ``} ${(S.x.health ?? 100) < 80 ? `worn` : ``}"><i style="width:${b}%"></i></span><span class="bpc"> ${b}%</span> <span class="plugb ${S.x.plug ? `on` : ``}" data-act="plug">${T(S.x.plug ? X5.unplug : X5.plug)}</span>`;
   },
   opened(id) { ERA[5].show(id); },
   show(id) { const x = S.x; if (phoneLv() >= 3 && x.cur && x.cur !== id) x.cur2 = x.cur; x.cur = id; },
   A: {
-    open(id) { openProg(id); if (S.run[id]) ERA[5].show(id); },
-    home() { S.x.cur = S.x.cur2 = null; },
+    open(id) { S.x.sw = 0; openProg(id); if (S.run[id]) ERA[5].show(id); },
+    // one press: home screen; two quick presses: the running apps, to switch or close them
+    home() {
+      const x = S.x, now = performance.now();
+      if (phoneLv() >= 2) return ERA[5].swipeEnd(0);
+      if (x.sw) { x.sw = 0; return; }
+      if (now - (ERA[5].lastHome || 0) < 450) { ERA[5].lastHome = 0; x.sw = 1; return; }
+      ERA[5].lastHome = now; x.cur = x.cur2 = null;
+    },
+    swclose() { S.x.sw = 0; },
     plug() { if (!S.x.dead) S.x.plug = S.x.plug ? 0 : 1; },
+    newbat() { const c = ERA[5].batCost(); if (S.px < c) return noPx(); S.px -= c; S.x.health = 100; S.st.newbat = (S.st.newbat || 0) + 1; toast(T(X5.newbatDone)); },
     notif() {
       if (!(S.x.notLeft > 0)) return;
       S.x.notLeft = 0; S.st.notif = (S.st.notif || 0) + 1;
@@ -246,19 +279,53 @@ ERA[5] = {
   BODY: {
     settings() {
       const u = U(), items = [[`save`, u.save], [`exp`, u.exp], [`imp`, u.imp], [`lang`, u.lang], [`sci`, (S.opt.sci ? `[x] ` : `[ ] `) + u.sci], [`anim`, (S.opt.anim ? `[x] ` : `[ ] `) + u.anim], ...(S.run.help ? [[`tip`, u.tip]] : []), [`about`, u.about], [`hard`, u.hard]];
-      return items.map(([a, t]) => `<div class="row"><span>${t}</span><button class="btn" data-act="${a}">&gt;</button></div>`).join(``);
+      const hp = Math.floor(S.x.health ?? 100), th = ERA[5].throttle();
+      const bat = `<div class="row"><span>${fill(T(X5.health), { n: hp })}${th < 1 ? `<small>${fill(T(X5.throttled), { n: th.toFixed(2).replace(`.`, S.lang === `fr` ? `,` : `.`) })}</small>` : ``}</span>${hp < 100 ? `<button class="btn" data-act="newbat">${fill(T(X5.newbat), { c: fmt(ERA[5].batCost()) })}</button>` : ``}</div>`;
+      return bat + items.map(([a, t]) => `<div class="row"><span>${t}</span><button class="btn" data-act="${a}">&gt;</button></div>`).join(``);
     },
   },
   winClass: () => `app`,
   dock: [`game`, `notes`, `install`, `settings`],
   extraBody(id) {
-    const u = S.x.upd;
-    if (!u || u.id !== id) return ``;
-    return u.on ? `<div class="upd">${fill(T(X5.updNow), { n: Math.floor((30 - u.t) / 30 * 100) })}</div>` : `<div class="upd">${fill(T(X5.upd), { a: prog(id).file })}<br><button class="btn" data-act="later">${T(X5.later)}</button></div>`;
+    const u = S.x.upd, mem = id === `install` ? ERA[5].memBar(true) : ``;
+    if (!u || u.id !== id) return mem;
+    return mem + (u.on ? `<div class="upd">${fill(T(X5.updNow), { n: Math.floor((30 - u.t) / 30 * 100) })}</div>` : `<div class="upd">${fill(T(X5.upd), { a: prog(id).file })}<br><button class="btn" data-act="later">${T(X5.later)}</button></div>`);
+  },
+  // iBrick X and iSlab have no home button: swipe up on the bar goes home, a long swipe shows the running apps
+  swipeEnd(dy) {
+    const x = S.x, now = performance.now();
+    if (now - (ERA[5].swT || 0) < 400) return;
+    ERA[5].swT = now;
+    if (dy >= 80) x.sw = 1; else if (x.sw) x.sw = 0; else x.cur = x.cur2 = null;
+  },
+  bindSwipe() {
+    const hb = $(`home`);
+    if (!hb || hb.dataset.sw) return;
+    hb.dataset.sw = 1;
+    hb.addEventListener(`pointerdown`, ev => { if (phoneLv() < 2) return; ERA[5].swY = ev.clientY; try { hb.setPointerCapture(ev.pointerId); } catch (er) {} });
+    hb.addEventListener(`pointerup`, ev => { if (phoneLv() < 2 || ERA[5].swY == null) return; const dy = ERA[5].swY - ev.clientY; ERA[5].swY = null; ERA[5].swipeEnd(dy); });
+  },
+  switcher() {
+    const x = S.x, el = $(`sw`);
+    if (!el) return;
+    const on = !!x.sw && !x.dead;
+    el.classList.toggle(`on`, on);
+    if (!on) return setH(`sw`, ``);
+    const apps = E().P.filter(p => S.run[p.id] && !p.hidden);
+    const card = p => `<div class="swc" data-act="open:${p.id}">${p.fixed ? `` : `<span class="swx" data-act="close:${p.id}">${phoneLv() ? `×` : `−`}</span>`}${icon(p.id)}<b>${esc(p.file)}${S.run[p.id] > 1 ? ` x${S.run[p.id]}` : ``}</b><small>${ramTxt(S.run[p.id] * kbOf(p.id))} - ${fmt(S.run[p.id] * (p.bat || 0))} mAh</small></div>`;
+    setH(`sw`, `<div class="swt">${T(X5.sw)}</div><div class="swl">${apps.map(card).join(``)}</div><div class="swh">${T([X5.swHint0, X5.swHint, X5.swHint2, X5.swHint2][phoneLv()])}</div>`);
+  },
+  // the memory as an iPhone storage bar: one colored part per running app, then the free space
+  memBar(list) {
+    const c = cap(`ram`), apps = E().P.filter(p => S.run[p.id] && kbOf(p.id)).map(p => [p, S.run[p.id] * kbOf(p.id)]);
+    const seg = apps.map(([p, k]) => `<i style="width:${k / c * 100}%;background:${ICONS[iconName(p.id)].a}" title="${esc(p.file)}"></i>`).join(``) + (S.frag ? `<i class="fr" style="width:${S.frag / c * 100}%"></i>` : ``);
+    const leg = list ? `<div class="meml">${apps.map(([p, k]) => `<span><i style="background:${ICONS[iconName(p.id)].a}"></i>${esc(p.file)}${S.run[p.id] > 1 ? ` x${S.run[p.id]}` : ``} ${ramTxt(k)}</span>`).join(``)}</div>` : ``;
+    return `<div class="memw"><div class="memt"><b>${T([`Memory`, `Mémoire`])}</b><span>${ramTxt(use(`ram`))} / ${ramTxt(c)} - ${fill(T([`{n} free`, `{n} libres`]), { n: ramTxt(Math.max(0, free())) })}</span></div><div class="memb">${seg}</div>${leg}</div>`;
   },
 };
 
 ACH.push(
+  [`gate`, [`Batterygate`, `Batterygate`], [`Let the phone slow itself down to save its battery.`, `Laisser le téléphone se ralentir pour ménager sa batterie.`], () => S.era === 5 && ERA[5].throttle() < 1, 5],
   [`brick`, [`Slide to unlock`, `Glisser pour déverrouiller`], [`Boot iBrick OS.`, `Démarrer iBrick OS.`], () => S.era >= 5, 5],
   [`dead`, [`Low battery`, `Batterie faible`], [`Let the battery die.`, `Laisser la batterie mourir.`], () => (S.st.dead || 0) >= 1, 5],
   [`notif20`, [`Notification addict`, `Accro aux notifs`], [`Tap 20 notifications.`, `Toucher 20 notifications.`], () => (S.st.notif || 0) >= 20, 5],
