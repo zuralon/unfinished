@@ -443,11 +443,15 @@ body.s5.flat #desk:before{width:calc(var(--pw) + 40px);height:calc(var(--ph) + 1
 body.s5.flat #ear{top:calc(50% - var(--ph)/2 - 40px);width:50px;height:6px;margin-left:-25px}
 body.s5.flat #home{top:calc(50% + var(--ph)/2 + 14px);width:52px;height:52px;border:2px solid #6e6e73;background:#111;box-shadow:none}
 body.s5.flat #home:after{display:none}
-body.s5.notch #desk:before{width:calc(var(--pw) + 24px);height:calc(var(--ph) + 24px);border-radius:52px;background:#000;box-shadow:0 0 0 3px #c4c4c9,0 0 0 5px #6e6e73,0 30px 70px rgba(0,0,0,.7)}
+body.s5.notch #desk:before{width:calc(var(--pw) + 24px);height:calc(var(--ph) + 24px);border-radius:54px;background:#000;box-shadow:0 0 0 3px #c4c4c9,0 0 0 5px #6e6e73,0 30px 70px rgba(0,0,0,.7)}
 body.s5.notch #desk:after{border-radius:42px}
 body.s5.notch #ear{top:calc(50% - var(--ph)/2);width:calc(var(--pw) * .42);height:28px;margin-left:calc(var(--pw) * -.21);border-radius:0 0 18px 18px;background:#000;box-shadow:none;z-index:100004}
 body.s5.notch #home{top:calc(50% + var(--ph)/2 - 26px);width:120px;height:5px;padding:12px 0;box-sizing:content-box;background-clip:content-box;margin-left:-60px;transform:none;border:0;border-radius:3px;background-color:rgba(255,255,255,.85);box-shadow:none;cursor:ns-resize;touch-action:none;z-index:100004}
 body.s5.notch:not(.apphome) #home{background-color:rgba(0,0,0,.75)}
+body.s5.notch.darkapp:not(.apphome) #home{background-color:rgba(255,255,255,.85)}
+body.s5.darkapp #w-game,body.s5.darkapp #w-game .body{background:#000}
+/* under an open app the wallpaper would show as a light line at the rounded edges */
+body.s5.notch:not(.apphome):not(.drag) #desk:after{background:#000}
 body.s5.slab #desk:before{width:calc(var(--pw) + 48px);height:calc(var(--ph) + 48px);border-radius:30px}
 body.s5.slab #desk:after{border-radius:16px}
 body.s5.slab #ear{left:calc(50% - var(--pw)/2 - 16px);top:50%;width:8px;height:8px;margin:-4px 0 0;border-radius:50%;background:#222}
@@ -471,7 +475,10 @@ body.s5.notch #task>span:nth-child(3){display:none}
 body.s5.notch #clk{position:static;transform:none;order:-2;margin:0 6px 0 0}
 body.s5.notch #ram{order:-1;margin-left:0}
 body.s5.notch #res{margin-left:auto;font-size:11px}
-body.s5.notch .plugb{font-size:10px;padding:0 4px}
+body.s5.notch .plugb{font-size:10px;padding:0 5px;line-height:13px}
+body.s5.notch .plugb:not(.on){filter:grayscale(1)}
+/* notifications stay inside the screen instead of spilling over the bezel */
+body.s5 #toast{max-width:calc(var(--pw) - 32px);box-sizing:border-box;width:max-content}
 body.s5.notch:not(.slab) .bpc{display:none}
 body.s5.slab #task>span:nth-child(3){display:inline;order:1;margin-left:auto}
 body.s5.slab #ram{margin-left:4px}
@@ -727,16 +734,16 @@ body.flick{animation:fl .12s steps(2) 8}
 <div id="boot"><div><i></i>PIXEL-OS 1<br><br><span class="dim">Welcome. Mostly.</span></div></div>
 <div id="dlg"><div class="win"><div class="title"><b id="dlgH">PIXEL-OS</b></div><div class="body"><div id="dlgT"></div><textarea id="dlgI" spellcheck="false"></textarea><div id="dlgB"></div></div></div></div>
 
-<script src="data.js?v=28"></script>
-<script src="era2.js?v=28"></script>
-<script src="era3.js?v=28"></script>
-<script src="era4.js?v=28"></script>
-<script src="era5.js?v=28"></script>
-<script src="era6.js?v=28"></script>
-<script src="icons.js?v=28"></script>
-<script src="savers.js?v=28"></script>
-<script src="visuals.js?v=28"></script>
-<script src="postit.js?v=28"></script>
-<script src="game.js?v=28"></script>
+<script src="data.js?v=29"></script>
+<script src="era2.js?v=29"></script>
+<script src="era3.js?v=29"></script>
+<script src="era4.js?v=29"></script>
+<script src="era5.js?v=29"></script>
+<script src="era6.js?v=29"></script>
+<script src="icons.js?v=29"></script>
+<script src="savers.js?v=29"></script>
+<script src="visuals.js?v=29"></script>
+<script src="postit.js?v=29"></script>
+<script src="game.js?v=29"></script>
 </body>
 </html>
