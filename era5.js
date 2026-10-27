@@ -25,6 +25,8 @@ const X5 = {
   hkHints: [`Hints: each one removes a wrong word, or sometimes gives the tries back`, `Indices : chacun retire un mauvais mot, ou parfois rend les essais`],
   hkHist: [`Tries: letters in the right place (out of {n})`, `Essais : lettres à la bonne place (sur {n})`],
   hkDud: [`Hint: {w} was not it`, `Indice : ce n'était pas {w}`], hkReset: [`Hint: tries given back`, `Indice : essais rendus`],
+  mtFull: [`Full screen`, `Plein écran`], mtSplit: [`Split View`, `Écran partagé`], mtSide: [`Close this side`, `Fermer ce côté`],
+  pick: [`Pick a second app to put next to {a}.`, `Choisis une 2e appli à mettre à côté de {a}.`], cancel: [`Cancel`, `Annuler`],
   sw: [`Running apps`, `Applis lancées`], swHint2: [`Drag the cards sideways. Throw one up (or tap ×) to close it. Swipe up from the bottom edge to go home.`, `Fais glisser les cartes. Jette-en une vers le haut (ou touche ×) pour la fermer. Glisse depuis le bas de l'écran pour revenir à l'accueil.`], swHint0: [`Tap − to close an app. Tap an icon to open it.`, `Touche − pour fermer une appli. Touche une icône pour l'ouvrir.`],
   swHint: [`Drag the cards sideways. Throw one up (or tap ×) to close it. Tap a card to open it.`, `Fais glisser les cartes. Jette-en une vers le haut (ou touche ×) pour la fermer. Touche une carte pour l'ouvrir.`],
   updScore: [`{a}: updating ({s} s), not producing`, `{a} : mise à jour ({s} s), ne produit pas`], deadScore: [`Battery dead: nothing produces`, `Batterie à plat : rien ne produit`],
@@ -162,6 +164,7 @@ ERA[5] = {
   },
   HELP: [
     [`One app on screen at a time. The round button goes back home. Running apps keep working in the background.`, `Une appli à l'écran à la fois. Le bouton rond revient à l'accueil. Les applis lancées continuent en arrière-plan.`],
+    [`On the iSlab, tap the ••• at the top of an app, then Split View, then pick a second app: both stay side by side.`, `Sur l'iSlab, touche les ••• en haut d'une appli, puis Écran partagé, puis choisis une 2e appli : les deux restent côte à côte.`],
     [`Press the home button twice to see the running apps and close them. On the iBrick X and the iSlab, swipe up from the bottom edge of the screen: a flick goes home, a slow swipe (or a pause on the way) shows the apps.`, `Appuie deux fois sur le bouton home pour voir les applis lancées et les fermer. Sur l'iBrick X et l'iSlab, glisse vers le haut depuis le bas de l'écran : un geste rapide revient à l'accueil, un geste lent (ou une pause en chemin) montre les applis.`],
     [`Every running app drains the battery. At 0%, the phone turns off and every app closes. Use Charge in the status bar.`, `Chaque appli lancée vide la batterie. À 0 %, le téléphone s'éteint et toutes les applis se ferment. Utilise Charger dans la barre d'état.`],
     [`While charging, you can't tap the pixel. The cable is too short.`, `Pendant la charge, tu ne peux pas taper le pixel. Le câble est trop court.`],
@@ -177,7 +180,7 @@ ERA[5] = {
   // ----- era mechanics -----
   enter() { S.x.bat = 100; S.bought.settings = 1; note(N(`bat`)); },
   load() {
-    if (!$(`home`)) document.body.insertAdjacentHTML(`beforeend`, `<div id="ear"></div><div id="bezel"></div><div id="sw" data-act="swclose"></div><button id="home" data-act="home" aria-label="home"></button><div id="notif" data-act="notif"></div><div id="dead"></div>`);
+    if (!$(`home`)) document.body.insertAdjacentHTML(`beforeend`, `<div id="ear"></div><div id="bezel"></div><div id="pickb"></div><div id="sw" data-act="swclose"></div><button id="home" data-act="home" aria-label="home"></button><div id="notif" data-act="notif"></div><div id="dead"></div>`);
     if (S.x.dead) $(`dead`).classList.add(`on`);
   },
   // a worn battery slows the phone down, like a certain fruit company did
@@ -253,7 +256,16 @@ ERA[5] = {
     // iSlab: the previous app stays open on the right (split view)
     if (!W[x.cur]) { x.cur = W[x.cur2] ? x.cur2 : null; x.cur2 = null; }
     if (!W[x.cur2] || x.cur2 === x.cur || phoneLv() < 3) x.cur2 = null;
-    for (const id in W) { W[id].el.classList.toggle(`cur`, id === x.cur); W[id].el.classList.toggle(`cur2`, id === x.cur2); }
+    for (const id in W) {
+      const el = W[id].el, t = el.querySelector(`.title`);
+      el.classList.toggle(`cur`, id === x.cur); el.classList.toggle(`cur2`, id === x.cur2);
+      // iPadOS multitasking button at the top of each app
+      if (t && !t.querySelector(`.mt`)) t.insertAdjacentHTML(`afterbegin`, `<span class="mt" data-act="mt:${id}"><i></i><i></i><i></i></span><span class="mtm"></span>`);
+      if (t) { const m = t.querySelector(`.mtm`), h = x.mt === id ? ERA[5].mtMenu(id) : ``; if (m.dataset.h !== h) { m.dataset.h = h; m.innerHTML = h; } }
+    }
+    if (x.pick && (!W[x.pick] || phoneLv() < 3)) x.pick = null;
+    const pb = $(`pickb`);
+    if (pb) { pb.classList.toggle(`on`, !!x.pick && !x.cur); const h = x.pick ? fill(T(X5.pick), { a: esc(prog(x.pick).file) }) + `<b data-act="pickno">${T(X5.cancel)}</b>` : ``; if (pb.dataset.h !== h) { pb.dataset.h = h; pb.innerHTML = h; } }
     const b = document.body.classList, lv = phoneLv();
     b.toggle(`apphome`, !x.cur);
     ERA[5].bindSwipe();
@@ -264,18 +276,35 @@ ERA[5] = {
     return `<span class="batt ${b < 20 ? `low` : ``} ${(S.x.health ?? 100) < 80 ? `worn` : ``}"><i style="width:${b}%"></i></span><span class="bpc"> ${b}%</span> <span class="plugb ${S.x.plug ? `on` : ``}" data-act="plug" title="${T(S.x.plug ? X5.unplug : X5.plug)}">${phoneLv() >= 2 ? `⚡` : T(S.x.plug ? X5.unplug : X5.plug)}</span>`;
   },
   opened(id) { ERA[5].show(id); },
-  show(id) { const x = S.x; if (phoneLv() >= 3 && x.cur && x.cur !== id) x.cur2 = x.cur; x.cur = id; },
+  // an app opens full screen, unless the iSlab is waiting for the second app of a split view
+  show(id) {
+    const x = S.x;
+    x.mt = null;
+    if (x.pick && x.pick !== id && W[x.pick] && phoneLv() >= 3) { x.cur = x.pick; x.cur2 = id; x.pick = null; S.st.split = 1; return; }
+    x.pick = null; x.cur = id; x.cur2 = null;
+  },
+  mtMenu(id) {
+    const x = S.x, it = (a, ic, t) => `<span class="mti" data-act="${a}:${id}"><i class="mi ${ic}"></i>${T(t)}</span>`;
+    return it(`mtfull`, `full`, X5.mtFull) + it(`mtsplit`, `half`, X5.mtSplit) + (x.cur2 ? it(`mtside`, `shut`, X5.mtSide) : ``);
+  },
   A: {
-    open(id) { S.x.sw = 0; openProg(id); if (S.run[id]) ERA[5].show(id); },
+    // an app launched for the first time is shown by opened(); one already running is shown here
+    open(id) { S.x.sw = 0; const was = S.run[id]; openProg(id); if (was && S.run[id]) ERA[5].show(id); },
     // one press: home screen; two quick presses: the running apps, to switch or close them
     home() {
       const x = S.x, now = performance.now();
       if (phoneLv() >= 2) return;
       if (x.sw) { x.sw = 0; return; }
       if (now - (ERA[5].lastHome || 0) < 450) { ERA[5].lastHome = 0; x.sw = 1; return; }
-      ERA[5].lastHome = now; x.cur = x.cur2 = null;
+      ERA[5].lastHome = now; x.cur = x.cur2 = x.pick = null;
     },
     swclose() { S.x.sw = 0; },
+    mt(id) { S.x.mt = S.x.mt === id ? null : id; },
+    mtfull(id) { const x = S.x; x.mt = x.pick = null; x.cur = id; x.cur2 = null; },
+    // the app goes to the left, the home screen shows to pick the one on the right
+    mtsplit(id) { const x = S.x; x.mt = null; x.pick = id; x.cur = x.cur2 = null; },
+    mtside(id) { const x = S.x; x.mt = null; x.cur = id === x.cur ? x.cur2 : x.cur; x.cur2 = null; },
+    pickno() { const x = S.x; x.cur = x.pick; x.pick = null; },
     plug() { if (!S.x.dead) S.x.plug = S.x.plug ? 0 : 1; },
     newbat() { const c = ERA[5].batCost(); if (S.px < c) return noPx(); S.px -= c; S.x.health = 100; S.st.newbat = (S.st.newbat || 0) + 1; toast(T(X5.newbatDone)); },
     notif() {
@@ -328,7 +357,7 @@ ERA[5] = {
   swipeEnd(dy, sw) {
     const x = S.x;
     if (sw) x.sw = 1;
-    else if (dy >= 40) { x.sw = 0; x.cur = x.cur2 = null; }
+    else if (dy >= 40) { x.sw = 0; x.cur = x.cur2 = x.pick = x.mt = null; }
   },
   bindSwipe() {
     if (ERA[5].swBound) return;

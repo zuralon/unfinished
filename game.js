@@ -275,6 +275,26 @@ function hackStart(era) {
   }
   H = { era, pass, words, tries: 4, lines, log: [], hist: [], used: [], dud: [], base: 0xf000 + (Math.random() * 0xe00 | 0) };
 }
+// each era dresses the terminal as the real program of its time
+const HT_ICONS = [
+  `<path d="M3 1h7l3 3v11H3z" fill="#fff" stroke="#000"/><path d="M10 1v3h3" fill="none" stroke="#000"/>`,
+  `<path d="M1 4h5l1 2h8v8H1z" fill="#ff0" stroke="#000"/>`,
+  `<path d="M2 11c0-5 3-8 6-8s6 3 6 8z" fill="#c00" stroke="#000"/><rect x="5" y="11" width="6" height="3" fill="#000"/>`,
+  `<path d="M2 11c0-5 3-8 6-8s6 3 6 8z" fill="#888" stroke="#000"/><path d="M3 2l10 12" stroke="#c00" stroke-width="2"/>`,
+  `<rect x="2" y="3" width="12" height="10" fill="#fff" stroke="#000"/><path d="M4 6h8M4 8h8M4 10h5" stroke="#008"/>`,
+  `<rect x="2" y="2" width="12" height="12" fill="#c0c0c0" stroke="#000"/><path d="M5 5h6v6H5z" fill="#fff" stroke="#000"/>`,
+].map(p => `<i><svg viewBox="0 0 16 16" width="16" height="16">${p}</svg></i>`).join(``);
+const HACK_FRAME = {
+  // PIXEL-OS 1984: 1-bit screen, inverted title band, blinking block cursor
+  1: (h, on) => `<div class="hk1">${h}<div>&gt; <span class="blk">█</span></div></div>`,
+  // MINO-DOS: grey on black, the DOS prompt around the program
+  2: (h, on) => `<div class="hk2"><div class="dosb">MINO-DOS TERMINAL v2.1  (C) PIXCORP 1987</div><div>C:\\&gt;TERMINAL.EXE /CRACK</div><br>${h}<div>C:\\&gt;<span class="blk">_</span></div></div>`,
+  // Winbows 95: HyperTerminal, with its toolbar, white terminal area and status bar
+  3: (h, on) => { const t = on && H ? Math.floor((Date.now() - (H.t0 || (H.t0 = Date.now()))) / 1000) : 0;
+    return `<div class="hk3"><div class="htb">${HT_ICONS}</div><div class="htt">${h}<span class="blk">_</span></div><div class="hts"><span>${on ? `${T([`Connected`, `Connecté`])} ${Math.floor(t / 3600)}:${String(Math.floor(t / 60) % 60).padStart(2, `0`)}:${String(t % 60).padStart(2, `0`)}` : T([`Disconnected`, `Déconnecté`])}</span><span>${T([`Auto detect`, `Détection auto`])}</span><span>2400 8-N-1</span></div></div>`; },
+  // Winbows XD: the black Command Prompt with its banner
+  4: (h, on) => `<div class="hk4"><div>PIXCORP Winbows XD [version 5.1.2600]</div><div>(C) Copyright 1985-2001 PIXCORP.</div><br><div>C:\\Documents and Settings\\Pixel&gt;hack.exe</div>${h}<div>C:\\Documents and Settings\\Pixel&gt;<span class="blk">_</span></div></div>`,
+};
 function hackHtml() {
   const u = U();
   const part = x => x.w ? (H.dud.includes(x.w) ? `.`.repeat(x.w.length) : `<span class="hw" data-act="hg:${x.w}">${x.w}</span>`)
@@ -474,7 +494,9 @@ const BODY = {
     return `<div class="grid">${cells}</div><div class="dim">${S.frag ? U().defragOn : U().defragIdle}</div>`;
   },
   hack() {
-    if (H && H.era) return hackHtml();
+    const f = HACK_FRAME[E().skin];
+    if (H && H.era) return f ? f(hackHtml(), 1) : hackHtml();
+    if (f) return f(`<div>${esc(T(E().D.hack))}</div>${S.lastLog ? `<p>${esc(T(S.lastLog))}</p>` : ``}${S.hackCd > 0 ? `<div>${U().hackWait(Math.ceil(S.hackCd))}</div>` : `<div class="tl" data-act="hack">${U().hackReady}</div>`}`, 0);
     const btn = S.hackCd > 0 ? `<span class="dim">${U().hackWait(Math.ceil(S.hackCd))}</span>` : `<button class="btn" data-act="hack">${U().hackReady.replace(/^> /, ``)}</button>`;
     return `<div class="dim">${T(E().D.hack)}</div>${S.lastLog ? `<p>${esc(T(S.lastLog))}</p>` : ``}<div style="margin-top:8px">${btn}</div>`;
   },

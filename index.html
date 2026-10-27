@@ -485,6 +485,46 @@ body.s5.slab #desk:before{width:calc(var(--pw) + 48px);height:calc(var(--ph) + 4
 body.s5.slab .ikeys{grid-template-columns:repeat(4,1fr)}
 body.s5:not(.flat) .ikey{border-radius:6px;background:linear-gradient(#fff,#e6e6ea);box-shadow:0 1px 2px rgba(0,0,0,.4)}
 body.s5:not(.flat) .ibtn{border-radius:8px;background:linear-gradient(#5a9cf8,#1f6fe0);box-shadow:inset 0 1px 0 rgba(255,255,255,.35)}
+/* iSlab multitasking: the ••• button, its menu, and the banner while picking the second app */
+.mt,.mtm,#pickb{display:none}
+body.s5.slab .win[id^="w-"] .title{position:relative}
+body.s5.slab .mt{display:flex;gap:3px;position:absolute;left:50%;top:6px;transform:translateX(-50%);padding:4px 8px;cursor:pointer;z-index:3}
+body.s5.slab .mt i{width:5px;height:5px;border-radius:50%;background:#8e8e93}
+body.s5.slab .mtm:not(:empty){display:flex;flex-direction:column;position:absolute;left:50%;top:24px;transform:translateX(-50%);min-width:190px;background:rgba(255,255,255,.97);border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,.28);z-index:4;overflow:hidden;font:15px -apple-system,'Helvetica Neue',Helvetica,Arial,sans-serif}
+.mtm .mti{display:flex;align-items:center;gap:10px;padding:10px 14px;font-weight:400;color:#1c1c1e;cursor:pointer;border-top:1px solid #e5e5ea}
+.mtm .mti:first-child{border-top:0}
+.mtm .mti:hover{background:#f2f2f7}
+.mi{width:22px;height:15px;border:1.5px solid #1c1c1e;border-radius:3px;position:relative;box-sizing:border-box}
+.mi.full{background:#1c1c1e;box-shadow:inset 0 0 0 2px #fff}
+.mi.half:after{content:'';position:absolute;left:2px;top:2px;bottom:2px;width:7px;background:#1c1c1e;border-radius:1px}
+.mi.shut{border-color:#ff3b30}
+.mi.shut:after{content:'';position:absolute;right:2px;top:2px;bottom:2px;width:7px;background:#ff3b30;border-radius:1px}
+body.s5.slab #pickb.on{display:flex;gap:14px;align-items:center;position:fixed;left:50%;top:calc(50% - var(--ph)/2 + 40px);transform:translateX(-50%);z-index:60;padding:8px 16px;border-radius:16px;background:rgba(255,255,255,.92);color:#1c1c1e;font:14px -apple-system,'Helvetica Neue',Helvetica,Arial,sans-serif;box-shadow:0 6px 20px rgba(0,0,0,.3);white-space:nowrap}
+#pickb b{color:#007aff;font-weight:600;cursor:pointer}
+/* the bezel already cuts the overlay on the screen's curve */
+body.s5.notch #sw.on{border-radius:0}
+/* the terminal of each era */
+.blk{animation:blink 1s steps(1) infinite}
+#b-hack:has(.hk2),#b-hack:has(.hk3),#b-hack:has(.hk4){padding:0}
+.hk1>div:first-child{background:#000;color:#fff;padding:1px 6px;margin:-2px -4px 2px}
+.hk2{background:#000;color:#aaa;font:16px/1.15 'VT323',ui-monospace,monospace;padding:8px 10px;min-height:100%}
+.hk2 .dosb{color:#fff}
+.hk2 .hk{font:inherit}
+.hk2 .hw:hover,.hk2 .tl:hover{background:#aaa;color:#000}
+.hk3{display:flex;flex-direction:column;background:#c0c0c0}
+.htb{display:flex;gap:2px;padding:3px 4px;border-bottom:1px solid #808080;box-shadow:0 1px 0 #fff}
+.htb i{display:flex;padding:3px;border:1px solid;border-color:#fff #808080 #808080 #fff}
+.htb i:nth-child(3){margin-left:6px}
+.htb i:nth-child(5){margin-left:6px}
+.htt{margin:4px;background:#fff;color:#000;border:2px solid;border-color:#808080 #fff #fff #808080;box-shadow:inset 1px 1px 0 #000;padding:6px;font:13px/1.25 'Fixedsys','Courier New',monospace}
+.htt .hk{font:inherit}
+.htt .hw:hover,.htt .tl:hover{background:#000080;color:#fff}
+.hts{display:flex;gap:2px;padding:2px 3px 3px;font:11px Tahoma,sans-serif}
+.hts span{padding:1px 6px;border:1px solid;border-color:#808080 #fff #fff #808080;white-space:nowrap}
+.hts span:first-child{flex:1}
+.hk4{background:#000;color:#c0c0c0;font:12px/1.3 'Lucida Console',Consolas,monospace;padding:6px 8px}
+.hk4 .hk{font:inherit}
+.hk4 .hw:hover,.hk4 .tl:hover{background:#c0c0c0;color:#000}
 #bezel{display:none}
 body.s5.notch:not(.apphome):not(.drag) #icons{visibility:hidden}
 body.s5.notch #bezel{display:block;position:fixed;left:calc(50% - var(--pw)/2 - 12px);top:calc(50% - var(--ph)/2 - 12px);width:calc(var(--pw) + 24px);height:calc(var(--ph) + 24px);box-sizing:border-box;border:12px solid #000;border-radius:54px;pointer-events:none;z-index:100006;box-shadow:0 0 0 3px #c4c4c9,0 0 0 5px #6e6e73}
@@ -549,8 +589,17 @@ body.s5.notch .win[id^="w-"] .title{justify-content:flex-start;height:56px;align
 body.s5.notch .win[id^="w-"] .title b{position:static;text-align:left;margin-left:6px;font:bold 26px -apple-system,'Helvetica Neue',Helvetica,Arial,sans-serif}
 body.s5.notch .x{order:2;margin-left:auto}
 /* iSlab split view: two apps side by side */
-body.s5.split .win[id^="w-"].cur{width:calc(var(--pw)/2 - 1px)!important}
-body.s5.split .win[id^="w-"].cur2{display:flex;flex-direction:column;left:calc(50% + 1px)!important;width:calc(var(--pw)/2 - 1px)!important}
+/* like iPadOS: a black divider between two separate rounded panes, with a grab handle */
+body.s5.split .win[id^="w-"].cur{width:calc(var(--pw)/2 - 3px)!important;border-radius:0 12px 12px 16px}
+body.s5.split .win[id^="w-"].cur2{display:flex;flex-direction:column;left:calc(50% + 3px)!important;width:calc(var(--pw)/2 - 3px)!important;border-radius:12px 0 16px 12px}
+/* both apps reach the top of the screen, under a see-through status bar, so the divider runs straight top to bottom */
+body.s5.split #task{background:transparent!important;color:#000}
+body.s5.split .win[id^="w-"].cur,body.s5.split .win[id^="w-"].cur2{top:calc(50% - var(--ph)/2)!important;height:var(--ph)!important}
+body.s5.split .win[id^="w-"] .title{height:86px;padding-top:30px;box-sizing:border-box}
+body.s5.split .win[id^="w-"] .mt{top:34px}
+body.s5.split .win[id^="w-"].cur{border-radius:16px 12px 12px 16px}
+body.s5.split .win[id^="w-"].cur2{border-radius:12px 16px 16px 12px}
+body.s5.split #pickb{display:block;position:fixed;left:50%;top:50%;width:4px;height:44px;margin:-22px 0 0 -2px;padding:0;border-radius:2px;background:#8e8e93;z-index:61;box-shadow:none;font-size:0}
 body.s5.notch .win[id^="w-"]{border-radius:0 0 42px 42px;overflow:hidden}
 body.s5.notch #dead.on{border-radius:42px}
 body.s5.slab #dead.on,body.slab #saver[data-k="5"]{border-radius:16px}
@@ -772,16 +821,16 @@ body.flick{animation:fl .12s steps(2) 8}
 <div id="boot"><div><i></i>PIXEL-OS 1<br><br><span class="dim">Welcome. Mostly.</span></div></div>
 <div id="dlg"><div class="win"><div class="title"><b id="dlgH">PIXEL-OS</b></div><div class="body"><div id="dlgT"></div><textarea id="dlgI" spellcheck="false"></textarea><div id="dlgB"></div></div></div></div>
 
-<script src="data.js?v=31"></script>
-<script src="era2.js?v=31"></script>
-<script src="era3.js?v=31"></script>
-<script src="era4.js?v=31"></script>
-<script src="era5.js?v=31"></script>
-<script src="era6.js?v=31"></script>
-<script src="icons.js?v=31"></script>
-<script src="savers.js?v=31"></script>
-<script src="visuals.js?v=31"></script>
-<script src="postit.js?v=31"></script>
-<script src="game.js?v=31"></script>
+<script src="data.js?v=34"></script>
+<script src="era2.js?v=34"></script>
+<script src="era3.js?v=34"></script>
+<script src="era4.js?v=34"></script>
+<script src="era5.js?v=34"></script>
+<script src="era6.js?v=34"></script>
+<script src="icons.js?v=34"></script>
+<script src="savers.js?v=34"></script>
+<script src="visuals.js?v=34"></script>
+<script src="postit.js?v=34"></script>
+<script src="game.js?v=34"></script>
 </body>
 </html>
