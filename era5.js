@@ -19,6 +19,12 @@ const X5 = {
   notifGot: [`+{n} px`, `+{n} px`],
   upd: [`{a} needs to update. It stops producing while it updates.`, `{a} doit se mettre à jour. Il ne produit plus pendant la mise à jour.`],
   updNow: [`Updating... {n}%`, `Mise à jour... {n} %`],
+  hkTitle: [`Locked file`, `Fichier verrouillé`], hkOpen: [`Unlock`, `Déverrouiller`], hkLast: [`Last file opened`, `Dernier fichier ouvert`],
+  hkIntro: [`Guess the password among the words. Each try tells how many letters are in the right place.`, `Devine le mot de passe parmi les mots proposés. Chaque essai dit combien de lettres sont à la bonne place.`],
+  hkWait: [`Too many tries. Wait {s} s.`, `Trop d'essais. Attends {s} s.`], hkTries: [`{n} tries left`, `{n} essais restants`],
+  hkHints: [`Hints: each one removes a wrong word, or sometimes gives the tries back`, `Indices : chacun retire un mauvais mot, ou parfois rend les essais`],
+  hkHist: [`Tries: letters in the right place (out of {n})`, `Essais : lettres à la bonne place (sur {n})`],
+  hkDud: [`Hint: {w} was not it`, `Indice : ce n'était pas {w}`], hkReset: [`Hint: tries given back`, `Indice : essais rendus`],
   sw: [`Running apps`, `Applis lancées`], swHint2: [`Drag the cards sideways. Throw one up (or tap ×) to close it. Swipe up from the bottom edge to go home.`, `Fais glisser les cartes. Jette-en une vers le haut (ou touche ×) pour la fermer. Glisse depuis le bas de l'écran pour revenir à l'accueil.`], swHint0: [`Tap − to close an app. Tap an icon to open it.`, `Touche − pour fermer une appli. Touche une icône pour l'ouvrir.`],
   swHint: [`Drag the cards sideways. Throw one up (or tap ×) to close it. Tap a card to open it.`, `Fais glisser les cartes. Jette-en une vers le haut (ou touche ×) pour la fermer. Touche une carte pour l'ouvrir.`],
   updScore: [`{a}: updating ({s} s), not producing`, `{a} : mise à jour ({s} s), ne produit pas`], deadScore: [`Battery dead: nothing produces`, `Batterie à plat : rien ne produit`],
@@ -281,6 +287,27 @@ ERA[5] = {
     later() { const u = S.x.upd; if (u && !u.on) { u.t = 60; S.st.later = (S.st.later || 0) + 1; } },
   },
   BODY: {
+    // the terminal as an iOS app: a locked file, passcode dots for the tries, the words as keys,
+    // the bracket pairs as hint chips and the guesses as a list
+    hack() {
+      const fr = S.lang === `fr`;
+      if (!(H && H.era)) {
+        const wait = S.hackCd > 0;
+        return `<div class="ilock"><div class="ilk">🔒</div><b>${T(X5.hkTitle)}</b><p>${T(X5.hkIntro)}</p>${wait ? `<p class="dim">${fill(T(X5.hkWait), { s: Math.ceil(S.hackCd) })}</p>` : `<button class="ibtn" data-act="hack">${T(X5.hkOpen)}</button>`}</div>${S.lastLog ? `<div class="igrp"><div class="ihd">${T(X5.hkLast)}</div><div class="irow">${esc(T(S.lastLog))}</div></div>` : ``}`;
+      }
+      const len = H.pass.length;
+      const dots = Array.from({ length: 4 }, (_, i) => `<i class="${i < H.tries ? `on` : ``}"></i>`).join(``);
+      const keys = H.words.map(w => H.dud.includes(w) ? `<span class="ikey off">${w}</span>` : `<span class="ikey" data-act="hg:${w}">${w}</span>`).join(``);
+      const chips = H.lines.flat().filter(x => x.s).map(x => H.used.includes(x.k) ? `<span class="ichip off">${esc(x.s)}</span>` : `<span class="ichip" data-act="hb:${x.k}">${esc(x.s)}</span>`).join(``);
+      const rows = H.hist.slice().reverse().map(h => h.w
+        ? `<div class="irow"><span class="mono">${h.w}</span><span class="ilik">${Array.from({ length: len }, (_, i) => `<i class="${i < h.n ? `on` : ``}"></i>`).join(``)} ${h.n}/${len}</span></div>`
+        : `<div class="irow dim">${h.dud ? fill(T(X5.hkDud), { w: h.dud }) : T(X5.hkReset)}</div>`).join(``);
+      return `<div class="ilock sm"><b>${T(X5.hkTitle)}</b><div class="idots">${dots}</div><small>${fill(T(X5.hkTries), { n: H.tries })}</small></div>`
+        + `<div class="ikeys">${keys}</div>`
+        + `<div class="igrp"><div class="ihd">${T(X5.hkHints)}</div><div class="ichips">${chips}</div></div>`
+        + (rows ? `<div class="igrp"><div class="ihd">${fill(T(X5.hkHist), { n: len })}</div>${rows}</div>` : ``)
+        + `<button class="ibtn ghost" data-act="hexit">${fr ? `Annuler` : `Cancel`}</button>`;
+    },
     settings() {
       const u = U(), items = [[`save`, u.save], [`exp`, u.exp], [`imp`, u.imp], [`lang`, u.lang], [`sci`, (S.opt.sci ? `[x] ` : `[ ] `) + u.sci], [`anim`, (S.opt.anim ? `[x] ` : `[ ] `) + u.anim], ...(S.run.help ? [[`tip`, u.tip]] : []), [`about`, u.about], [`hard`, u.hard]];
       const hp = Math.floor(S.x.health ?? 100), th = ERA[5].throttle();
