@@ -598,9 +598,11 @@ function fragTick(dt) {
 function milestones() {
   for (const [k, v] of E().MS || []) if (!S.x[k] && S.total >= v) { S.x[k] = 1; note(N(k)); }
 }
+// what is left, shown next to every resource: "113 free", or "overloaded" past the limit
+const freeTxt = (n, f) => ` · ` + (n < 0 ? T([`overloaded`, `surchargé`]) : fill(T([`{n} free`, `{n} libres`]), { n: f(n) }));
 function meter(r) {
   const u = use(r), c = cap(r);
-  return `<span class="meter ${u > c ? `over` : ``}">${T(E().rn[r])} ${fmt(u)}/${fmt(c)} ${T(E().ru[r])}</span>`;
+  return `<span class="meter ${u > c ? `over` : ``}">${T(E().rn[r])} ${fmt(u)}/${fmt(c)} ${T(E().ru[r])}<small>${freeTxt(c - u, n => fmt(n) + ` ` + T(E().ru[r]))}</small></span>`;
 }
 function deskRender() {
   const u = U(), e = E();
@@ -610,7 +612,7 @@ function deskRender() {
   let r = ``;
   for (const p of e.P) { const n = (S.run[p.id] || 0) * kbOf(p.id); for (let i = 0; i < n; i++) r += `<i class="p${p.i % 3}" title="${p.file}"></i>`; }
   setH(`ram`, r + `<i class="f"></i>`.repeat(S.frag) + `<i></i>`.repeat(Math.max(0, free())));
-  setH(`ramT`, u.ram(ramTxt(use(`ram`)), ramTxt(cap(`ram`)), S.frag));
+  setH(`ramT`, u.ram(ramTxt(use(`ram`)), ramTxt(cap(`ram`)), S.frag) + freeTxt(free(), ramTxt));
   setH(`res`, [`cpu`, `bw`, `bat`].filter(x => e.start[x] && x !== `bat`).map(meter).join(``) + (e.taskExtra ? e.taskExtra() : ``));
   setH(`startB`, e.startMenu ? `<span class="m sb" data-menu="start"><i></i>${T(e.startMenu)}</span>` : ``);
   const now = new Date();
