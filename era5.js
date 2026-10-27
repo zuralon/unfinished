@@ -171,7 +171,7 @@ ERA[5] = {
   // ----- era mechanics -----
   enter() { S.x.bat = 100; S.bought.settings = 1; note(N(`bat`)); },
   load() {
-    if (!$(`home`)) document.body.insertAdjacentHTML(`beforeend`, `<div id="ear"></div><div id="sw" data-act="swclose"></div><button id="home" data-act="home" aria-label="home"></button><div id="notif" data-act="notif"></div><div id="dead"></div>`);
+    if (!$(`home`)) document.body.insertAdjacentHTML(`beforeend`, `<div id="ear"></div><div id="bezel"></div><div id="sw" data-act="swclose"></div><button id="home" data-act="home" aria-label="home"></button><div id="notif" data-act="notif"></div><div id="dead"></div>`);
     if (S.x.dead) $(`dead`).classList.add(`on`);
   },
   // a worn battery slows the phone down, like a certain fruit company did
