@@ -349,7 +349,7 @@ function makeWin(id) {
   el.innerHTML = `<div class="title" data-drag="${id}">${p.fixed ? `` : `<button class="x" data-act="close:${id}" aria-label="close">x</button>`}<i class="ti"></i><b>${p.file}</b><span class="cbs"><button class="cb mn" data-act="nyi:min" aria-label="minimize"></button><button class="cb mx" data-act="nyi:max" aria-label="maximize"></button></span></div><div class="body" id="b-${id}"></div>`;
   $(`desk`).appendChild(el);
   W[id] = { el, h: ``, ti: el.querySelector(`.ti`) };
-  if (id === `game`) $(`b-game`).innerHTML = `<button id="pix" aria-label="pixel"><i></i></button>`;
+  if (id === `game`) $(`b-game`).innerHTML = `<div id="pixs"></div><button id="pix" aria-label="pixel"><i></i></button>`;
   winBody(id);
   const [x, y] = S.pos[id] || defPos(id);
   place(el, x, y); front(id);
@@ -580,6 +580,8 @@ function deskRender() {
   const now = new Date();
   setH(`clk`, S.run.clock ? now.toTimeString().slice(0, 5) + (e.skin === 6 ? `<small>${now.toLocaleDateString(loc())}</small>` : ``) : ``);
   setH(`tapps`, e.skin === 6 ? e.P.filter(p => S.run[p.id] && !p.hidden).map(p => `<span class="ta" data-act="open:${p.id}" title="${esc(p.file)}">${icon(p.id)}</span>`).join(``) : ``);
+  // on the phone only one app shows at a time: the running Score app also shows on top of the Pixel app
+  if ($(`pixs`)) setH(`pixs`, e.skin === 5 && S.run.score ? `<b>${fmt(S.px)}</b> px<small>${u.perSec(fmtR(perSec()))}</small>` : ``);
   for (const id in W) { winBody(id); if (e.skin === 3 || e.skin === 4 || e.skin === 6) { const u = iconUrl(iconName(id), iconStyle(id)); if (W[id].ti.dataset.u !== u) { W[id].ti.dataset.u = u; W[id].ti.style.backgroundImage = `url('${u}')`; } } }
   if (e.render) e.render();
 }
