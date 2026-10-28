@@ -135,7 +135,7 @@ function treeBind() {
 }
 const TREE_A = {
   tree() { if (S.treeV !== 2) treeMigrate(); treeRender(); $(`tree`).classList.add(`on`); if (!TV.z) TV.z = tfit(); treeView(); },
-  tclose() { $(`tree`).classList.remove(`on`); },
+  tclose() { if ($(`tree`)) $(`tree`).classList.remove(`on`); },
   tsel(id) { TV.sel = id; treeRender(); },
   tcenter() { TV.x = TV.y = 0; TV.z = tfit(); treeView(); },
   tbuy(id) {

@@ -585,9 +585,9 @@ html body #fin.q .fb .btn:hover{background:#a29bfe!important;color:#07031a!impor
 .tsub{color:#b9b1e8;font-size:12.5px}
 .tsp{flex:1}
 .thow{flex-basis:100%;margin:0;color:#8f86c9;font-size:12px}
-#tree .btn{background:#2a2150;color:#e8e4ff;border:1px solid #5b4fb3;border-radius:6px;padding:6px 14px;cursor:pointer;font:inherit}
-#tree .btn:hover{background:#3a2e70}
-#tree .btn[disabled]{opacity:.5;cursor:default}
+html body #tree .btn{background:#2a2150!important;color:#e8e4ff!important;border:1px solid #5b4fb3!important;border-radius:6px!important;padding:6px 14px!important;cursor:pointer;font:14px 'Segoe UI',system-ui,sans-serif!important;box-shadow:none!important;text-shadow:none!important;height:auto!important;min-width:0!important}
+html body #tree .btn:hover{background:#3a2e70!important}
+html body #tree .btn[disabled]{opacity:.5;cursor:default}
 .tbody{flex:1;display:flex;min-height:0}
 .tmap{flex:1;position:relative;overflow:hidden;cursor:grab;background-image:radial-gradient(rgba(162,155,254,.18) 1px,transparent 1px);background-size:28px 28px}
 .tmap.drag{cursor:grabbing}
@@ -622,8 +622,8 @@ html body #fin.q .fb .btn:hover{background:#a29bfe!important;color:#07031a!impor
 .tlv{height:8px;border-radius:4px;background:#2e2660;overflow:hidden}
 .tlv div{height:100%;background:linear-gradient(90deg,#2ecc71,#a3e635)}
 .tlt{font-size:12px;color:#b9b1e8;margin:4px 0 12px}
-.tbuy{width:100%;padding:10px!important;font-weight:600!important;background:#6c5ce7!important;border-color:#a29bfe!important}
-.tbuy[disabled]{background:#2a2150!important}
+html body #tree .tbuy{width:100%;padding:10px!important;font-weight:600!important;background:#6c5ce7!important;border-color:#a29bfe!important;color:#fff!important}
+html body #tree .tbuy[disabled]{background:#2a2150!important;color:#b9b1e8!important}
 .tok{color:#ffd166;font-weight:700}
 .tno{color:#ff9f9f;font-size:13px}
 @media (max-width:760px){.tbody{flex-direction:column}.tside{width:auto;border-left:0;border-top:1px solid #3a3170;max-height:38%}}
@@ -649,7 +649,8 @@ html body .rp .btn.on{background:#2ecc71!important;border-color:#2ecc71!importan
 .rc i{font-style:normal;color:#ffd166;font-weight:700}
 @media (max-width:700px){.rcs{grid-template-columns:1fr}}
 body.ruleflip #desk{transform:rotate(180deg)}
-.mile{font-size:11.5px;margin-top:3px;color:#a29bfe}
+.mile{font-size:11px;margin-top:3px;opacity:.6;font-style:italic}
+.notes:empty:before{content:attr(data-empty);opacity:.5;font-style:italic}
 #bezel{display:none}
 body.s5.notch:not(.apphome):not(.drag) #icons{visibility:hidden}
 body.s5.notch #bezel{display:block;position:fixed;left:calc(50% - var(--pw)/2 - 12px);top:calc(50% - var(--ph)/2 - 12px);width:calc(var(--pw) + 24px);height:calc(var(--ph) + 24px);box-sizing:border-box;border:12px solid #000;border-radius:54px;pointer-events:none;z-index:100006;box-shadow:0 0 0 3px #c4c4c9,0 0 0 5px #6e6e73}
@@ -923,9 +924,10 @@ body.s5 #icons{bottom:auto}
 .ic i.w11{width:36px;height:36px;filter:drop-shadow(0 2px 3px rgba(0,0,0,.35))}
 body.s5 .ic i.ico{width:54px;height:54px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))}
 /* act change: a slow fade to black, never a flash (photosensitive players); no fade at all with animations off */
-body.flick{animation:fadeout 1s ease-in forwards}
+/* only the game fades: the skill tree, automation and rule panels stay visible */
+body.flick>:not(#tree):not(#autop):not(#rules){animation:fadeout 1s ease-in forwards}
 @keyframes fadeout{to{opacity:0}}
-body.noanim.flick{animation:none;opacity:0}
+body.noanim.flick>:not(#tree):not(#autop):not(#rules){animation:none;opacity:0}
 body.noanim #desk{transition:none!important}
 </style>
 </head>
@@ -959,19 +961,19 @@ body.noanim #desk{transition:none!important}
 <div id="boot"><div><i></i>PIXEL-OS 1<br><br><span class="dim">Welcome. Mostly.</span></div></div>
 <div id="dlg"><div class="win"><div class="title"><b id="dlgH">PIXEL-OS</b></div><div class="body"><div id="dlgT"></div><textarea id="dlgI" spellcheck="false"></textarea><div id="dlgB"></div></div></div></div>
 
-<script src="data.js?v=59"></script>
-<script src="era2.js?v=59"></script>
-<script src="era3.js?v=59"></script>
-<script src="era4.js?v=59"></script>
-<script src="era5.js?v=59"></script>
-<script src="era6.js?v=59"></script>
-<script src="era7.js?v=59"></script>
-<script src="icons.js?v=59"></script>
-<script src="savers.js?v=59"></script>
-<script src="visuals.js?v=59"></script>
-<script src="postit.js?v=59"></script>
-<script src="tree.js?v=59"></script>
-<script src="auto.js?v=59"></script>
-<script src="game.js?v=59"></script>
+<script src="data.js?v=61"></script>
+<script src="era2.js?v=61"></script>
+<script src="era3.js?v=61"></script>
+<script src="era4.js?v=61"></script>
+<script src="era5.js?v=61"></script>
+<script src="era6.js?v=61"></script>
+<script src="era7.js?v=61"></script>
+<script src="icons.js?v=61"></script>
+<script src="savers.js?v=61"></script>
+<script src="visuals.js?v=61"></script>
+<script src="postit.js?v=61"></script>
+<script src="tree.js?v=61"></script>
+<script src="auto.js?v=61"></script>
+<script src="game.js?v=61"></script>
 </body>
 </html>

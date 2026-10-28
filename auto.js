@@ -121,7 +121,7 @@ function autoRender() {
 }
 const AUTO_A = {
   auto() { autoRender(); $(`autop`).classList.add(`on`); },
-  aclose() { $(`autop`).classList.remove(`on`); },
+  aclose() { if ($(`autop`)) $(`autop`).classList.remove(`on`); },
   atog(id) { S.auto = S.auto || {}; S.auto[id] = S.auto[id] ? 0 : 1; autoRender(); save(); },
   rpick(id) {
     S.rule = id;

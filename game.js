@@ -254,8 +254,7 @@ async function toEra1() {
   busy = true;
   for (const p of DELIVERY[0].text) { zSay(p); await wait(1300); }
   for (let n = 0; n <= 100; n += 25) { zSay(tf(TERM.installing, { n })); await wait(500); }
-  document.body.classList.add(`flick`);
-  await wait(1000);
+  if (!panelOpen()) { document.body.classList.add(`flick`); await wait(1000); }
   Object.assign(S, eraFresh(1));
   restart(S);
 }
@@ -380,6 +379,24 @@ function place(el, x, y) {
   el.style.left = Math.max(96, Math.min(x, innerWidth - el.offsetWidth - 6)) + `px`;
   el.style.top = Math.max(top, Math.min(y, innerHeight - 160)) + `px`;
 }
+// a window without a saved spot goes where it covers the least, close to its usual spot
+const freePos = {};
+function spot(id, el) {
+  if (document.body.classList.contains(`s5`)) return defPos(id);
+  const ww = el.offsetWidth, wh = el.offsetHeight, [dx, dy] = defPos(id);
+  const top = E().startMenu ? 4 : 28, bot = innerHeight - 50;
+  const obs = Object.keys(W).filter(k => k !== id).map(k => W[k].el.getBoundingClientRect());
+  for (const k of [`postit`]) if ($(k) && $(k).offsetParent) obs.push($(k).getBoundingClientRect());
+  const cover = (x, y) => obs.reduce((n, r) => n + Math.max(0, Math.min(x + ww, r.right) - Math.max(x, r.left)) * Math.max(0, Math.min(y + wh, r.bottom) - Math.max(y, r.top)), 0);
+  const clampX = x => Math.max(96, Math.min(x, innerWidth - ww - 6)), clampY = y => Math.max(top, Math.min(y, bot - wh));
+  let best = [clampX(dx), clampY(dy)], bc = cover(...best);
+  if (bc < ww * wh * 0.08) return best;
+  for (let y = top; y <= bot - wh; y += 24) for (let x = 96; x <= innerWidth - ww - 6; x += 32) {
+    const c = cover(x, y) + Math.hypot(x - dx, y - dy) * 2;
+    if (c < bc) { bc = c; best = [x, y]; }
+  }
+  return best;
+}
 const front = id => { if (W[id]) W[id].el.style.zIndex = ++zTop; };
 function makeWin(id) {
   if (W[id]) return front(id);
@@ -391,10 +408,11 @@ function makeWin(id) {
   W[id] = { el, h: ``, ti: el.querySelector(`.ti`) };
   if (id === `game`) $(`b-game`).innerHTML = `<div id="pixs"></div><button id="pix" aria-label="pixel"><i></i></button>`;
   winBody(id);
-  const [x, y] = S.pos[id] || defPos(id);
+  if (!S.pos[id]) freePos[id] = spot(id, el);
+  const [x, y] = S.pos[id] || freePos[id];
   place(el, x, y); front(id);
 }
-function killWin(id) { if (W[id]) { W[id].el.remove(); delete W[id]; } }
+function killWin(id) { if (W[id]) { W[id].el.remove(); delete W[id]; } delete freePos[id]; }
 function fits(id) {
   if (kbOf(id) > free()) return false;
   return true;
@@ -487,7 +505,7 @@ const BODY = {
     return tabs + h + (owned ? `<div class="h">${u.installedH}</div>${owned}` : ``);
   },
   score: () => `<div class="big">${fmt(S.px)}</div><div class="c">px</div><div class="c dim">${U().perSec(fmtR(perSec()))}<br>${U().perClick(fmtR(clickPow()))}</div>${E().scoreNote ? E().scoreNote() : ``}`,
-  notes: () => `<div class="notes">${S.notes.map(n => `<p>${esc(T(n))}</p>`).join(``)}</div>`,
+  notes: () => `<div class="notes" data-empty="${T([`Nothing yet.`, `Rien pour l'instant.`])}">${S.notes.map(n => `<p>${esc(T(n))}</p>`).join(``)}</div>`,
   help: () => `<div class="notes">${E().HELP.map(t => `<p>- ${esc(T(t))}</p>`).join(``)}</div>`,
   cursor: () => `<div class="dim">${T(E().D.cursor)}</div>`,
   trophy() {
@@ -793,7 +811,7 @@ addEventListener(`pointerup`, e => {
   down = null; closeMenu(); act(a);
 }, true);
 // windows opened before the page had its real size (background tab) get placed again
-const relayout = () => { for (const id in W) { const [x, y] = S.pos[id] || defPos(id); place(W[id].el, x, y); } };
+const relayout = () => { for (const id in W) { const [x, y] = S.pos[id] || freePos[id] || defPos(id); place(W[id].el, x, y); } };
 addEventListener(`resize`, relayout);
 addEventListener(`beforeunload`, save);
 document.addEventListener(`visibilitychange`, () => { if (document.hidden) save(); });
