@@ -51,8 +51,8 @@ function load(d) {
   if (d) for (const k of [`z`, `st`, `opt`, `x`, `hw`]) S[k] = Object.assign(fresh()[k] || {}, d[k]);
   if (d && d.rl && !d.hw) S.hw.ram = d.rl;
   if (d && !d.x) S.once.boot1 = 1;
-  // saves from before the skill tree: points for the New Game+ already done
-  if (S.ng >= 2 && S.tp == null) S.tp = 3 * (S.ng - 1);
+  // saves from before the big skill tree: points given back with the new rates
+  if (S.treeV !== 2) treeMigrate();
 }
 function save() {
   if (noSave) return;
@@ -90,8 +90,8 @@ function dur(s) {
 const E = () => ERA[S.era];
 const prog = id => PDX[S.era][id];
 // each New Game+ doubles everything again: x2, x4, x8... like a prestige
-const ngMul = () => 2 ** (S.ng || 0);
-const achMul = () => (1 + S.ach.length / 100) * ngMul();
+const ngMul = () => (2 + tsum(`ng`)) ** (S.ng || 0);
+const achMul = () => (1 + S.ach.length / 100 * (1 + tsum(`ach`))) * ngMul();
 const scoreVisible = () => (S.era === 0 ? S.z.countOn : S.run.score);
 function gain(n) { S.px += n; S.total += n; S.life += n; if (!scoreVisible()) S.st.blind += n; }
 
@@ -108,14 +108,14 @@ function kbOf(id) { let k = prog(id).kb; for (const p of OWN) if (p.z && p.z[0] 
 function cpuOf(id) { let k = prog(id).cpu || 0; for (const p of OWN) if (p.u && p.u[0] === id) k = Math.min(k, p.u[1]); return k; }
 const RES = { ram: id => kbOf(id), cpu: id => cpuOf(id), bw: id => prog(id).bw || 0, bat: id => prog(id).bat || 0 };
 function track(r) { return E().HW.find(h => h.r === r); }
-function cap(r) { const t = track(r), lv = S.hw[r] || 0; return lv ? t.s[lv - 1].to : E().start[r]; }
+function cap(r) { const t = track(r), lv = S.hw[r] || 0; return Math.floor((lv ? t.s[lv - 1].to : E().start[r]) * treeCap(r)); }
 function use(r) { let u = r === `ram` ? S.frag : 0; for (const id in S.run) if (S.run[id] && PDX[S.era][id]) u += S.run[id] * RES[r](id); return u; }
 const free = () => cap(`ram`) - use(`ram`);
-const costOf = id => { const p = prog(id); return p.multi ? Math.ceil(p.cost * p.k ** ((S.bought[id] || 0) + (E().queued ? E().queued(id) : 0))) : p.cost; };
+const costOf = id => { const p = prog(id); return Math.ceil((p.multi ? p.cost * p.k ** ((S.bought[id] || 0) + (E().queued ? E().queued(id) : 0)) : p.cost) * treeCost()); };
 const cpuF = () => (E().start.cpu ? Math.min(1, cap(`cpu`) / Math.max(1, use(`cpu`))) : 1);
 const bwF = () => (E().start.bw ? Math.min(1, cap(`bw`) / Math.max(1, use(`bw`))) : 1);
 let saverOn = false;
-const saverMul = () => (saverOn ? (flag(`saver5`) ? 5 : 3) : 1);
+const saverMul = () => (saverOn ? (flag(`saver5`) ? 5 : 3) + tsum(`idle`) : 1);
 function progRate(p) {
   let f = p.prod * progMul(p.id);
   if (p.bw) f *= bwF();
@@ -136,7 +136,7 @@ function clickPow() {
   for (const p of OWN) if (p.c) c *= p.c;
   c *= achMul() * boostOf(`c`) * treeC();
   if (flag(`macro`)) c += basePerSec() * 0.05;
-  if (TR(`c2`)) c += basePerSec() * 0.02;
+  c += basePerSec() * tsum(`cpx`);
   return c;
 }
 
@@ -328,8 +328,8 @@ function hackGuess(w) {
   if (!H) return;
   const era = H.era;
   if (w === H.pass) {
-    const r = Math.max(era === 0 ? 40 : 200, perSec() * 60);
-    gain(r); S.st.hacks++; S.hackCd = era === 0 ? 45 : 90;
+    const r = Math.max(era === 0 ? 40 : 200, perSec() * 60) * (1 + tsum(`hack`));
+    gain(r); S.st.hacks++; S.hackCd = (era === 0 ? 45 : 90) / (1 + tsum(`hack`) / 4);
     const pool = era === 0 ? DEVLOG : E().LOGS || DEVLOG;
     const i = era === 0 ? S.logs : S.x.logs || 0;
     const log = pool[i];
@@ -581,7 +581,7 @@ function strayTick(dt) {
     return;
   }
   if (S.total < 200 || busy || (s.next -= dt) > 0) return;
-  s.next = 25 + Math.random() * 25; s.left = 5; s.good = Math.random() < 0.65;
+  s.next = (25 + Math.random() * 25) / (1 + tsum(`strayF`)); s.left = 5; s.good = Math.random() < 0.65;
   s.x = 100 + Math.random() * (innerWidth - 200); s.y = 60 + Math.random() * (innerHeight * 0.5);
   const a = Math.random() * Math.PI * 2, sp = (140 + Math.random() * 80) * (flag(`strayslow`) ? 0.6 : 1);
   s.vx = Math.cos(a) * sp; s.vy = Math.sin(a) * sp;
@@ -660,6 +660,8 @@ function endEra() {
   if (!next) return dlg(T(E().soon || [UI.en.soon, UI.fr.soon]));
   dlg(dv.text.map(T).join(`\n\n`), { title: T(dv.item), okT: T(E().end.go || [`Insert`, `Insérer`]), cancel: true, ok: async () => {
     busy = true; S.px -= E().end.c;
+    // skill tree: 2 reset points per act finished
+    if (treeOpen()) S.tp = (S.tp || 0) + 2;
     document.body.classList.add(`flick`);
     await wait(1100);
     const keep = { pos: {} };
@@ -728,7 +730,7 @@ const A = {
   nyi(k) { const l = NYI[k]; toast(T(l[Math.random() * l.length | 0])); },
   pfold() { S.opt.pfold = S.opt.pfold ? 0 : 1; },
 };
-const SAFE = new Set([`lang`, `exp`, `imp`, `hard`, `dlgOk`, `dlgNo`, `save`, `keep`, `ngplus`, `bsodOk`, `safeOk`, `tree`, `tclose`, `tbuy`, `treset`]);
+const SAFE = new Set([`lang`, `exp`, `imp`, `hard`, `dlgOk`, `dlgNo`, `save`, `keep`, `ngplus`, `bsodOk`, `safeOk`, `tree`, `tclose`, `tbuy`, `treset`, `tsel`, `tcenter`]);
 function act(s) {
   const i = s.indexOf(`:`), k = i < 0 ? s : s.slice(0, i), v = i < 0 ? `` : s.slice(i + 1);
   if (busy && !SAFE.has(k)) return;
@@ -753,7 +755,9 @@ addEventListener(`mousedown`, e => {
 addEventListener(`mouseup`, () => { if (drag) { S.pos[drag.id] = [drag.el.offsetLeft, drag.el.offsetTop]; drag = null; } });
 function clickPix(e) {
   if (E().tap && E().tap(e) === false) return;
-  const n = clickPow(); gain(n); S.clicks++; fx(e, `+` + fmtR(n));
+  // skill tree Glitch: sometimes a click is worth 100
+  const g = Math.random() < tsum(`glitch`), n = clickPow() * (g ? 100 : 1);
+  gain(n); S.clicks++; fx(e, (g ? `GLITCH +` : `+`) + fmtR(n));
 }
 document.addEventListener(`click`, e => {
   const t = e.target;
@@ -804,14 +808,15 @@ function tick() {
   const now = performance.now(), dt = Math.min((now - prev) / 1000, 2);
   prev = now;
   S.time += dt; S.hackCd = Math.max(0, S.hackCd - dt);
-  if (S.era === 0) { if (!busy) gain((zPerSec() + (TR(`c3`) ? zClick() * 5 : 0)) * dt); zTriggers(); }
+  if (S.era === 0) { if (!busy) gain((zPerSec() + zClick() * tsum(`cps`)) * dt); zTriggers(); }
   else if (!busy) {
     idle += dt;
     const on = !!S.run.saver && idle >= 20;
     if (on !== saverOn) { saverOn = on; $(`saver`).classList.toggle(`on`, on); if (on) { S.once.saverOn = 1; saverStart(); } else saverStop(); }
     gain(perSec() * dt); fragTick(dt); milestones();
-    // Ghost finger: 5 free clicks per second
-    if (TR(`c3`)) gain(clickPow() * 5 * dt);
+    // skill tree: free clicks per second, and the house cat
+    if (tsum(`cps`)) gain(clickPow() * tsum(`cps`) * dt);
+    treeTick(dt);
     if (E().tick) E().tick(dt);
     piTick(dt);
   }
@@ -854,7 +859,7 @@ function start() {
     for (const id in S.run) if (S.run[id] && prog(id)) makeWin(id);
     setTimeout(relayout, 300);
     if (!S.once[`boot` + S.era]) {
-      S.once[`boot` + S.era] = 1; note(N(`start`)); treeRamStart();
+      S.once[`boot` + S.era] = 1; note(N(`start`)); treeBoot();
       if (E().enter) E().enter();
       $(`boot`).innerHTML = `<div><i></i>${E().os}<br><br><span class="dim">${esc(T(E().bootT || [`Welcome. Mostly.`, `Bienvenue. En gros.`]))}</span></div>`;
       $(`boot`).classList.add(`on`);
@@ -862,7 +867,7 @@ function start() {
     }
     const away = (Date.now() - S.last) / 1000;
     if (S.run.clock && away > 60) {
-      const g = basePerSec() * Math.min(away, 8 * 3600) * (flag(`offline`) ? 1 : 0.5);
+      const g = basePerSec() * Math.min(away, (8 + tsum(`offh`)) * 3600) * (flag(`offline`) ? 1 : 0.5) * 2 ** tsum(`offx`);
       if (g > 0) { gain(g); S.once.offline = 1; dlg(U().away(dur(away), fmt(g))); }
     }
     if (E().load) E().load();

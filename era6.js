@@ -205,7 +205,7 @@ ERA[6] = {
   subRate() {
     let s = 0;
     for (const p of E().P) if (p.sub && S.run[p.id]) s += S.run[p.id] * p.sub * (rec(p.id) ? 1.5 : 1);
-    return s * (flag(`annual`) ? 0.6 : 1) * (flag(`family`) ? 0.6 : 1);
+    return s * (flag(`annual`) ? 0.6 : 1) * (flag(`family`) ? 0.6 : 1) * (1 - Math.min(0.6, tsum(`sub`)));
   },
   winClass: id => (rec(id) || id === `ai` ? `new` : ``),
   closing: id => id !== `ai`,
@@ -260,7 +260,7 @@ ERA[6] = {
     keep() { $(`fin`).classList.remove(`on`, `green`, `q`); busy = false; },
     ngplus() {
       const ng = (S.ng || 0) + 1, pts = treeGain(ng, S.era === 7);
-      const keep = { ach: S.ach, st: S.st, lang: S.lang, opt: S.opt, life: S.life, time: S.time, clicks: S.clicks, logs: S.logs, ng, tree: S.tree || {}, tp: (S.tp || 0) + pts };
+      const keep = { ach: S.ach, st: S.st, lang: S.lang, opt: S.opt, life: S.life, time: S.time, clicks: S.clicks, logs: S.logs, ng, tree: S.tree || { core: 1 }, treeV: 2, tp: (S.tp || 0) + pts };
       restart(Object.assign(fresh(), keep));
       if (pts) setTimeout(() => { zSay(tf(TRT.gain, { n: pts })); }, 2500);
     },

@@ -576,33 +576,57 @@ body.q7mirror #desk{transform:scaleX(-1)}
 #fin.green.q{background:radial-gradient(circle at 50% 40%,#2a1660,#07031a 70%);color:#c8bfff;text-shadow:-1px 0 rgba(0,229,255,.6),1px 0 rgba(255,0,200,.6)}
 html body #fin.q .fb .btn{color:#c8bfff!important;border-color:#a29bfe!important}
 html body #fin.q .fb .btn:hover{background:#a29bfe!important;color:#07031a!important}
-/* ---------- skill tree (from the second New Game+) ---------- */
+/* ---------- skill tree (from the second New Game+): a map of skills around the core ---------- */
 #tree{display:none}
-#tree.on{display:flex;position:fixed;inset:0;z-index:450000;background:rgba(5,3,15,.82);align-items:center;justify-content:center;padding:16px;overflow:auto;font:14px/1.35 'Segoe UI',system-ui,sans-serif;color:#e8e4ff}
-.tp{background:linear-gradient(160deg,#1b1338,#0d0a1f);border:1px solid #5b4fb3;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 0 1px rgba(162,155,254,.15) inset;padding:20px 24px;max-width:900px;width:100%}
-.tp h2{margin:0;font-size:22px;letter-spacing:.5px}
-.tpts{display:inline-block;margin:8px 0 2px;padding:3px 12px;border-radius:12px;background:#6c5ce7;color:#fff;font-weight:600}
-.tp p{margin:6px 0 14px;color:#b9b1e8;font-size:13px}
-.tcols{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.tb{background:rgba(255,255,255,.03);border-radius:10px;padding:10px}
-.tb h3{margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:1px;color:#a29bfe;text-align:center}
-.tl2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;position:relative}
-.tl2:before{content:'';position:absolute;left:25%;right:25%;top:-8px;height:8px;border:2px solid #4a3f8f;border-bottom:0;border-radius:6px 6px 0 0}
-.tl2>div{display:flex;flex-direction:column;gap:8px}
-.tn{display:flex;flex-direction:column;gap:3px;padding:8px 9px;border-radius:8px;border:1px solid #3a3170;background:#15102c;min-height:86px}
-.tn b{font-size:13px}
-.tn span{font-size:11.5px;color:#b9b1e8}
-.tn i{font-style:normal;font-size:11px;margin-top:auto;color:#8b84c7}
-.tn.can{border-color:#a29bfe;cursor:pointer;box-shadow:0 0 12px rgba(162,155,254,.25)}
-.tn.can:hover{background:#231a48}
-.tn.can i{color:#ffd166;font-weight:600}
-.tn.got{border-color:#2ecc71;background:#10291d}
-.tn.got i{color:#2ecc71;font-weight:600}
-.tn.no{opacity:.55}
-.tbtn{display:flex;gap:10px;justify-content:flex-end;margin-top:16px}
+#tree.on{display:flex;flex-direction:column;position:fixed;inset:0;z-index:450000;background:radial-gradient(circle at 50% 50%,#1d1440,#07051a 75%);font:14px/1.35 'Segoe UI',system-ui,sans-serif;color:#e8e4ff;user-select:none}
+.thd{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:12px 18px;background:rgba(10,7,30,.85);border-bottom:1px solid #3a3170}
+.thd h2{margin:0;font-size:20px;letter-spacing:.5px}
+.tpill{padding:3px 12px;border-radius:12px;background:#6c5ce7;color:#fff;font-weight:600}
+.tsub{color:#b9b1e8;font-size:12.5px}
+.tsp{flex:1}
+.thow{flex-basis:100%;margin:0;color:#8f86c9;font-size:12px}
 #tree .btn{background:#2a2150;color:#e8e4ff;border:1px solid #5b4fb3;border-radius:6px;padding:6px 14px;cursor:pointer;font:inherit}
 #tree .btn:hover{background:#3a2e70}
-@media (max-width:700px){.tcols{grid-template-columns:1fr}}
+#tree .btn[disabled]{opacity:.5;cursor:default}
+.tbody{flex:1;display:flex;min-height:0}
+.tmap{flex:1;position:relative;overflow:hidden;cursor:grab;background-image:radial-gradient(rgba(162,155,254,.18) 1px,transparent 1px);background-size:28px 28px}
+.tmap.drag{cursor:grabbing}
+.tlay{position:absolute;left:0;top:0;transform-origin:0 0}
+.tsv{position:absolute;left:-800px;top:-800px;overflow:visible;pointer-events:none}
+.tsv line{stroke:#2e2660;stroke-width:4;stroke-linecap:round}
+.tsv line.av{stroke:#5b4fb3;stroke-dasharray:2 9}
+.tsv line.on{stroke:#a29bfe;filter:drop-shadow(0 0 4px #a29bfe)}
+.tbr{position:absolute;transform:translate(-50%,-50%);font:800 22px 'Segoe UI',system-ui,sans-serif;letter-spacing:6px;color:rgba(162,155,254,.22);white-space:nowrap;pointer-events:none}
+.tnd{position:absolute;width:62px;height:62px;margin:-31px 0 0 -31px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(circle,#1b1438 60%,transparent 61%),conic-gradient(#2ecc71 var(--p),#3a3170 0);box-shadow:0 0 0 2px #3a3170;transition:transform .12s}
+.tnd:hover{transform:scale(1.08)}
+.tnd i{width:34px;height:34px;background-size:contain;background-repeat:no-repeat;background-position:center}
+.tnd em{position:absolute;bottom:-9px;left:50%;transform:translateX(-50%);font:600 10.5px 'Segoe UI',system-ui,sans-serif;font-style:normal;background:#140f2c;border:1px solid #5b4fb3;border-radius:8px;padding:0 6px;color:#e8e4ff}
+.tnd.lock{filter:grayscale(1);opacity:.4}
+.tnd.av{opacity:.8}
+.tnd.can{box-shadow:0 0 0 2px #a29bfe,0 0 16px rgba(162,155,254,.6);animation:tpulse 1.6s ease-in-out infinite}
+@keyframes tpulse{50%{box-shadow:0 0 0 2px #a29bfe,0 0 28px rgba(162,155,254,.9)}}
+.tnd.part{box-shadow:0 0 0 2px #2ecc71}
+.tnd.max{box-shadow:0 0 0 2px #ffd166,0 0 14px rgba(255,209,102,.5);background:radial-gradient(circle,#2a2010 60%,transparent 61%),conic-gradient(#ffd166 100%,#ffd166 0)}
+.tnd.ks{width:84px;height:84px;margin:-42px 0 0 -42px;border-radius:24px;transform:rotate(45deg)}
+.tnd.ks:hover{transform:rotate(45deg) scale(1.08)}
+.tnd.ks i{transform:rotate(-45deg);width:42px;height:42px}
+.tnd.ks em{transform:rotate(-45deg)}
+.tnd.sel{outline:3px solid #fff;outline-offset:4px}
+.tside{width:300px;flex:none;padding:18px;background:rgba(10,7,30,.88);border-left:1px solid #3a3170;overflow:auto}
+.tsi{display:flex;gap:12px;align-items:center}
+.tsi i{width:54px;height:54px;flex:none;background-size:contain;background-repeat:no-repeat;background-position:center}
+.tsi b{display:block;font-size:17px}
+.tks{display:inline-block;margin-top:3px;font-size:11px;padding:1px 8px;border-radius:8px;background:#ffd166;color:#2a2010;font-weight:700}
+.tside p{color:#cfc8f5;margin:14px 0}
+.tlv{height:8px;border-radius:4px;background:#2e2660;overflow:hidden}
+.tlv div{height:100%;background:linear-gradient(90deg,#2ecc71,#a3e635)}
+.tlt{font-size:12px;color:#b9b1e8;margin:4px 0 12px}
+.tbuy{width:100%;padding:10px!important;font-weight:600!important;background:#6c5ce7!important;border-color:#a29bfe!important}
+.tbuy[disabled]{background:#2a2150!important}
+.tok{color:#ffd166;font-weight:700}
+.tno{color:#ff9f9f;font-size:13px}
+@media (max-width:760px){.tbody{flex-direction:column}.tside{width:auto;border-left:0;border-top:1px solid #3a3170;max-height:38%}}
 #bezel{display:none}
 body.s5.notch:not(.apphome):not(.drag) #icons{visibility:hidden}
 body.s5.notch #bezel{display:block;position:fixed;left:calc(50% - var(--pw)/2 - 12px);top:calc(50% - var(--ph)/2 - 12px);width:calc(var(--pw) + 24px);height:calc(var(--ph) + 24px);box-sizing:border-box;border:12px solid #000;border-radius:54px;pointer-events:none;z-index:100006;box-shadow:0 0 0 3px #c4c4c9,0 0 0 5px #6e6e73}
@@ -909,18 +933,18 @@ body.flick{animation:fl .12s steps(2) 8}
 <div id="boot"><div><i></i>PIXEL-OS 1<br><br><span class="dim">Welcome. Mostly.</span></div></div>
 <div id="dlg"><div class="win"><div class="title"><b id="dlgH">PIXEL-OS</b></div><div class="body"><div id="dlgT"></div><textarea id="dlgI" spellcheck="false"></textarea><div id="dlgB"></div></div></div></div>
 
-<script src="data.js?v=52"></script>
-<script src="era2.js?v=52"></script>
-<script src="era3.js?v=52"></script>
-<script src="era4.js?v=52"></script>
-<script src="era5.js?v=52"></script>
-<script src="era6.js?v=52"></script>
-<script src="era7.js?v=52"></script>
-<script src="icons.js?v=52"></script>
-<script src="savers.js?v=52"></script>
-<script src="visuals.js?v=52"></script>
-<script src="postit.js?v=52"></script>
-<script src="tree.js?v=52"></script>
-<script src="game.js?v=52"></script>
+<script src="data.js?v=54"></script>
+<script src="era2.js?v=54"></script>
+<script src="era3.js?v=54"></script>
+<script src="era4.js?v=54"></script>
+<script src="era5.js?v=54"></script>
+<script src="era6.js?v=54"></script>
+<script src="era7.js?v=54"></script>
+<script src="icons.js?v=54"></script>
+<script src="savers.js?v=54"></script>
+<script src="visuals.js?v=54"></script>
+<script src="postit.js?v=54"></script>
+<script src="tree.js?v=54"></script>
+<script src="game.js?v=54"></script>
 </body>
 </html>

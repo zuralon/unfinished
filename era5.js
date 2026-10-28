@@ -187,7 +187,7 @@ ERA[5] = {
   throttle() { const h = S.x.health ?? 100; return h < 80 ? 0.5 + (h - 50) / 60 : 1; },
   mul2: () => ERA[5].throttle(),
   batCost: () => Math.max(5000, basePerSec() * 120),
-  drain() { return use(`bat`) / cap(`bat`) * 0.8 * (flag(`lowpower`) ? 0.6 : 1); },
+  drain() { return use(`bat`) / cap(`bat`) * 0.8 * (flag(`lowpower`) ? 0.6 : 1) * (1 - Math.min(0.6, tsum(`bat`))); },
   // why the score may suddenly drop: shown under it
   scoreNote() { const u = S.x.upd; return S.x.dead ? `<small class="warn">${T(X5.deadScore)}</small>` : u && u.on ? `<small class="warn">${fill(T(X5.updScore), { a: prog(u.id).file, s: Math.ceil(u.t) })}</small>` : ``; },
   factor: p => (S.x.dead || (S.x.upd && S.x.upd.on && S.x.upd.id === p.id) ? 0 : 1),

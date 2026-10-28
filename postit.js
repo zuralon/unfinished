@@ -62,7 +62,7 @@ const TK = [
 function nice(v) { const p = 10 ** Math.max(0, Math.floor(Math.log10(Math.max(v, 1))) - 1); return Math.ceil(v / p) * p; }
 function multiPick() { return E().P.find(p => p.multi && p.prod && (S.bought[p.id] || 0) >= 2 && (S.run[p.id] || 0) < S.bought[p.id]); }
 
-const tkRew = r => Math.max(basePerSec() * 75 * r, clickPow() * 50 * r, 30) * (TR(`u3`) ? 3 : 1);
+const tkRew = r => Math.max(basePerSec() * 75 * r, clickPow() * 50 * r, 30) * (1 + tsum(`tk`));
 function tkNew() {
   // the first task of an era is always the easy one
   const x = S.x, list = x.tkLast ? TK.filter(t => t.id !== x.tkLast && (!t.ok || t.ok())) : [TK[0]];
@@ -137,7 +137,7 @@ const EV = [
 function evApply(f) {
   if (!f) return;
   if (f.lose) S.px -= Math.floor(S.px * f.lose);
-  if (f.g) gain(Math.max(basePerSec() * f.g, clickPow() * f.g * 0.5, 20));
+  if (f.g) gain(Math.max(basePerSec() * f.g, clickPow() * f.g * 0.5, 20) * (1 + tsum(`ev`)));
   if (f.b) { const [k, m, s] = f.b; S.x.boost = S.x.boost || {}; S.x.boost[k] = { m, s }; }
   if (f.bet) return evApply(Math.random() < f.bet[0] ? f.bet[1] : f.bet[2]);
   if (f.m) toast(T(f.m));
