@@ -1,6 +1,6 @@
 // Screensavers: each era shows the one its program is named after.
 // 1 screensaver.scr = flying pixels (CSS, in index.html), 2 STARS.SCR = starfield, 3 3D Pipes, 4 Mystify,
-// 5 Night Shift = the iPhone lock screen tinted orange, 6 Focus Session = a focus timer ring.
+// 5 Night Shift = the iPhone lock screen tinted orange, 6 Focus Session = a focus timer ring, 7 Quantum Foam = particle pairs.
 
 const SV = { raf: 0, era: 0, t0: 0 };
 const SVT = {
@@ -24,7 +24,7 @@ function saverStart() {
   } else {
     el.innerHTML = `<canvas></canvas>`;
     const cv = el.firstChild; cv.width = innerWidth; cv.height = innerHeight;
-    SV.st = e === 2 ? starsInit(cv) : e === 3 ? pipesInit(cv) : mystInit(cv);
+    SV.st = e === 2 ? starsInit(cv) : e === 3 ? pipesInit(cv) : e === 7 ? foamInit(cv) : mystInit(cv);
   }
   cancelAnimationFrame(SV.raf);
   const loop = now => { if (!saverOn) return; svFrame(now); SV.raf = requestAnimationFrame(loop); };
@@ -50,7 +50,7 @@ function svFrame(now) {
   if (SV.era === 5 || SV.era === 6) { if (now - svLast > 250) { svLast = now; svClock(); } return; }
   const cv = $(`saver`).firstChild;
   if (!cv || !cv.getContext) return;
-  (SV.era === 2 ? starsFrame : SV.era === 3 ? pipesFrame : mystFrame)(cv.getContext(`2d`), cv, SV.st);
+  (SV.era === 2 ? starsFrame : SV.era === 3 ? pipesFrame : SV.era === 7 ? foamFrame : mystFrame)(cv.getContext(`2d`), cv, SV.st);
 }
 
 // ---------- STARS.SCR: flying through a starfield ----------
@@ -149,4 +149,23 @@ function mystFrame(x, cv, ps) {
       x.beginPath(); pts.forEach(([a, b], j) => (j ? x.lineTo(a, b) : x.moveTo(a, b))); x.closePath(); x.stroke();
     });
   }
+}
+
+// ---------- Quantum Foam: pairs of particles pop out of the vacuum, drift apart, come back and annihilate ----------
+function foamInit(cv) {
+  const x = cv.getContext(`2d`); x.fillStyle = `#07031a`; x.fillRect(0, 0, cv.width, cv.height);
+  return { p: [] };
+}
+function foamFrame(x, cv, st) {
+  x.fillStyle = `rgba(7,3,26,.22)`; x.fillRect(0, 0, cv.width, cv.height);
+  if (st.p.length < 40 && Math.random() < 0.5) st.p.push({ x: rnd(0, cv.width), y: rnd(0, cv.height), a: rnd(0, 6.3), t: 0, life: rnd(60, 140), h: rnd(160, 320) });
+  for (const p of st.p) {
+    p.t++;
+    // apart, then back together
+    const k = p.t / p.life, d = Math.sin(k * Math.PI) * 60, dx = Math.cos(p.a) * d, dy = Math.sin(p.a) * d;
+    x.fillStyle = `hsl(${p.h},100%,65%)`; x.beginPath(); x.arc(p.x + dx, p.y + dy, 3, 0, 7); x.fill();
+    x.fillStyle = `hsl(${p.h + 180},100%,65%)`; x.beginPath(); x.arc(p.x - dx, p.y - dy, 3, 0, 7); x.fill();
+    if (p.t >= p.life) { x.fillStyle = `rgba(255,255,255,.85)`; x.beginPath(); x.arc(p.x, p.y, 14, 0, 7); x.fill(); }
+  }
+  st.p = st.p.filter(p => p.t < p.life);
 }

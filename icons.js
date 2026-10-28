@@ -67,17 +67,25 @@ const ICONS = {
   gpt: { a: `#10a37f`, L: [[`a`, RR(1, 2, 14, 10, 2.5) + `M4 11L4 15L8 11Z`], [`w`, `M8 3.8L8.9 6.1L11.2 7L8.9 7.9L8 10.2L7.1 7.9L4.8 7L7.1 6.1Z`]] },
   atom: { a: `#0984e3`, b: `#a29bfe`, L: [[`b`, `M1.5 8A6.5 2.6 0 1 0 14.5 8A6.5 2.6 0 1 0 1.5 8M4.75 2.37A6.5 2.6 60 1 0 11.25 13.63A6.5 2.6 60 1 0 4.75 2.37M4.75 13.63A6.5 2.6 -60 1 0 11.25 2.37A6.5 2.6 -60 1 0 4.75 13.63`, 1], [`a`, C(8, 8, 2)]] },
   window: { a: `#3b6fd9`, L: [[`w`, R(1, 2, 14, 12)], [`a`, R(1, 2, 14, 3)]] },
+  // QUANTUM-OS
+  cat: { a: `#f39c4a`, L: [[`a`, `M2.5 7L3.5 1.5L7 5H9L12.5 1.5L13.5 7V10.5A5.5 4.5 0 0 1 2.5 10.5Z`], [`k`, C(5.8, 8.6, 1) + C(10.2, 8.6, 1)], [`#ff7fa8`, `M7.2 10.6H8.8L8 11.6Z`]] },
+  dice: { a: `#e74c3c`, L: [[`a`, RR(2, 2, 12, 12, 2.6)], [`w`, C(5, 5, 1.25) + C(8, 8, 1.25) + C(11, 11, 1.25) + C(11, 5, 1.25) + C(5, 11, 1.25)]] },
+  tunnel: { a: `#8d6e63`, b: `#f1c40f`, L: [[`a`, `M1 15V9A7 7 0 0 1 15 9V15Z`], [`k`, `M5 15V10A3 3 0 0 1 11 10V15Z`], [`b`, C(8, 12.5, 1.1)]] },
+  hourglass: { a: `#9c7a3c`, b: `#f1c40f`, L: [[`a`, R(3, 1, 10, 1.6) + R(3, 13.4, 10, 1.6)], [`#d6eaf8`, `M4.5 2.6H11.5L8.6 8L11.5 13.4H4.5L7.4 8Z`], [`b`, `M6 4H10L8 7.2Z` + `M8 9.4L10.6 13.4H5.4Z`]] },
+  planets: { a: `#3498db`, b: `#9b59b6`, L: [[`a`, C(6, 9.5, 4.5)], [`b`, C(12.5, 4, 2.5)], [`#2ecc71`, C(4.6, 8.4, 1.2) + C(7.4, 11, 0.9)]] },
+  hole: { a: `#ff8c1a`, b: `#ffd166`, L: [[`a`, `M1.2 8A6.8 2.6 0 1 0 14.8 8A6.8 2.6 0 1 0 1.2 8`, 1.4], [`k`, C(8, 8, 3.8)], [`b`, `M3.4 8.6A4.8 1.2 0 0 0 12.6 8.6`, 0.8]] },
+  bubbles: { a: `#00cec9`, b: `#a29bfe`, L: [[`a`, C(5, 10, 3.6)], [`b`, C(11, 5.5, 2.6)], [`a`, C(11.8, 12, 1.8)], [`w`, C(4, 8.8, 0.9) + C(10.3, 4.8, 0.6)]] },
 };
 
 // which drawing each program uses; m = the program was recoded by Copixel (era 6)
 const ICON_OF = {
-  game: (e, m) => (e === 5 ? `pixel` : `monitor`), install: (e, m) => (e <= 3 ? `floppy` : e === 5 || m ? `bag` : `box`),
+  game: (e, m) => (e >= 5 && e !== 6 ? `pixel` : `monitor`), install: (e, m) => (e <= 3 ? `floppy` : e === 5 || m ? `bag` : `box`),
   notes: (e, m) => (e <= 3 ? `note` : e === 5 || m ? `chat` : `mail`), score: `chart`, help: `help`, auto: `autoclick`, cursor: `arrow`,
-  trophy: `trophy`, clock: `clock`, cga: `palette`, calc: `calc`, bot: `robot`, saver: `moon`, defrag: `blocks`, hack: `term`, render: `cube`,
+  trophy: `trophy`, clock: `clock`, cga: `palette`, calc: `calc`, bot: `robot`, saver: e => (e === 7 ? `bubbles` : `moon`), defrag: `blocks`, hack: `term`, render: `cube`,
   comp: `gear`, tsr: `chip`, av: `shield`, bbs: `handset`, dl: `handset`, turbo: `bolt`, mega: `star`, virus: `bug`, bip: `clip`, macro: `cassette`,
   media: `music`, stream: e => (e === 6 ? `music` : `tower`), doom: `skull`, server: `server`, browser: `globe`, msn: `people`, popblock: `stop`,
   p2p: `arrows`, craft: `grass`, seti: `dish`, web: `webserver`, settings: `gearS`, flash: `torch`, farm: `sprout`, birds: `bird`, tok: `tok`,
-  crush: `candy`, cloud: `cloud`, ai: `orb`, tube: (e, m) => (m ? `play` : `arrows`), vr: (e, m) => (m ? `goggles` : `grass`),
+  crush: `candy`, cloud: `cloud`, ai: `orb`, cat: `cat`, dice: `dice`, tunnel: `tunnel`, loop: `hourglass`, multi: `planets`, hole: `hole`, last: `atom`, tube: (e, m) => (m ? `play` : `arrows`), vr: (e, m) => (m ? `goggles` : `grass`),
   cgame: (e, m) => (m ? `pad` : `globe`), gpt: (e, m) => (m ? `gpt` : `dish`), quantum: (e, m) => (m ? `atom` : `webserver`),
 };
 
@@ -159,6 +167,11 @@ function vectorIcon(ic, style) {
         : `<path d="${d}" fill="${role === `w` ? `#ffffff` : grad(c, 0.3, -0.05, 1)}"${t}/>`;
     }).join(``);
   }
+  // QUANTUM-OS: the same drawing in two states at once, shifted in cyan and magenta
+  if (style === `q`) {
+    defs += `<filter id="qc"><feColorMatrix values="0 0 0 0 0 0 0 0 0 1 0 0 0 0 1 0 0 0 .6 0"/></filter><filter id="qm"><feColorMatrix values="0 0 0 0 1 0 0 0 0 0 0 0 0 0 1 0 0 0 .6 0"/></filter>`;
+    body = `<g filter="url(#qc)" transform="translate(-.8 .3)">${body}</g><g filter="url(#qm)" transform="translate(.8 -.3)">${body}</g>${body}`;
+  }
   return `data:image/svg+xml,` + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="64" height="64"><defs>${defs}</defs>${body}</svg>`);
 }
 
@@ -168,7 +181,7 @@ function iconUrl(name, style) {
   if (!iconCache[key]) { const ic = ICONS[name] || ICONS.window; iconCache[key] = [`mac`, `ega`, `w95`].includes(style) ? pixelIcon(ic, style) : vectorIcon(ic, style); }
   return iconCache[key];
 }
-const recoded = id => S.era === 6 && (id === `ai` || !!(S.x.rc && S.x.rc[id]));
+const recoded = id => S.era === 7 || (S.era === 6 && (id === `ai` || !!(S.x.rc && S.x.rc[id])));
 function iconName(id) { const f = ICON_OF[id]; return typeof f === `function` ? f(S.era, recoded(id)) : f || `window`; }
-const iconStyle = id => (S.era === 5 && phoneLv() >= 1 ? `ios7` : [, `mac`, `ega`, `w95`, `xp`, `ios`][S.era] || (recoded(id) ? `w11` : `xp`));
+const iconStyle = id => (S.era === 5 && phoneLv() >= 1 ? `ios7` : S.era === 7 ? `q` : [, `mac`, `ega`, `w95`, `xp`, `ios`][S.era] || (recoded(id) ? `w11` : `xp`));
 function icon(id) { const st = iconStyle(id); return `<i class="ico ${st}" style="background-image:url('${iconUrl(iconName(id), st)}')"></i>`; }

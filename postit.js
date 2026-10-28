@@ -51,6 +51,10 @@ const TK = [
     t: [`Get {n} nudges. I need to feel popular.`, `Reçois {n} wizz. J'ai besoin de me sentir populaire.`] },
   { id: `notif`, r: 1, ok: () => S.era === 5, n: () => 2, k: () => S.st.notif || 0,
     t: [`Tap {n} notifications. They won't stop anyway.`, `Touche {n} notifications. De toute façon, elles n'arrêteront pas.`] },
+  { id: `box`, r: 1.2, ok: () => S.era === 7 && S.bought.cat, n: () => 1, k: () => S.st.box || 0,
+    t: [`Open the cat's box. I don't dare.`, `Ouvre la boîte du chat. Moi, je n'ose pas.`] },
+  { id: `heis`, r: 0.8, ok: () => S.era === 7 && S.run.score && !flag(`heisen`), n: () => 3, k: () => S.st.measure || 0,
+    t: [`Measure the Score {n} times. I want to be sure. I can't be.`, `Mesure le Score {n} fois. Je veux être sûr. Je ne peux pas.`] },
   { id: `rec`, r: 1.2, ok: () => S.era === 6 && !!S.x.rq, gone: () => !S.x.rq, n: () => 1, k: () => S.st.recoded || 0,
     t: [`Let Copixel recode a program. Watch it closely.`, `Laisse Copixel recoder un programme. Surveille-le de près.`] },
 ];

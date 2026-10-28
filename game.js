@@ -301,6 +301,8 @@ const HACK_FRAME = {
     return `<div class="hk3"><div class="htb">${HT_ICONS}</div><div class="htt">${h}<span class="blk">_</span></div><div class="hts"><span>${on ? `${T([`Connected`, `Connecté`])} ${Math.floor(t / 3600)}:${String(Math.floor(t / 60) % 60).padStart(2, `0`)}:${String(t % 60).padStart(2, `0`)}` : T([`Disconnected`, `Déconnecté`])}</span><span>${T([`Auto detect`, `Détection auto`])}</span><span>2400 8-N-1</span></div></div>`; },
   // Winbows 12: Windows Terminal, a PowerShell tab, colored prompt
   6: (h, on) => `<div class="hk6"><div class="wtt"><span class="wtab"><i>&gt;_</i>PowerShell<b>×</b></span><span class="wtp">+</span><span class="wtp">⌄</span></div><div class="wtb"><div class="wtd">PowerShell 7.4.1 · Copixel Edition</div><div><span class="wps">PS C:\\Users\\Pixel&gt;</span> <span class="wcm">.\\hack.ps1</span></div>${h}<div><span class="wps">PS C:\\Users\\Pixel&gt;</span> <span class="blk">▏</span></div></div></div>`,
+  // QUANTUM-OS: Windows Terminal again, but the shell itself is in a superposition
+  7: (h, on) => `<div class="hk6 hk7"><div class="wtt"><span class="wtab"><i>ψ</i>Q-Shell<b>×</b></span><span class="wtab ghost"><i>ψ</i>Q-Shell<b>×</b></span><span class="wtp">+</span></div><div class="wtb"><div class="wtd">Q-Shell 0.∞ · ${T([`results not guaranteed in this universe`, `résultats non garantis dans cet univers`])}</div><div><span class="wps">ψ C:\\Multiverse\\Pixel|0⟩+|1⟩&gt;</span> <span class="wcm">./crack --all-universes</span></div>${h}<div><span class="wps">ψ C:\\Multiverse\\Pixel|0⟩+|1⟩&gt;</span> <span class="blk">▏</span></div></div></div>`,
   // Winbows XD: the black Command Prompt with its banner
   4: (h, on) => `<div class="hk4"><div>PIXCORP Winbows XD [version 5.1.2600]</div><div>(C) Copyright 1985-2001 PIXCORP.</div><br><div>C:\\Documents and Settings\\Pixel&gt;hack.exe</div>${h}<div>C:\\Documents and Settings\\Pixel&gt;<span class="blk">_</span></div></div>`,
 };
@@ -359,7 +361,7 @@ const ramTxt = n => fmt(n * E().mul) + ` ` + T(E().unit);
 
 const W = {};
 let zTop = 20;
-const MID = new Set([`cursor`, `cga`, `calc`, `saver`, `defrag`, `clock`, `av`, `dl`]);
+const MID = new Set([`cursor`, `cga`, `calc`, `saver`, `defrag`, `clock`, `av`, `dl`, `cat`]);
 function defPos(id) {
   const w = innerWidth, h = innerHeight, o = E().pos && E().pos[id];
   if (o) return [o[0] < 0 ? w + o[0] : o[0], o[1] < 0 ? h + o[1] : o[1]];
@@ -475,7 +477,7 @@ const BODY = {
       }
       const en = E().end;
       // once seen, the ending is free to watch again (and leads to New Game+)
-      h += S.era === 6 && S.once.fin ? row(`end`, T([`See the ending again`, `Revoir la fin`]), T([`And start a New Game+ from there.`, `Et lancer une Nouvelle partie+ depuis là.`]), T([`Watch`, `Voir`]), true)
+      h += E().finScreen && S.once.fin ? row(`end`, T([`See the ending again`, `Revoir la fin`]), T([`And start a New Game+ from there.`, `Et lancer une Nouvelle partie+ depuis là.`]), T([`Watch`, `Voir`]), true)
         : maxed ? row(`end`, T(en.t), T(en.d), u.buy(fmt(en.c)), S.px >= en.c) : `<div class="row dim"><span>${T(en.t)}<small>${T(en.d)}</small></span></div>`;
     }
     const tabs = `<div class="tabs">${u.tabs.map((n, i) => `<button class="btn ${i === t ? `on` : ``}" data-act="tab:${i}">${n}</button>`).join(``)}</div>`;
@@ -506,7 +508,7 @@ const BODY = {
   },
   hack() {
     // in Winbows 12 (and once Copixel has recoded it) the terminal becomes Windows Terminal
-    const f = HACK_FRAME[E().skin === 6 || (W.hack && W.hack.el.classList.contains(`new`)) ? 6 : E().skin];
+    const f = HACK_FRAME[S.era === 7 ? 7 : E().skin === 6 || (W.hack && W.hack.el.classList.contains(`new`)) ? 6 : E().skin];
     if (H && H.era) return f ? f(hackHtml(), 1) : hackHtml();
     if (f) return f(`<div>${esc(T(E().D.hack))}</div>${S.lastLog ? `<p>${esc(T(S.lastLog))}</p>` : ``}${S.hackCd > 0 ? `<div>${U().hackWait(Math.ceil(S.hackCd))}</div>` : `<div class="tl" data-act="hack">${U().hackReady}</div>`}`, 0);
     const btn = S.hackCd > 0 ? `<span class="dim">${U().hackWait(Math.ceil(S.hackCd))}</span>` : `<button class="btn" data-act="hack">${U().hackReady.replace(/^> /, ``)}</button>`;
@@ -620,7 +622,7 @@ function deskRender() {
   setH(`res`, [`cpu`, `bw`, `bat`].filter(x => e.start[x] && x !== `bat`).map(meter).join(``) + (e.taskExtra ? e.taskExtra() : ``));
   setH(`startB`, e.startMenu ? `<span class="m sb" data-menu="start"><i></i>${T(e.startMenu)}</span>` : ``);
   const now = new Date();
-  setH(`clk`, S.run.clock ? now.toTimeString().slice(0, 5) + (e.skin === 6 ? `<small>${now.toLocaleDateString(loc())}</small>` : ``) : ``);
+  setH(`clk`, S.run.clock ? (e.clk ? e.clk(now) : now.toTimeString().slice(0, 5) + (e.skin === 6 ? `<small>${now.toLocaleDateString(loc())}</small>` : ``)) : ``);
   setH(`tapps`, e.skin === 6 ? e.P.filter(p => S.run[p.id] && !p.hidden).map(p => `<span class="ta" data-act="open:${p.id}" title="${esc(p.file)}">${icon(p.id)}</span>`).join(``) : ``);
   // on the phone only one app shows at a time: the running Score app also shows on top of the Pixel app
   if ($(`pixs`)) setH(`pixs`, e.skin === 5 && S.run.score ? `<b>${fmt(S.px)}</b> px<small>${u.perSec(fmtR(perSec()))}</small>${e.scoreNote ? e.scoreNote() : ``}` : ``);
@@ -715,7 +717,7 @@ const A = {
   sci() { S.opt.sci = S.opt.sci ? 0 : 1; },
   anim() { S.opt.anim = S.opt.anim ? 0 : 1; },
   tip() { dlg(T(E().HELP[Math.random() * E().HELP.length | 0])); },
-  about() { dlg((E().about ? T(E().about) : U().aboutT) + `\n\n` + fill(T([`Act {n} of 6 - {os} ({y})`, `Acte {n} sur 6 - {os} ({y})`]), { n: S.era, os: E().os, y: E().year }) + (S.ng ? ` - ` + T([`New Game+`, `Nouvelle partie+`]) + (S.ng > 1 ? ` ${S.ng}` : ``) + ` (` + T([`production`, `production`]) + ` x${fmt(ngMul())})` : ``)); },
+  about() { dlg((E().about ? T(E().about) : U().aboutT) + `\n\n` + fill(T([`Act {n} of {m} - {os} ({y})`, `Acte {n} sur {m} - {os} ({y})`]), { n: S.era, m: S.ng || S.era > 6 ? 7 : 6, os: E().os, y: E().year }) + (S.ng ? ` - ` + T([`New Game+`, `Nouvelle partie+`]) + (S.ng > 1 ? ` ${S.ng}` : ``) + ` (` + T([`production`, `production`]) + ` x${fmt(ngMul())})` : ``)); },
   dlgOk() { const cb = dlgCb; const v = $(`dlgI`).value; dlgCb = dlgNoCb = null; dlgClose(); if (cb) cb(v); },
   dlgNo() { const cb = dlgNoCb; dlgCb = dlgNoCb = null; dlgClose(); if (cb) cb(); },
   pclaim: () => tkClaim(),
@@ -784,6 +786,9 @@ function render() {
   const b = document.body.classList;
   b.toggle(`e0`, S.era === 0); b.toggle(`e1`, S.era >= 1);
   for (let i = 1; i <= 6; i++) b.toggle(`s` + i, S.era >= 1 && E().skin === i);
+  // QUANTUM-OS (act 7) is drawn over the Winbows 12 look
+  b.toggle(`q7`, S.era === 7);
+  if (S.era !== 7) b.remove(`q7flip`, `q7mirror`);
   b.toggle(`nocursor`, S.era === 0 || (S.era === 1 && !S.run.cursor));
   b.toggle(`cga`, S.era === 1 && !!S.run.cga);
   b.toggle(`noanim`, !S.opt.anim);
@@ -826,7 +831,7 @@ function restart(d) {
   for (const k in cache) delete cache[k];
   if (saverOn) { saverOn = false; saverStop(); }
   busy = false; noSave = false; H = null; dlgCb = dlgNoCb = null; dq.length = 0; tq.length = 0; drag = null; saverOn = false;
-  for (const id of [`boot`, `bsod`, `safe`, `dead`, `notif`, `fin`, `saver`, `dlg`, `drop`, `toast`, `stray`, `tStray`]) if ($(id)) $(id).classList.remove(`on`, `green`);
+  for (const id of [`boot`, `bsod`, `safe`, `dead`, `notif`, `fin`, `saver`, `dlg`, `drop`, `toast`, `stray`, `tStray`]) if ($(id)) $(id).classList.remove(`on`, `green`, `q`);
   document.body.classList.remove(`flick`, `lag`, `shake`);
   load(d === undefined ? undefined : d && JSON.parse(JSON.stringify(d)));
   start();

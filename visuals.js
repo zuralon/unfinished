@@ -8,6 +8,7 @@ const VIZ_OF = {
   4: { auto: `click`, browser: `iexp`, media: `winamp`, p2p: `wire2`, craft: `craft`, seti: `seti`, web: `weblog` },
   5: { auto: `taps`, farm: `farm`, birds: `birds`, tok: `tok`, crush: `crush`, cloud: `sync` },
   6: { auto: `click`, stream: [`winamp`, `music`], tube: [`wire2`, `tube`], vr: [`craft`, `vr`], cgame: [`iexp`, `cgame`], gpt: [`seti`, `gpt`], quantum: [`weblog`, `qubit`] },
+  7: { auto: `click`, cat: `catbox`, dice: `dice`, tunnel: `tunnel`, loop: `loop`, multi: `worlds`, hole: `hole`, last: `qubit` },
 };
 function vizOf(id) { const v = (VIZ_OF[S.era] || {})[id]; return Array.isArray(v) ? v[recoded(id) ? 1 : 0] : v; }
 
@@ -30,7 +31,7 @@ function arrow(x, X, Y, s, c, o) { x.fillStyle = c; x.strokeStyle = o; x.lineWid
 const VIZ = {
   // an arrow flies to the pixel and clicks it
   click(x, w, h, t) {
-    const e = S.era, bg = e === 2 ? `#000` : `#fff`, fg = [, `#000`, `#55ff55`, `#000080`, `#3c9f3c`, , `#005fb8`][e];
+    const e = S.era, bg = e === 2 ? `#000` : `#fff`, fg = [, `#000`, `#55ff55`, `#000080`, `#3c9f3c`, , `#005fb8`, `#6c5ce7`][e];
     box(x, bg, 0, 0, w, h);
     const k = fr(t / 1.2), px = w / 2, py = h / 2, cx = px + 60 * (1 - Math.min(1, k * 2.2)) * Math.cos(t), cy = py + 30 * (1 - Math.min(1, k * 2.2));
     const press = k > 0.45 && k < 0.6;
@@ -242,6 +243,64 @@ const VIZ = {
     const a = T(VT.answer), k = Math.floor(fr(t / 8) * a.length * 1.4), s = a.slice(0, k);
     box(x, `#fff`, 8, 36, w - 40, h - 44); say(x, s.slice(0, 30), 14, 48, 11, `#111`); say(x, s.slice(30), 14, 64, 11, `#111`);
     if (k < a.length && fr(t * 2) < 0.5) box(x, `#111`, 16 + Math.min(30, s.length) * 5.4, 42, 6, 12);
+  },
+  // QUANTUM-OS
+  // the box shakes; now and then two eyes look out
+  catbox(x, w, h, t) {
+    box(x, `#140c2a`, 0, 0, w, h);
+    const ready = !(S.x.catT > 0), sh = ready ? Math.sin(t * 25) * (fr(t / 2.5) < 0.25 ? 2 : 0) : 0, bx = w / 2 - 34 + sh, by = h / 2 - 18;
+    box(x, `#b07d48`, bx, by, 68, 40); box(x, `#8a5d31`, bx - 4, by - 8, 76, 10); box(x, `#d9a066`, bx + 30, by, 8, 40);
+    if (fr(t / 4) > 0.7) { ball(x, bx + 22, by - 13, 3, `#ffe066`); ball(x, bx + 46, by - 13, 3, `#ffe066`); ball(x, bx + 22, by - 13, 1.3, `#000`); ball(x, bx + 46, by - 13, 1.3, `#000`); }
+    say(x, ready ? `?` : `|vivant⟩ + |mort⟩`.replace(`vivant`, T([`alive`, `vivant`])).replace(`mort`, T([`dead`, `mort`])), w / 2, by + 52, ready ? 18 : 11, `#a29bfe`, `center`, true);
+  },
+  // God rolls: the die tumbles, then shows the current multiplier
+  dice(x, w, h, t) {
+    box(x, `#140c2a`, 0, 0, w, h);
+    const k = fr(t / 5), roll = k > 0.85, s = 34, cx = w / 2 - 50, cy = h / 2;
+    x.save(); x.translate(cx, cy); x.rotate(roll ? (k - 0.85) * 40 : 0);
+    x.fillStyle = `#e74c3c`; x.beginPath(); x.roundRect ? x.roundRect(-s / 2, -s / 2, s, s, 6) : x.rect(-s / 2, -s / 2, s, s); x.fill();
+    const n = roll ? 1 + (t * 13 | 0) % 6 : 1 + Math.min(5, Math.round(diceM() * 2)), P = { 1: [[0, 0]], 2: [[-1, -1], [1, 1]], 3: [[-1, -1], [0, 0], [1, 1]], 4: [[-1, -1], [1, -1], [-1, 1], [1, 1]], 5: [[-1, -1], [1, -1], [0, 0], [-1, 1], [1, 1]], 6: [[-1, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [1, 1]] }[n];
+    for (const [a, b] of P) ball(x, a * 9, b * 9, 3.2, `#fff`);
+    x.restore();
+    say(x, `x${String(diceM()).replace(`.`, S.lang === `fr` ? `,` : `.`)}`, cx + 40, cy, 22, `#ffd166`, `left`, true);
+  },
+  // a miner walks into a wall and comes out the other side, without a hole
+  tunnel(x, w, h, t) {
+    box(x, `#1b1430`, 0, 0, w, h);
+    const wx = w / 2 - 6; box(x, `#6d5a8c`, wx, 6, 12, h - 12);
+    for (let y = 8; y < h - 8; y += 10) box(x, `#5a4878`, wx + ((y / 10) % 2 ? 0 : 6), y, 6, 1);
+    const k = fr(t / 3), px = 20 + k * (w - 40), inWall = Math.abs(px - w / 2) < 14;
+    x.globalAlpha = inWall ? 0.35 : 1; box(x, `#ffd166`, px - 5, h / 2 - 8, 10, 14); box(x, `#f39c4a`, px - 6, h / 2 - 12, 12, 5); x.globalAlpha = 1;
+    if (k > 0.55) say(x, `+${fmtR(progRate(prog(`tunnel`)))}`, w - 30, 14, 11, `#a29bfe`, `right`, true);
+  },
+  // the same second, over and over: the hand goes back, the counter goes up
+  loop(x, w, h, t) {
+    box(x, `#140c2a`, 0, 0, w, h);
+    const cx = 52, cy = h / 2, r = h * 0.36, k = fr(t / 2);
+    x.strokeStyle = `#6c5ce7`; x.lineWidth = 3; x.beginPath(); x.arc(cx, cy, r, 0, 7); x.stroke();
+    x.strokeStyle = `#ffd166`; x.beginPath(); x.moveTo(cx, cy); x.lineTo(cx + Math.sin(k * 6.28) * r * 0.8, cy - Math.cos(k * 6.28) * r * 0.8); x.stroke();
+    say(x, T([`Same second, again`, `La même seconde, encore`]), cx + r + 14, cy - 10, 12, `#fff`, `left`, true);
+    say(x, `#${1 + (t / 2 | 0)}`, cx + r + 14, cy + 10, 12, `#a29bfe`);
+  },
+  // a row of universes, each with its own little pixel, sending it home
+  worlds(x, w, h, t) {
+    box(x, `#0b0820`, 0, 0, w, h);
+    for (let i = 0; i < 5; i++) {
+      const cx = 30 + i * (w - 60) / 4, cy = h / 2 + Math.sin(t + i) * 6, c = [`#3498db`, `#9b59b6`, `#2ecc71`, `#e67e22`, `#e84393`][i];
+      ball(x, cx, cy, 14, c); box(x, `#fff`, cx - 2, cy - 2, 4, 4);
+      const k = fr(t / 1.5 + i * 0.2); x.globalAlpha = 1 - k; box(x, `#ffd166`, cx - 2, cy - 2 - k * 30, 4, 4); x.globalAlpha = 1;
+    }
+  },
+  // the black hole spins and slowly swallows pixels; it gets bigger over time
+  hole(x, w, h, t) {
+    box(x, `#05030c`, 0, 0, w, h);
+    const cx = w / 2, cy = h / 2, r = 10 + 6 * (holeM() - 1);
+    for (let i = 0; i < 14; i++) {
+      const a = t * 1.4 + i * 0.45, d = (1 - fr(t / 4 + i / 14)) * 70 + r;
+      x.globalAlpha = 0.8; box(x, `#ffd166`, cx + Math.cos(a) * d - 1.5, cy + Math.sin(a) * d * 0.45 - 1.5, 3, 3);
+    }
+    x.globalAlpha = 1; x.strokeStyle = `#ff8c1a`; x.lineWidth = 2; x.beginPath(); x.ellipse(cx, cy, r + 8, (r + 8) * 0.35, 0, 0, 7); x.stroke();
+    ball(x, cx, cy, r, `#000`); say(x, `x${(Math.round(holeM() * 100) / 100).toString().replace(`.`, S.lang === `fr` ? `,` : `.`)}`, w - 10, 14, 11, `#ff8c1a`, `right`, true);
   },
   qubit(x, w, h, t) {
     box(x, `#0b1023`, 0, 0, w, h);

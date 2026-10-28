@@ -81,7 +81,11 @@ ERA[6] = {
     { r: `gpu`, s: [{ to: 2, c: 30000 }, { to: 4, c: 3.8e6 }, { to: 8, c: 1.2e8 }, { to: 16, c: 3e9 }, { to: 32, c: 1.7e11 }, { to: 64, c: 5.4e12 }],
       t: [`Graphics card {a} -> {b}`, `Carte graphique {a} -> {b}`], d: [`Copixel recodes faster. The card is bigger than the computer.`, `Copixel recode plus vite. La carte est plus grosse que l'ordinateur.`] },
   ],
-  end: { c: 4e15, t: [`Let the AI finish the game`, `Laisser l'IA finir le jeu`], d: [`Requires every hardware upgrade. This is the end.`, `Nécessite toutes les améliorations matérielles. C'est la fin.`], go: [`Finish it`, `Finir`] },
+  // in New Game+, letting the AI finish leads to act 7 instead of the ending
+  get end() {
+    return S && S.ng ? { c: 4e15, t: [`Let the AI finish the game. Again.`, `Laisser l'IA finir le jeu. Encore.`], d: [`Requires every hardware upgrade. Copixel looks like it remembers something.`, `Nécessite toutes les améliorations matérielles. Copixel a l'air de se souvenir de quelque chose.`], go: [`Let it try`, `Le laisser essayer`] }
+      : { c: 4e15, t: [`Let the AI finish the game`, `Laisser l'IA finir le jeu`], d: [`Requires every hardware upgrade. This is the end.`, `Nécessite toutes les améliorations matérielles. C'est la fin.`], go: [`Finish it`, `Finir`] };
+  },
   MS: [[`m1m`, 1e6], [`m1b`, 1e9], [`m1t`, 1e12]],
   PA: [
     { id: `premium`, cost: 2.7e13, g: 1.5, t: [`Premium tier`, `Formule Premium`], d: [`All production x1.5. Same thing, with a golden badge.`, `Toute la production x1,5. La même chose, avec un badge doré.`] },
@@ -250,9 +254,10 @@ ERA[6] = {
       // seen already: show the end screen again, free, so New Game+ stays reachable after "Keep playing"
       if (S.once.fin) { busy = true; return ERA[6].finScreen(); }
       if (S.px < E().end.c) return noPx();
+      if (S.ng) return endEra();
       ERA[6].finale();
     },
-    keep() { $(`fin`).classList.remove(`on`, `green`); busy = false; },
+    keep() { $(`fin`).classList.remove(`on`, `green`, `q`); busy = false; },
     ngplus() {
       const keep = { ach: S.ach, st: S.st, lang: S.lang, opt: S.opt, life: S.life, time: S.time, clicks: S.clicks, logs: S.logs, ng: (S.ng || 0) + 1 };
       restart(Object.assign(fresh(), keep));

@@ -551,6 +551,31 @@ html body .win:has(.hk6) .title b,html body .win:has(.hk6) .title .ti{visibility
 .hk6 .hw:hover,.hk6 .tl:hover{background:#3b78ff;color:#fff}
 .hk6 .tl{color:#cccccc}
 .meter small{font-size:.9em;opacity:.75;margin-left:1px}
+/* ---------- QUANTUM-OS (act 7): the Winbows 12 look, in two states at once ---------- */
+body.s6.q7 #desk{background:radial-gradient(circle at 30% 35%,rgba(108,92,231,.55),transparent 45%),radial-gradient(circle at 72% 65%,rgba(0,206,201,.35),transparent 45%),radial-gradient(1px 1px at 12% 20%,#fff,transparent),radial-gradient(1px 1px at 82% 14%,#fff,transparent),radial-gradient(1.5px 1.5px at 64% 82%,#fff,transparent),radial-gradient(1px 1px at 38% 70%,#fff,transparent),radial-gradient(1px 1px at 90% 48%,#fff,transparent),linear-gradient(160deg,#0b0620,#1a0f3d 50%,#05020f);transition:transform .9s cubic-bezier(.6,-0.3,.4,1.3)}
+body.s6.q7 #desk:before{background:radial-gradient(ellipse 18% 7% at 62% 50%,transparent 60%,rgba(162,155,254,.35) 63%,transparent 68%),radial-gradient(ellipse 7% 18% at 62% 50%,transparent 60%,rgba(0,206,201,.3) 63%,transparent 68%);animation:qspin 40s linear infinite;mix-blend-mode:screen}
+@keyframes qspin{to{filter:hue-rotate(360deg)}}
+/* every window exists slightly twice */
+body.s6.q7 .win{box-shadow:-3px 0 0 rgba(0,229,255,.35),3px 0 0 rgba(255,0,200,.35),0 18px 44px rgba(0,0,0,.5)!important;animation:qjit 7s steps(1) infinite}
+@keyframes qjit{0%,96%{box-shadow:-3px 0 0 rgba(0,229,255,.35),3px 0 0 rgba(255,0,200,.35),0 18px 44px rgba(0,0,0,.5)}97%{box-shadow:-9px 2px 0 rgba(0,229,255,.5),9px -2px 0 rgba(255,0,200,.5),0 18px 44px rgba(0,0,0,.5)}98%{box-shadow:5px 0 0 rgba(0,229,255,.45),-5px 0 0 rgba(255,0,200,.45),0 18px 44px rgba(0,0,0,.5)}}
+body.s6.q7 .win .title b{text-shadow:-1px 0 rgba(0,229,255,.7),1px 0 rgba(255,0,200,.7)!important}
+body.s6.q7 .win .row.can .btn{background:#6c5ce7!important;border-color:#6c5ce7!important;border-bottom-color:#4834d4!important}
+body.s6.q7 #task{background:rgba(20,10,45,.85)!important;color:#e8e4ff}
+body.noanim.q7 .win,body.noanim.q7 #desk:before{animation:none}
+/* decoherence */
+body.q7flip #desk{transform:rotate(180deg)}
+body.q7mirror #desk{transform:scaleX(-1)}
+/* the Heisenberg score */
+.qq{color:#a29bfe;text-shadow:-1px 0 rgba(0,229,255,.7),1px 0 rgba(255,0,200,.7);animation:blink 1.4s steps(2) infinite}
+.qs{font-size:11px;margin-top:6px}
+/* the shell in two tabs at once */
+.hk7 .wtab.ghost{opacity:.45;filter:hue-rotate(160deg);margin-left:-60px;transform:translateY(-2px)}
+.hk7 .wtab i{background:#6c5ce7}
+/* the second ending */
+#fin.q{background:radial-gradient(circle at 50% 40%,#2a1660,#07031a 70%)}
+#fin.green.q{background:radial-gradient(circle at 50% 40%,#2a1660,#07031a 70%);color:#c8bfff;text-shadow:-1px 0 rgba(0,229,255,.6),1px 0 rgba(255,0,200,.6)}
+html body #fin.q .fb .btn{color:#c8bfff!important;border-color:#a29bfe!important}
+html body #fin.q .fb .btn:hover{background:#a29bfe!important;color:#07031a!important}
 #bezel{display:none}
 body.s5.notch:not(.apphome):not(.drag) #icons{visibility:hidden}
 body.s5.notch #bezel{display:block;position:fixed;left:calc(50% - var(--pw)/2 - 12px);top:calc(50% - var(--ph)/2 - 12px);width:calc(var(--pw) + 24px);height:calc(var(--ph) + 24px);box-sizing:border-box;border:12px solid #000;border-radius:54px;pointer-events:none;z-index:100006;box-shadow:0 0 0 3px #c4c4c9,0 0 0 5px #6e6e73}
@@ -732,6 +757,9 @@ body.s6 #dlgB .btn{flex:1;padding:6px 12px!important}
 body.s6 #dlgB [data-act="dlgOk"]{background:#005fb8!important;border-color:#005fb8!important;color:#fff!important}
 body.s6 #toast{right:12px;bottom:60px;width:360px;max-width:92vw;padding:14px 16px;background:rgba(243,243,243,.97)!important;border:1px solid rgba(0,0,0,.1)!important;border-radius:8px!important;box-shadow:0 12px 32px rgba(0,0,0,.32)!important;color:#1a1a1a}
 body.s6 #toast:before{content:'Winbows 12';display:block;font-size:12px;color:#5c5c5c;margin-bottom:6px}
+body.s6.q7 #toast:before{content:'QUANTUM-OS \221E'}
+/* the title needs room next to the three caption buttons */
+body.s6 #w-score,.win.new#w-score,body.s6 #w-clock,.win.new#w-clock{min-width:250px}
 body.s6 .p0{background:#0067c0}
 body.s6 .p1{background:#7a5af5}
 body.s6 .p2{background:#00b294}
@@ -854,16 +882,17 @@ body.flick{animation:fl .12s steps(2) 8}
 <div id="boot"><div><i></i>PIXEL-OS 1<br><br><span class="dim">Welcome. Mostly.</span></div></div>
 <div id="dlg"><div class="win"><div class="title"><b id="dlgH">PIXEL-OS</b></div><div class="body"><div id="dlgT"></div><textarea id="dlgI" spellcheck="false"></textarea><div id="dlgB"></div></div></div></div>
 
-<script src="data.js?v=46"></script>
-<script src="era2.js?v=46"></script>
-<script src="era3.js?v=46"></script>
-<script src="era4.js?v=46"></script>
-<script src="era5.js?v=46"></script>
-<script src="era6.js?v=46"></script>
-<script src="icons.js?v=46"></script>
-<script src="savers.js?v=46"></script>
-<script src="visuals.js?v=46"></script>
-<script src="postit.js?v=46"></script>
-<script src="game.js?v=46"></script>
+<script src="data.js?v=50"></script>
+<script src="era2.js?v=50"></script>
+<script src="era3.js?v=50"></script>
+<script src="era4.js?v=50"></script>
+<script src="era5.js?v=50"></script>
+<script src="era6.js?v=50"></script>
+<script src="era7.js?v=50"></script>
+<script src="icons.js?v=50"></script>
+<script src="savers.js?v=50"></script>
+<script src="visuals.js?v=50"></script>
+<script src="postit.js?v=50"></script>
+<script src="game.js?v=50"></script>
 </body>
 </html>

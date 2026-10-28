@@ -14,7 +14,7 @@
 
 **PIXEL-OS** est un jeu incrémental (clicker) où tout prend de la mémoire, même l'interface. Ton score, tes couleurs, ton curseur de souris : ce sont des programmes qui occupent de la place. Impossible de tout faire tourner en même temps : tu choisis, tu fermes des fenêtres, tu fais de la place.
 
-Tu commences dans un terminal vert, tu trouves une carte perforée, puis tu traverses six systèmes d'exploitation, chacun avec son nouveau problème.
+Tu commences dans un terminal vert, tu trouves une carte perforée, puis tu traverses six systèmes d'exploitation (sept, si tu recommences), chacun avec son nouveau problème.
 
 ### Les époques
 
@@ -27,6 +27,7 @@ Tu commences dans un terminal vert, tu trouves une carte perforée, puis tu trav
 | 4 | Winbows XD (2001) | La bande passante, les pop-ups, la messagerie |
 | 5 | iBrick (2007), un téléphone | La batterie, les mises à jour forcées, de l'iBrick d'origine jusqu'à la tablette iSlab |
 | 6 | Winbows 12 | Les abonnements, et Copixel, une IA qui veut recoder ton ordinateur et finir le jeu à ta place |
+| 7 | QUANTUM-OS ∞ (à partir de la Nouvelle partie+) | Tout est incertain : le score ou la vitesse (jamais les deux), un chat dans une boîte, l'écran qui se retourne, des lettres de demain |
 
 ### Ce qu'il y a dedans
 
@@ -52,7 +53,7 @@ Aucune installation ni compilation : c'est du HTML et du JavaScript sans dépend
 | `index.html` | La page, et tout le style de chaque époque |
 | `game.js` | Le moteur : ressources, fenêtres, boutique, sauvegarde, succès |
 | `data.js` | Les textes communs, le tutoriel et l'acte 1 |
-| `era2.js` … `era6.js` | Un fichier par époque : programmes, améliorations, histoire, mécaniques |
+| `era2.js` … `era7.js` | Un fichier par époque : programmes, améliorations, histoire, mécaniques |
 | `icons.js` | Les icônes, dessinées dans le style de chaque époque |
 | `savers.js` | Les économiseurs d'écran |
 | `visuals.js` | Les animations dans les fenêtres des programmes |
@@ -68,7 +69,7 @@ Un jeu de **zuralon**.
 
 **PIXEL-OS** is an incremental game where everything uses memory, including the interface. Your score, your colors, even your mouse cursor are programs that take room. You can't run everything at once: you choose, close windows and make room.
 
-Start in a green terminal, find a punched card, then live through six operating systems, each with its own new problem.
+Start in a green terminal, find a punched card, then live through six operating systems (seven, if you start again), each with its own new problem.
 
 ### The eras
 
@@ -81,6 +82,7 @@ Start in a green terminal, find a punched card, then live through six operating 
 | 4 | Winbows XD (2001) | Bandwidth, pop-ups, instant messaging |
 | 5 | iBrick (2007), a phone | The battery, forced updates, from the first iBrick up to the iSlab tablet |
 | 6 | Winbows 12 | Subscriptions, and Copixel, an AI that wants to recode your computer and finish the game for you |
+| 7 | QUANTUM-OS ∞ (from New Game+ on) | Nothing is certain: your score or your speed (never both), a cat in a box, an upside-down screen, letters from tomorrow |
 
 ### What's inside
 
@@ -106,7 +108,7 @@ Nothing to install or build: it's plain HTML and JavaScript with no dependencies
 | `index.html` | The page, and all the styling for every era |
 | `game.js` | The engine: resources, windows, store, saving, achievements |
 | `data.js` | Shared texts, the tutorial and act 1 |
-| `era2.js` … `era6.js` | One file per era: programs, upgrades, story, mechanics |
+| `era2.js` … `era7.js` | One file per era: programs, upgrades, story, mechanics |
 | `icons.js` | Icons, drawn in the style of each era |
 | `savers.js` | Screensavers |
 | `visuals.js` | Animations inside program windows |
