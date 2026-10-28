@@ -4,7 +4,7 @@
 const UI = {
   en: {
     file: `File`, edit: `Edit`, help: `Help`, save: `Save`, exp: `Export save`, imp: `Import save`, hard: `Hard reset`,
-    lang: `Français`, sci: `Scientific notation`, anim: `Animations`, helpOff: `Help (not installed)`, about: `About`,
+    lang: `Français`, sci: `Scientific notation`, anim: `Animations and transitions`, helpOff: `Help (not installed)`, about: `About`,
     saved: `Saved.`, expQ: `Copy this code to keep your save:`, impQ: `Paste a save code:`, badImp: `That code is not a save.`, resetQ: `Erase EVERYTHING and start over?`,
     tabs: [`Programs`, `Patches`, `Hardware`], buy: c => `${c} px`, open: `open`, running: `running`, installing: n => `Installing ${n}`,
     oom: `Not enough memory.\nClose a program (X) to make room.`, ok: `OK`, ram: (u, t, f) => `${u} / ${t}` + (f ? `  (${f} fragmented)` : ``),
@@ -26,7 +26,7 @@ const UI = {
   },
   fr: {
     file: `Fichier`, edit: `Édition`, help: `Aide`, save: `Sauvegarder`, exp: `Exporter la sauvegarde`, imp: `Importer une sauvegarde`, hard: `Tout effacer`,
-    lang: `English`, sci: `Notation scientifique`, anim: `Animations`, helpOff: `Aide (non installée)`, about: `À propos`,
+    lang: `English`, sci: `Notation scientifique`, anim: `Animations et transitions`, helpOff: `Aide (non installée)`, about: `À propos`,
     saved: `Sauvegardé.`, expQ: `Copie ce code pour garder ta sauvegarde :`, impQ: `Colle un code de sauvegarde :`, badImp: `Ce code n'est pas une sauvegarde.`, resetQ: `Tout effacer et recommencer ?`,
     tabs: [`Programmes`, `Patchs`, `Matériel`], buy: c => `${c} px`, open: `ouvrir`, running: `lancé`, installing: n => `Installation de ${n}`,
     oom: `Mémoire insuffisante.\nFerme un programme (X) pour faire de la place.`, ok: `OK`, ram: (u, t, f) => `${u} / ${t}` + (f ? `  (${f} fragmentés)` : ``),
@@ -100,7 +100,7 @@ const TERM = {
   ach: [`> ACHIEVEMENT UNLOCKED: {n} (+1% PRODUCTION)`, `> SUCCÈS DÉBLOQUÉ : {n} (+1 % DE PRODUCTION)`],
   bought: [`> {n} INSTALLED.`, `> {n} INSTALLÉ.`],
   memOk: [`> MEMORY: {n} KB. THE FAN SOUNDS WORRIED.`, `> MÉMOIRE : {n} KO. LE VENTILATEUR A L'AIR INQUIET.`],
-  sys: [`SYSTEM`, `SYSTÈME`], langSw: [`FRANÇAIS`, `ENGLISH`], exp: [`EXPORT`, `EXPORTER`], imp: [`IMPORT`, `IMPORTER`], reset: [`RESET`, `EFFACER`], exit: [`EXIT`, `QUITTER`],
+  sys: [`SYSTEM`, `SYSTÈME`], langSw: [`FRANÇAIS`, `ENGLISH`], anim: [`ANIMATIONS: ON`, `ANIMATIONS : OUI`], animOff: [`ANIMATIONS: OFF`, `ANIMATIONS : NON`], exp: [`EXPORT`, `EXPORTER`], imp: [`IMPORT`, `IMPORTER`], reset: [`RESET`, `EFFACER`], exit: [`EXIT`, `QUITTER`],
   // tutorial messages, shown once each
   tut: {
     start: [`> GAME.EXE LOADED. CLICK THE BLOCK TO GENERATE PIXELS.`, `> GAME.EXE CHARGÉ. CLIQUE SUR LE BLOC POUR GÉNÉRER DES PIXELS.`],

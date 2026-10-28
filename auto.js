@@ -30,10 +30,19 @@ function autoTick(dt) {
   autoT = 0;
   const e = E(), lim = Math.max(S.total * 2.5, 60);
   if (autoOn(`hw`)) for (const tr of e.HW) { const st = tr.s[S.hw[tr.r] || 0]; if (st && S.px >= hwC(st)) A.hw(tr.r); }
-  if (autoOn(`pat`)) for (const p of e.PA) if (!S.patch[p.id] && (!p.req || S.bought[p.req]) && S.px >= patC(p)) A.pat(p.id);
+  // save up for the next goal (hardware, or the end of the act): meanwhile only small purchases (under 5% of the goal),
+  // or ones that still leave enough for the goal
+  const steps = e.HW.map(tr => tr.s[S.hw[tr.r] || 0]).filter(Boolean).map(hwC);
+  const goal = steps.length ? Math.min(...steps) : e.end ? e.end.c : 0;
+  const small = c => !goal || S.px - c >= goal || c <= goal * 0.05;
+  if (autoOn(`pat`)) for (const p of e.PA) if (!S.patch[p.id] && (!p.req || S.bought[p.req]) && S.px >= patC(p) && small(patC(p))) A.pat(p.id);
   if (autoOn(`prog`)) {
+    // a virus eats pixels: close it
+    if (S.run.virus) closeProg(`virus`);
+    // the iBrick: plug in before the battery dies, unplug when full
+    if (S.era === 5 && !S.x.dead) { if (S.x.bat < 25 && !S.x.plug) S.x.plug = 1; else if (S.x.bat > 95 && S.x.plug) S.x.plug = 0; }
     for (let i = 0; i < 20; i++) {
-      const can = e.P.filter(p => p.cost && !p.hidden && !p.nostore && (p.multi || !S.bought[p.id]) && (S.bought[p.id] || costOf(p.id) <= lim) && S.px >= costOf(p.id) && !(e.queued && e.queued(p.id)));
+      const can = e.P.filter(p => p.cost && !p.hidden && !p.nostore && (p.multi || !S.bought[p.id]) && (S.bought[p.id] || costOf(p.id) <= lim) && S.px >= costOf(p.id) && small(costOf(p.id)) && !(e.queued && e.queued(p.id)));
       if (!can.length) break;
       const p = can.sort((a, b) => costOf(a.id) - costOf(b.id))[0], c = costOf(p.id);
       S.px -= c;
@@ -42,15 +51,27 @@ function autoTick(dt) {
       if (S.bought[p.id] === 1) note(N(p.id));
       mileCheck(p.id);
     }
-    // launch what fits: new programs once, then more copies of the producers
-    for (const p of e.P) {
-      if (!S.bought[p.id] || p.fixed || (e.canOpen && !e.canOpen(p.id))) continue;
-      if (!p.multi) { if (!S.run[p.id] && kbOf(p.id) <= free()) { S.run[p.id] = 1; makeWin(p.id); if (e.opened) e.opened(p.id); } continue; }
-      while ((S.run[p.id] || 0) < S.bought[p.id] && kbOf(p.id) <= free()) { S.run[p.id] = (S.run[p.id] || 0) + 1; makeWin(p.id); }
+    // launch what fits in memory AND in the processor and the connection: an overloaded CPU slows everything down
+    // while subscriptions still cost full price
+    const room = id => kbOf(id) <= free() && (!e.start.cpu || use(`cpu`) + cpuOf(id) <= cap(`cpu`)) && (!e.start.bw || use(`bw`) + (prog(id).bw || 0) <= cap(`bw`));
+    for (const p of e.P) if (!p.multi && !p.fixed && S.bought[p.id] && !S.run[p.id] && !(e.canOpen && !e.canOpen(p.id)) && room(p.id)) { S.run[p.id] = 1; makeWin(p.id); if (e.opened) e.opened(p.id); }
+    // producers: the best pixels per unit of memory first; a better one takes the place of a worse one
+    const val = p => progRate(p) / Math.max(0.001, kbOf(p.id)), prods = e.P.filter(p => p.multi && p.prod && S.bought[p.id] && !(e.canOpen && !e.canOpen(p.id))).sort((a, b) => val(b) - val(a));
+    for (let i = 0; i < prods.length; i++) {
+      const p = prods[i];
+      while ((S.run[p.id] || 0) < S.bought[p.id]) {
+        if (!room(p.id)) {
+          const worse = prods.slice(i + 1).reverse().find(q => S.run[q.id]);
+          if (!worse) break;
+          if (--S.run[worse.id] === 0) killWin(worse.id);
+          continue;
+        }
+        S.run[p.id] = (S.run[p.id] || 0) + 1; makeWin(p.id);
+      }
     }
   }
   // the last act (6, or 7 in New Game+) ends with its own scene: never skipped
-  if (autoOn(`end`) && (S.era < 6 || (S.era === 6 && S.ng)) && e.HW.every(tr => (S.hw[tr.r] || 0) >= tr.s.length) && S.px >= e.end.c && !$(`dlg`).classList.contains(`on`)) endEraNow();
+  if (autoOn(`end`) && (S.era < 6 || (S.era === 6 && S.ng)) && e.HW.every(tr => (S.hw[tr.r] || 0) >= tr.s.length) && S.px >= e.end.c) endEraNow();
 }
 
 // ---------- the rule of the run ----------
