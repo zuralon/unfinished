@@ -892,6 +892,7 @@ function start() {
     else if (!S.z.seen.boot) zBoot();
   } else if (S.era === 8) p2Start();
   else {
+    setTimeout(p2Tell, 2600);
     for (const id in S.run) if (S.run[id] && prog(id)) makeWin(id);
     setTimeout(relayout, 300);
     if (!S.once[`boot` + S.era]) {

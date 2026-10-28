@@ -153,7 +153,7 @@ const TREE_A = {
     if (n.k === `ramlv` || n.k === `kit`) treeBoot();
     treeRender(); save();
     // the last skill opens PIXEL-OS 2
-    if (!S.once.p2un && p2Unlocked()) { S.once.p2un = 1; dlg(T(X8.unlock), { cancel: true, okT: `PIXEL-OS 2 →`, ok: () => p2Enter() }); }
+    p2Tell();
   },
   treset() { S.tree = { core: 1 }; TV.sel = `core`; treeRender(); save(); },
 };

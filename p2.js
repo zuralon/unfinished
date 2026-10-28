@@ -240,7 +240,7 @@ const X8 = {
   away: [`While you were away ({t}), the painting earned {n} paint.`, `Pendant ton absence ({t}), le tableau a rapporté {n} de peinture.`],
   enter: [`PIXEL-OS 2: the second pixel`, `PIXEL-OS 2 : le deuxième pixel`],
   enterBack: [`PIXEL-OS 2`, `PIXEL-OS 2`],
-  unlock: [`The whole tree is learned. Something opens: PIXEL-OS 2.`, `Tout l'arbre est appris. Quelque chose s'ouvre : PIXEL-OS 2.`],
+  unlock: [`The second pixel is learned. A new game opens: PIXEL-OS 2. You can go there now, or later from the skill tree or the File / Start menu.`, `Le deuxième pixel est appris. Un nouveau jeu s'ouvre : PIXEL-OS 2. Tu peux y aller maintenant, ou plus tard depuis l'arbre de compétences ou le menu Fichier / Démarrer.`],
   intro: [
     [`> ALL SKILLS LEARNED`, `> TOUTES LES COMPÉTENCES APPRISES`],
     [`THE DEV: wait. you learned everything? everything everything?`, `LE DEV : attends. tu as tout appris ? vraiment tout ?`],
@@ -281,7 +281,10 @@ const X8 = {
 };
 
 // ---------- state ----------
-const p2Unlocked = () => !!S.p2 || TNODES.every(n => tlv(n.id) >= n.max);
+// opened by the last skill of the crown (or a tree learned to the end); kept forever, even after a tree reset
+const p2Unlocked = () => { if (!S.st.p2un && (S.p2 || TR(`x5`) || TNODES.every(n => tlv(n.id) >= n.max))) S.st.p2un = 1; return !!S.st.p2un; };
+// tell it once, out loud: a menu entry alone is easy to miss
+function p2Tell() { if (S.era !== 8 && p2Unlocked() && !S.st.p2told) { S.st.p2told = 1; dlg(T(X8.unlock), { cancel: true, okT: `PIXEL-OS 2 →`, ok: () => p2Enter() }); } }
 const p2Fresh = () => ({ pic: 0, grid: [], px: 0, tot: 0, gal: [], up: {}, chat: [], bat: {}, crash: {}, roll: 1, rollT: 5, crashT: 40, copT: 0, bugs: [], bugT: 50, sel: `g`, tool: `paint`, sym: 0, clicks: 0, placed: 0, squash: 0, reboots: 0, fin: 0, seen: {} });
 const p2k = () => P2K[S.p2.pic];
 const p2pic = () => P2PICS[S.p2.pic];
