@@ -68,9 +68,13 @@ function fmt(n) {
   return (n / 1000 ** e).toFixed(2) + SUF[e];
 }
 // "+300000 px/s" written in a description follows the number format chosen in the options
-const PS_RE = /^\+[\d.,]+( millions?)? px\/s/;
+const PS_RE = /^\+[\d.,]+( (?:million|milliard|billion|trillion)s?)? px\/s/;
+// the subscription is already shown, formatted, in the line above the description
+const SUB_RE = /\s*(?:Subscription|Abonnement) ?: [\d.,]+( (?:million|milliard|billion|trillion)s?)? px\/s\./;
 function desc(id) {
-  const t = T(E().D[id] || [``, ``]), p = prog(id);
+  let t = T(E().D[id] || [``, ``]);
+  const p = prog(id);
+  if (p && p.sub) t = t.replace(SUB_RE, ``);
   return p && p.prod && PS_RE.test(t) ? t.replace(PS_RE, `+${fmt(p.prod)} px/s`) : t;
 }
 const fmtR = n => (n < 100 ? (Math.round(n * 10) / 10).toLocaleString(loc()) : fmt(n));
