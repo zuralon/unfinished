@@ -98,7 +98,7 @@ function gain(n) { S.px += n; S.total += n; S.life += n; if (!scoreVisible()) S.
 const zUsed = () => 1 + S.z.countOn + 2 * S.z.autoOn;
 const zAutoCost = () => Math.ceil(P0[2].cost * P0[2].k ** S.z.auto);
 const zPerSec = () => S.z.autoOn * (S.z.pa.a0 ? 2 : 1) * achMul() * treeP();
-const zClick = () => (S.z.pa.c0 ? 2 : 1) * achMul() * treeC();
+const zClick = () => (S.z.pa.c0 ? 2 : 1) * achMul() * treeC() * ruleC();
 
 let OWN = [];
 const refreshOwn = () => { OWN = S.era ? E().PA.filter(p => S.patch[p.id]) : []; };
@@ -108,16 +108,16 @@ function kbOf(id) { let k = prog(id).kb; for (const p of OWN) if (p.z && p.z[0] 
 function cpuOf(id) { let k = prog(id).cpu || 0; for (const p of OWN) if (p.u && p.u[0] === id) k = Math.min(k, p.u[1]); return k; }
 const RES = { ram: id => kbOf(id), cpu: id => cpuOf(id), bw: id => prog(id).bw || 0, bat: id => prog(id).bat || 0 };
 function track(r) { return E().HW.find(h => h.r === r); }
-function cap(r) { const t = track(r), lv = S.hw[r] || 0; return Math.floor((lv ? t.s[lv - 1].to : E().start[r]) * treeCap(r)); }
+function cap(r) { const t = track(r), lv = S.hw[r] || 0; return Math.floor((lv ? t.s[lv - 1].to : E().start[r]) * treeCap(r) * ruleRam(r)); }
 function use(r) { let u = r === `ram` ? S.frag : 0; for (const id in S.run) if (S.run[id] && PDX[S.era][id]) u += S.run[id] * RES[r](id); return u; }
 const free = () => cap(`ram`) - use(`ram`);
-const costOf = id => { const p = prog(id); return Math.ceil((p.multi ? p.cost * p.k ** ((S.bought[id] || 0) + (E().queued ? E().queued(id) : 0)) : p.cost) * treeCost()); };
+const costOf = id => { const p = prog(id); return Math.ceil((p.multi ? p.cost * p.k ** ((S.bought[id] || 0) + (E().queued ? E().queued(id) : 0)) : p.cost) * treeCost() * ruleCost()); };
 const cpuF = () => (E().start.cpu ? Math.min(1, cap(`cpu`) / Math.max(1, use(`cpu`))) : 1);
 const bwF = () => (E().start.bw ? Math.min(1, cap(`bw`) / Math.max(1, use(`bw`))) : 1);
 let saverOn = false;
 const saverMul = () => (saverOn ? (flag(`saver5`) ? 5 : 3) + tsum(`idle`) : 1);
 function progRate(p) {
-  let f = p.prod * progMul(p.id);
+  let f = p.prod * progMul(p.id) * mileMul(p.id);
   if (p.bw) f *= bwF();
   if (E().factor) f *= E().factor(p);
   return f;
@@ -127,14 +127,14 @@ function basePerSec() {
   let s = 0;
   for (const p of E().P) if (p.prod && S.run[p.id]) s += S.run[p.id] * progRate(p);
   for (const p of OWN) if (p.g) s *= p.g;
-  return s * cpuF() * achMul() * treeP() * (E().mul2 ? E().mul2() : 1);
+  return s * cpuF() * achMul() * treeP() * ruleP() * (E().mul2 ? E().mul2() : 1);
 }
 const perSec = () => (S.era === 0 ? zPerSec() : basePerSec() * saverMul() * boostOf(`p`));
 function clickPow() {
   if (S.era === 0) return zClick();
   let c = typeof E().click === `function` ? E().click() : E().click || 1;
   for (const p of OWN) if (p.c) c *= p.c;
-  c *= achMul() * boostOf(`c`) * treeC();
+  c *= achMul() * boostOf(`c`) * treeC() * ruleC();
   if (flag(`macro`)) c += basePerSec() * 0.05;
   c += basePerSec() * tsum(`cpx`);
   return c;
@@ -231,7 +231,7 @@ function zRender() {
   setH(`tHint`, S.clicks < 3 ? T(TERM.block) : ``);
   setH(`tMenu`, H && H.era === 0 ? hackHtml() : zMenu());
   setH(`tLog`, z.log.map(e => `<div class="${e.id === z.n ? `new` : ``}">${esc(T(e.t))}</div>`).join(``));
-  setH(`tSys`, `${T(TERM.sys)}: <span class="tl" data-act="lang">[${T(TERM.langSw)}]</span><span class="tl" data-act="exp">[${T(TERM.exp)}]</span><span class="tl" data-act="imp">[${T(TERM.imp)}]</span><span class="tl" data-act="hard">[${T(TERM.reset)}]</span>` + (treeOpen() ? `<span class="tl" data-act="tree">[${T(TRT.title)}]</span>` : ``));
+  setH(`tSys`, `${T(TERM.sys)}: <span class="tl" data-act="lang">[${T(TERM.langSw)}]</span><span class="tl" data-act="exp">[${T(TERM.exp)}]</span><span class="tl" data-act="imp">[${T(TERM.imp)}]</span><span class="tl" data-act="hard">[${T(TERM.reset)}]</span>` + (treeOpen() ? `<span class="tl" data-act="tree">[${T(TRT.title)}]</span>` : ``) + (autoOpen() ? `<span class="tl" data-act="auto">[${T(AUT.title)}]</span>` : ``));
 }
 const st0 = { next: 25, left: 0, good: true };
 function zStrayTick(dt) {
@@ -248,7 +248,7 @@ function zStrayTick(dt) {
 function zCatch() {
   st0.left = 0; $(`tStray`).classList.remove(`on`);
   if (st0.good) { const n = Math.max(15, zPerSec() * 20 + zClick() * 10); gain(n); S.st.good++; zSay(tf(TERM.good, { n: fmt(n) })); }
-  else { const n = Math.floor(S.px * 0.15); S.px -= n; S.st.bad++; zSay(tf(TERM.bad, { n: fmt(n) })); }
+  else { const n = Math.floor(S.px * Math.min(0.5, 0.15 * rv)); S.px -= n; S.st.bad++; zSay(tf(TERM.bad, { n: fmt(n) })); }
 }
 async function toEra1() {
   busy = true;
@@ -432,7 +432,7 @@ function buyProg(id) {
   got(id);
 }
 function got(id) {
-  S.bought[id] = (S.bought[id] || 0) + 1; S.st.buys = (S.st.buys || 0) + 1;
+  S.bought[id] = (S.bought[id] || 0) + 1; S.st.buys = (S.st.buys || 0) + 1; mileCheck(id);
   if (S.bought[id] === 1) note(N(id));
   openProg(id, true);
 }
@@ -468,7 +468,7 @@ const BODY = {
         if (p.req && !S.bought[p.req]) continue;
         if (S.patch[p.id]) { owned += `<div class="row got"><span>${T(p.t)}<small>${T(p.d)}</small></span><span>${u.patchOwned}</span></div>`; continue; }
         if (p.cost > lim) { tease(); continue; }
-        h += row(`pat:${p.id}`, T(p.t), T(p.d), u.buy(fmt(p.cost)), S.px >= p.cost);
+        h += row(`pat:${p.id}`, T(p.t), T(p.d), u.buy(fmt(patC(p))), S.px >= patC(p));
       }
     } else {
       let maxed = true;
@@ -520,7 +520,8 @@ const BODY = {
 };
 function multiBody(p) {
   const r = S.run[p.id] || 0;
-  return `<div class="dim">${desc(p.id)}</div><div class="h">${U().runN(r, S.bought[p.id] || 0)} - ${fmtR(r * progRate(p) * cpuF() * achMul())} px/s</div><div style="display:flex;gap:6px;margin-top:6px;align-items:center"><button class="btn" data-act="less:${p.id}">-1</button><button class="btn" data-act="more:${p.id}">+1</button><span class="dim">${progSub(p)}</span></div>`;
+  const mn = mileNext(p.id);
+  return `<div class="dim">${desc(p.id)}</div><div class="h">${U().runN(r, S.bought[p.id] || 0)} - ${fmtR(r * progRate(p) * cpuF() * achMul())} px/s</div>${mn ? `<div class="dim mile">${fill(T(MLT.next), { n: mn })}</div>` : ``}<div style="display:flex;gap:6px;margin-top:6px;align-items:center"><button class="btn" data-act="less:${p.id}">-1</button><button class="btn" data-act="more:${p.id}">+1</button><span class="dim">${progSub(p)}</span></div>`;
 }
 function winBody(id) {
   if (id === `game` || !W[id]) return;
@@ -530,7 +531,7 @@ function winBody(id) {
 }
 
 const MENU = {
-  file: u => [[`save`, u.save], [`exp`, u.exp], [`imp`, u.imp], ...(treeOpen() ? [[`tree`, T(TRT.title), `sepi`]] : []), [`hard`, u.hard, `sepi`]],
+  file: u => [[`save`, u.save], [`exp`, u.exp], [`imp`, u.imp], ...(treeOpen() ? [[`tree`, T(TRT.title), `sepi`]] : []), ...(autoOpen() ? [[`auto`, T(AUT.title)]] : []), [`hard`, u.hard, `sepi`]],
   edit: u => [[`lang`, u.lang], [`sci`, (S.opt.sci ? `[x] ` : `[ ] `) + u.sci], [`anim`, (S.opt.anim ? `[x] ` : `[ ] `) + u.anim]],
   help: u => (S.run.help ? [[`tip`, u.tip], [`about`, u.about, `sepi`]] : [[``, u.helpOff, `dis`], [`about`, u.about, `sepi`]]),
 };
@@ -553,7 +554,7 @@ function toggleMenu(m) {
   document.querySelectorAll(`[data-menu]`).forEach(x => x.classList.toggle(`on`, x === m));
 }
 // the start menu of each Winbows: 95 has its side banner, XD its two columns, 12 its centered panel
-const MI_ICON = { tree: `sprout`, save: `floppy`, exp: `arrows`, imp: `box`, hard: `stop`, lang: `globe`, sci: `calc`, anim: `star`, tip: `help`, about: `window`, shutdown: `stop` };
+const MI_ICON = { auto: `gear`, tree: `sprout`, save: `floppy`, exp: `arrows`, imp: `box`, hard: `stop`, lang: `globe`, sci: `calc`, anim: `star`, tip: `help`, about: `window`, shutdown: `stop` };
 function startHtml(items) {
   const sk = E().skin, st = sk === 3 ? `w95` : sk === 4 ? `xp` : `w11`;
   const mi = ([a, t, c], cls = ``) => `<div class="mi ${c || ``} ${cls}"${a ? ` data-act="${a}"` : ``}><i style="background-image:url('${iconUrl(MI_ICON[a] || `window`, st)}')"></i><span>${t}</span></div>`;
@@ -581,7 +582,7 @@ function strayTick(dt) {
     return;
   }
   if (S.total < 200 || busy || (s.next -= dt) > 0) return;
-  s.next = (25 + Math.random() * 25) / (1 + tsum(`strayF`)); s.left = 5; s.good = Math.random() < 0.65;
+  s.next = (25 + Math.random() * 25) / (1 + tsum(`strayF`) + (rule().strayF || 0)); s.left = 5; s.good = Math.random() < 0.65;
   s.x = 100 + Math.random() * (innerWidth - 200); s.y = 60 + Math.random() * (innerHeight * 0.5);
   const a = Math.random() * Math.PI * 2, sp = (140 + Math.random() * 80) * (flag(`strayslow`) ? 0.6 : 1);
   s.vx = Math.cos(a) * sp; s.vy = Math.sin(a) * sp;
@@ -590,7 +591,8 @@ function strayTick(dt) {
 }
 function catchStray(e) {
   st1.left = 0; $(`stray`).className = ``;
-  if (st1.good) { const n = Math.max(20, basePerSec() * 30 + clickPow() * 20) * (flag(`strayx3`) ? 3 : 1); gain(n); S.st.good++; fx(e, `+` + fmt(n)); }
+  const rv = rule().strayV || 1;
+  if (st1.good) { const n = Math.max(20, basePerSec() * 30 + clickPow() * 20) * (flag(`strayx3`) ? 3 : 1) * rv; gain(n); S.st.good++; fx(e, `+` + fmt(n)); }
   else if (flag(`magnet`)) toast(U().blocked);
   else { const n = Math.floor(S.px * 0.15); S.px -= n; S.st.bad++; fx(e, `-` + fmt(n)); }
 }
@@ -658,16 +660,18 @@ function checkAch() {
 function endEra() {
   const next = ERA[S.era + 1], dv = DELIVERY[S.era];
   if (!next) return dlg(T(E().soon || [UI.en.soon, UI.fr.soon]));
-  dlg(dv.text.map(T).join(`\n\n`), { title: T(dv.item), okT: T(E().end.go || [`Insert`, `Insérer`]), cancel: true, ok: async () => {
-    busy = true; S.px -= E().end.c;
-    // skill tree: 2 reset points per act finished
-    if (treeOpen()) S.tp = (S.tp || 0) + 2;
-    document.body.classList.add(`flick`);
-    await wait(1100);
-    const keep = { pos: {} };
-    Object.assign(S, eraFresh(S.era + 1), keep);
-    restart(S);
-  } });
+  dlg(dv.text.map(T).join(`\n\n`), { title: T(dv.item), okT: T(E().end.go || [`Insert`, `Insérer`]), cancel: true, ok: endEraNow });
+}
+// the act is paid: flicker, then the next act (also called by the automation, without the dialog)
+async function endEraNow() {
+  busy = true; S.px -= E().end.c;
+  // skill tree: 2 reset points per act finished
+  if (treeOpen()) S.tp = (S.tp || 0) + 2;
+  document.body.classList.add(`flick`);
+  await wait(1100);
+  const keep = { pos: {} };
+  Object.assign(S, eraFresh(S.era + 1), keep);
+  restart(S);
 }
 
 // ---------- actions ----------
@@ -699,8 +703,9 @@ const A = {
   hb: k => hackBracket(+k),
   hexit() { H = null; },
   ...TREE_A,
+  ...AUTO_A,
   buy: id => buyProg(id),
-  pat(id) { const p = E().PA.find(x => x.id === id); if (S.patch[id]) return; if (S.px < p.cost) return noPx(); S.px -= p.cost; S.patch[id] = 1; S.st.buys = (S.st.buys || 0) + 1; refreshOwn(); },
+  pat(id) { const p = E().PA.find(x => x.id === id); if (S.patch[id]) return; if (S.px < patC(p)) return noPx(); S.px -= patC(p); S.patch[id] = 1; S.st.buys = (S.st.buys || 0) + 1; refreshOwn(); },
   end() { const en = E().end; if (S.px < en.c) return noPx(); endEra(); },
   open: id => openProg(id),
   close: id => closeProg(id),
@@ -730,7 +735,7 @@ const A = {
   nyi(k) { const l = NYI[k]; toast(T(l[Math.random() * l.length | 0])); },
   pfold() { S.opt.pfold = S.opt.pfold ? 0 : 1; },
 };
-const SAFE = new Set([`lang`, `exp`, `imp`, `hard`, `dlgOk`, `dlgNo`, `save`, `keep`, `ngplus`, `bsodOk`, `safeOk`, `tree`, `tclose`, `tbuy`, `treset`, `tsel`, `tcenter`]);
+const SAFE = new Set([`lang`, `exp`, `imp`, `hard`, `dlgOk`, `dlgNo`, `save`, `keep`, `ngplus`, `bsodOk`, `safeOk`, `tree`, `tclose`, `tbuy`, `treset`, `tsel`, `tcenter`, `auto`, `aclose`, `atog`, `rpick`]);
 function act(s) {
   const i = s.indexOf(`:`), k = i < 0 ? s : s.slice(0, i), v = i < 0 ? `` : s.slice(i + 1);
   if (busy && !SAFE.has(k)) return;
@@ -797,6 +802,7 @@ function render() {
   // QUANTUM-OS (act 7) is drawn over the Winbows 12 look
   b.toggle(`q7`, S.era === 7);
   if (S.era !== 7) b.remove(`q7flip`, `q7mirror`);
+  b.toggle(`ruleflip`, S.era >= 1 && !!rule().flip);
   b.toggle(`nocursor`, S.era === 0 || (S.era === 1 && !S.run.cursor));
   b.toggle(`cga`, S.era === 1 && !!S.run.cga);
   b.toggle(`noanim`, !S.opt.anim);
@@ -816,7 +822,7 @@ function tick() {
     gain(perSec() * dt); fragTick(dt); milestones();
     // skill tree: free clicks per second, and the house cat
     if (tsum(`cps`)) gain(clickPow() * tsum(`cps`) * dt);
-    treeTick(dt);
+    treeTick(dt); ruleTick(dt); autoTick(dt);
     if (E().tick) E().tick(dt);
     piTick(dt);
   }

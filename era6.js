@@ -260,8 +260,12 @@ ERA[6] = {
     keep() { $(`fin`).classList.remove(`on`, `green`, `q`); busy = false; },
     ngplus() {
       const ng = (S.ng || 0) + 1, pts = treeGain(ng, S.era === 7);
-      const keep = { ach: S.ach, st: S.st, lang: S.lang, opt: S.opt, life: S.life, time: S.time, clicks: S.clicks, logs: S.logs, ng, tree: S.tree || { core: 1 }, treeV: 2, tp: (S.tp || 0) + pts };
-      restart(Object.assign(fresh(), keep));
+      const keep = { ach: S.ach, st: S.st, lang: S.lang, opt: S.opt, life: S.life, time: S.time, clicks: S.clicks, logs: S.logs, ng, tree: S.tree || { core: 1 }, treeV: 2, tp: (S.tp || 0) + pts, auto: S.auto || {} };
+      const d = Object.assign(fresh(), keep);
+      // Skip the tutorial: start straight at act 1
+      if (autoOn(`skip0`)) Object.assign(d.z, { paid: 1, seen: { boot: 1 } });
+      restart(d);
+      if (ng >= 2) rulesShow();
       if (pts) setTimeout(() => { zSay(tf(TRT.gain, { n: pts })); }, 2500);
     },
   },
@@ -273,7 +277,8 @@ ERA[6] = {
     for (const l of X6.fin) {
       const d = document.createElement(`div`);
       d.textContent = T(l); d.className = /^(THE DEV|LE DEV)/.test(T(l)) ? `dev` : ``;
-      box.appendChild(d); await wait(T(l).length * 35 + 900);
+      // already seen once: the lines come fast
+      box.appendChild(d); await wait((T(l).length * 35 + 900) * (S.st.fin ? 0.15 : 1));
     }
     await wait(1500);
     ERA[6].finScreen();

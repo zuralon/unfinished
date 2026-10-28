@@ -137,7 +137,7 @@ const EV = [
 function evApply(f) {
   if (!f) return;
   if (f.lose) S.px -= Math.floor(S.px * f.lose);
-  if (f.g) gain(Math.max(basePerSec() * f.g, clickPow() * f.g * 0.5, 20) * (1 + tsum(`ev`)));
+  if (f.g) gain(Math.max(basePerSec() * f.g, clickPow() * f.g * 0.5, 20) * (1 + tsum(`ev`)) * (rule().evV || 1));
   if (f.b) { const [k, m, s] = f.b; S.x.boost = S.x.boost || {}; S.x.boost[k] = { m, s }; }
   if (f.bet) return evApply(Math.random() < f.bet[0] ? f.bet[1] : f.bet[2]);
   if (f.m) toast(T(f.m));
@@ -161,7 +161,7 @@ function piTick(dt) {
   if (cur && cur.gone && cur.gone() && !tkNow().done) { x.tk = null; x.tkT = 3; }
   if (!x.tk && (x.tkT = (x.tkT ?? 8) - dt) <= 0) tkNew();
   for (const k in x.boost || {}) if ((x.boost[k].s -= dt) <= 0) delete x.boost[k];
-  if ((x.evT = (x.evT ?? rnd(200, 300)) - dt) <= 0 && !$(`dlg`).classList.contains(`on`) && !x.dead) { x.evT = rnd(300, 480); evFire(); }
+  if ((x.evT = (x.evT ?? rnd(200, 300)) - dt) <= 0 && !$(`dlg`).classList.contains(`on`) && !x.dead) { x.evT = rnd(300, 480) / (rule().ev || 1); evFire(); }
 }
 function piRender() {
   const el = $(`postit`);

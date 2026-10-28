@@ -271,7 +271,8 @@ ERA[7] = {
     for (const l of X7.fin) {
       const d = document.createElement(`div`);
       d.textContent = T(l); d.className = /^(THE DEV|LE DEV|THE CAT|LE CHAT)/.test(T(l)) ? `dev` : ``;
-      box.appendChild(d); await wait(T(l).length * 35 + 900);
+      // already seen once: the lines come fast
+      box.appendChild(d); await wait((T(l).length * 35 + 900) * (S.st.fin7 ? 0.15 : 1));
     }
     await wait(1500);
     ERA[7].finScreen();

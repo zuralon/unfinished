@@ -37,6 +37,7 @@ Tu commences dans un terminal vert, tu trouves une carte perforée, puis tu trav
 - Sur le téléphone : gestes façon iOS, applis lancées, écran partagé sur la tablette.
 - Plus de 60 succès, la progression hors ligne, une vraie fin et une **Nouvelle partie+** qui double la production à chaque fois (x2, x4, x8…).
 - À partir de la 2e Nouvelle partie+, un **arbre de compétences** : 37 compétences en 4 branches (Usine, Doigt, Raccourcis, Chaos), des niveaux, des pierres angulaires et des synergies. Chaque recommencement et chaque acte fini rapportent des points, et l'arbre se réinitialise gratuitement.
+- Pour rejouer sans corvée : **automatisation** (achats, matériel, actes suivants, tuto sauté), **paliers** qui doublent la production des programmes, et une **règle différente à chaque partie** à choisir parmi trois.
 - Environ 10 heures pour la première partie, en français et en anglais.
 - Sauvegarde automatique, plus export et import d'une sauvegarde dans les menus.
 
@@ -60,6 +61,7 @@ Aucune installation ni compilation : c'est du HTML et du JavaScript sans dépend
 | `visuals.js` | Les animations dans les fenêtres des programmes |
 | `postit.js` | Le post-it du développeur et les dilemmes |
 | `tree.js` | L'arbre de compétences |
+| `auto.js` | L'automatisation, les paliers et les règles de partie |
 
 Les textes sont stockés par paires `[anglais, français]` et affichés avec `T()`.
 
@@ -94,6 +96,7 @@ Start in a green terminal, find a punched card, then live through six operating 
 - On the phone: iOS-style gestures, running apps, Split View on the tablet.
 - More than 60 achievements, offline progress, a real ending and a **New Game+** that doubles production every time (x2, x4, x8…).
 - From the second New Game+ on, a **skill tree**: 37 skills in 4 branches (Factory, Finger, Shortcuts, Chaos), with levels, keystones and synergies. Each restart and each finished act gives points, and the tree resets for free.
+- To replay without the chores: **automation** (buying, hardware, next acts, skipping the tutorial), **milestones** that double program production, and a **different rule each run**, picked among three.
 - About 10 hours for a first run, in English and French.
 - Saves automatically, with save export and import in the menus.
 
@@ -117,6 +120,7 @@ Nothing to install or build: it's plain HTML and JavaScript with no dependencies
 | `visuals.js` | Animations inside program windows |
 | `postit.js` | The developer's post-it and the events |
 | `tree.js` | The skill tree |
+| `auto.js` | Automation, milestones and run rules |
 
 Texts are stored as `[english, french]` pairs and shown with `T()`.
 
