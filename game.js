@@ -657,6 +657,7 @@ function checkAch() {
 }
 
 // ---------- era change ----------
+const panelOpen = () => [`tree`, `autop`, `rules`].some(id => $(id) && $(id).classList.contains(`on`));
 function endEra() {
   const next = ERA[S.era + 1], dv = DELIVERY[S.era];
   if (!next) return dlg(T(E().soon || [UI.en.soon, UI.fr.soon]));
@@ -667,11 +668,14 @@ async function endEraNow() {
   busy = true; S.px -= E().end.c;
   // skill tree: 2 reset points per act finished
   if (treeOpen()) S.tp = (S.tp || 0) + 2;
-  document.body.classList.add(`flick`);
-  await wait(1100);
+  // a panel is open (skill tree, automation, rule): the act changes quietly behind it, no fade, no boot screen
+  if (!panelOpen()) { document.body.classList.add(`flick`); await wait(1100); }
   const keep = { pos: {} };
   Object.assign(S, eraFresh(S.era + 1), keep);
   restart(S);
+  // the open panel shows the new points
+  if ($(`tree`) && $(`tree`).classList.contains(`on`)) treeRender();
+  if ($(`autop`) && $(`autop`).classList.contains(`on`)) autoRender();
 }
 
 // ---------- actions ----------
@@ -868,7 +872,7 @@ function start() {
       S.once[`boot` + S.era] = 1; note(N(`start`)); treeBoot();
       if (E().enter) E().enter();
       $(`boot`).innerHTML = `<div><i></i>${E().os}<br><br><span class="dim">${esc(T(E().bootT || [`Welcome. Mostly.`, `Bienvenue. En gros.`]))}</span></div>`;
-      $(`boot`).classList.add(`on`);
+      if (!panelOpen()) $(`boot`).classList.add(`on`);
       setTimeout(() => $(`boot`).classList.remove(`on`), 2200);
     }
     const away = (Date.now() - S.last) / 1000;
