@@ -638,9 +638,13 @@ function deskRender() {
   if (!e.startMenu) setH(`bar`, `<span class="logo"></span><span class="m" data-menu="file">${u.file}</span><span class="m" data-menu="edit">${u.edit}</span><span class="m" data-menu="help">${u.help}</span><span class="r">${e.os}</span>`);
   const ics = e.P.filter(p => (e.allIcons ? (S.bought[p.id] || p.fixed) && !p.hidden : !p.fixed && S.bought[p.id] && !S.run[p.id])), ich = p => `<div class="ic" data-act="open:${p.id}">${icon(p.id)}<span>${p.file}</span></div>`;
   setH(`icons`, e.dock ? ics.filter(p => !e.dock.includes(p.id)).map(ich).join(``) + (e.memBar ? e.memBar(false) : ``) + `<div class="dots"><i class="on"></i><i></i></div><div class="dock">${ics.filter(p => e.dock.includes(p.id)).map(ich).join(``)}</div>` : ics.map(ich).join(``));
-  let r = ``;
-  for (const p of e.P) { const n = (S.run[p.id] || 0) * kbOf(p.id); for (let i = 0; i < n; i++) r += `<i class="p${p.i % 3}" title="${p.file}"></i>`; }
-  setH(`ram`, r + `<i class="f"></i>`.repeat(S.frag) + `<i></i>`.repeat(Math.max(0, free())));
+  // one block per memory unit, squeezed to 48 blocks at most so a big memory stays on one line
+  const cells = [];
+  for (const p of e.P) { const n = (S.run[p.id] || 0) * kbOf(p.id); for (let i = 0; i < n; i++) cells.push(`<i class="p${p.i % 3}" title="${p.file}"></i>`); }
+  for (let i = 0; i < S.frag; i++) cells.push(`<i class="f"></i>`);
+  for (let i = 0; i < free(); i++) cells.push(`<i></i>`);
+  const nb = Math.min(cells.length, 48);
+  setH(`ram`, Array.from({ length: nb }, (_, j) => cells[Math.floor((j + 0.5) * cells.length / nb)]).join(``));
   setH(`ramT`, u.ram(ramTxt(use(`ram`)), ramTxt(cap(`ram`)), S.frag) + freeTxt(free(), ramTxt));
   setH(`res`, [`cpu`, `bw`, `bat`].filter(x => e.start[x] && x !== `bat`).map(meter).join(``) + (e.taskExtra ? e.taskExtra() : ``));
   setH(`startB`, e.startMenu ? `<span class="m sb" data-menu="start"><i></i>${T(e.startMenu)}</span>` : ``);
