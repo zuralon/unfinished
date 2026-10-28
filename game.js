@@ -51,6 +51,8 @@ function load(d) {
   if (d) for (const k of [`z`, `st`, `opt`, `x`, `hw`]) S[k] = Object.assign(fresh()[k] || {}, d[k]);
   if (d && d.rl && !d.hw) S.hw.ram = d.rl;
   if (d && !d.x) S.once.boot1 = 1;
+  // saves from before the skill tree: points for the New Game+ already done
+  if (S.ng >= 2 && S.tp == null) S.tp = 3 * (S.ng - 1);
 }
 function save() {
   if (noSave) return;
@@ -95,12 +97,12 @@ function gain(n) { S.px += n; S.total += n; S.life += n; if (!scoreVisible()) S.
 
 const zUsed = () => 1 + S.z.countOn + 2 * S.z.autoOn;
 const zAutoCost = () => Math.ceil(P0[2].cost * P0[2].k ** S.z.auto);
-const zPerSec = () => S.z.autoOn * (S.z.pa.a0 ? 2 : 1) * achMul();
-const zClick = () => (S.z.pa.c0 ? 2 : 1) * achMul();
+const zPerSec = () => S.z.autoOn * (S.z.pa.a0 ? 2 : 1) * achMul() * treeP();
+const zClick = () => (S.z.pa.c0 ? 2 : 1) * achMul() * treeC();
 
 let OWN = [];
 const refreshOwn = () => { OWN = S.era ? E().PA.filter(p => S.patch[p.id]) : []; };
-const flag = f => OWN.some(p => p.f === f);
+const flag = f => OWN.some(p => p.f === f) || treeFlag(f);
 function progMul(id) { let m = 1; for (const p of OWN) if (p.m && p.m[0] === id) m *= p.m[1]; return m; }
 function kbOf(id) { let k = prog(id).kb; for (const p of OWN) if (p.z && p.z[0] === id) k = Math.min(k, p.z[1]); return k; }
 function cpuOf(id) { let k = prog(id).cpu || 0; for (const p of OWN) if (p.u && p.u[0] === id) k = Math.min(k, p.u[1]); return k; }
@@ -125,15 +127,16 @@ function basePerSec() {
   let s = 0;
   for (const p of E().P) if (p.prod && S.run[p.id]) s += S.run[p.id] * progRate(p);
   for (const p of OWN) if (p.g) s *= p.g;
-  return s * cpuF() * achMul() * (E().mul2 ? E().mul2() : 1);
+  return s * cpuF() * achMul() * treeP() * (E().mul2 ? E().mul2() : 1);
 }
 const perSec = () => (S.era === 0 ? zPerSec() : basePerSec() * saverMul() * boostOf(`p`));
 function clickPow() {
   if (S.era === 0) return zClick();
   let c = typeof E().click === `function` ? E().click() : E().click || 1;
   for (const p of OWN) if (p.c) c *= p.c;
-  c *= achMul() * boostOf(`c`);
+  c *= achMul() * boostOf(`c`) * treeC();
   if (flag(`macro`)) c += basePerSec() * 0.05;
+  if (TR(`c2`)) c += basePerSec() * 0.02;
   return c;
 }
 
@@ -228,7 +231,7 @@ function zRender() {
   setH(`tHint`, S.clicks < 3 ? T(TERM.block) : ``);
   setH(`tMenu`, H && H.era === 0 ? hackHtml() : zMenu());
   setH(`tLog`, z.log.map(e => `<div class="${e.id === z.n ? `new` : ``}">${esc(T(e.t))}</div>`).join(``));
-  setH(`tSys`, `${T(TERM.sys)}: <span class="tl" data-act="lang">[${T(TERM.langSw)}]</span><span class="tl" data-act="exp">[${T(TERM.exp)}]</span><span class="tl" data-act="imp">[${T(TERM.imp)}]</span><span class="tl" data-act="hard">[${T(TERM.reset)}]</span>`);
+  setH(`tSys`, `${T(TERM.sys)}: <span class="tl" data-act="lang">[${T(TERM.langSw)}]</span><span class="tl" data-act="exp">[${T(TERM.exp)}]</span><span class="tl" data-act="imp">[${T(TERM.imp)}]</span><span class="tl" data-act="hard">[${T(TERM.reset)}]</span>` + (treeOpen() ? `<span class="tl" data-act="tree">[${T(TRT.title)}]</span>` : ``));
 }
 const st0 = { next: 25, left: 0, good: true };
 function zStrayTick(dt) {
@@ -473,7 +476,7 @@ const BODY = {
         const lv = S.hw[tr.r] || 0, st = tr.s[lv];
         if (!st) continue;
         maxed = false;
-        h += row(`hw:${tr.r}`, fill(T(tr.t), { a: resTxt(tr.r, cap(tr.r)), b: resTxt(tr.r, st.to) }), T(tr.d), u.buy(fmt(st.c)), S.px >= st.c);
+        h += row(`hw:${tr.r}`, fill(T(tr.t), { a: resTxt(tr.r, cap(tr.r)), b: resTxt(tr.r, st.to) }), T(tr.d), u.buy(fmt(hwC(st))), S.px >= hwC(st));
       }
       const en = E().end;
       // once seen, the ending is free to watch again (and leads to New Game+)
@@ -527,7 +530,7 @@ function winBody(id) {
 }
 
 const MENU = {
-  file: u => [[`save`, u.save], [`exp`, u.exp], [`imp`, u.imp], [`hard`, u.hard, `sepi`]],
+  file: u => [[`save`, u.save], [`exp`, u.exp], [`imp`, u.imp], ...(treeOpen() ? [[`tree`, T(TRT.title), `sepi`]] : []), [`hard`, u.hard, `sepi`]],
   edit: u => [[`lang`, u.lang], [`sci`, (S.opt.sci ? `[x] ` : `[ ] `) + u.sci], [`anim`, (S.opt.anim ? `[x] ` : `[ ] `) + u.anim]],
   help: u => (S.run.help ? [[`tip`, u.tip], [`about`, u.about, `sepi`]] : [[``, u.helpOff, `dis`], [`about`, u.about, `sepi`]]),
 };
@@ -550,7 +553,7 @@ function toggleMenu(m) {
   document.querySelectorAll(`[data-menu]`).forEach(x => x.classList.toggle(`on`, x === m));
 }
 // the start menu of each Winbows: 95 has its side banner, XD its two columns, 12 its centered panel
-const MI_ICON = { save: `floppy`, exp: `arrows`, imp: `box`, hard: `stop`, lang: `globe`, sci: `calc`, anim: `star`, tip: `help`, about: `window`, shutdown: `stop` };
+const MI_ICON = { tree: `sprout`, save: `floppy`, exp: `arrows`, imp: `box`, hard: `stop`, lang: `globe`, sci: `calc`, anim: `star`, tip: `help`, about: `window`, shutdown: `stop` };
 function startHtml(items) {
   const sk = E().skin, st = sk === 3 ? `w95` : sk === 4 ? `xp` : `w11`;
   const mi = ([a, t, c], cls = ``) => `<div class="mi ${c || ``} ${cls}"${a ? ` data-act="${a}"` : ``}><i style="background-image:url('${iconUrl(MI_ICON[a] || `window`, st)}')"></i><span>${t}</span></div>`;
@@ -686,13 +689,14 @@ const A = {
   hw(r) {
     const t = track(r), lv = S.hw[r] || 0, st = t.s[lv];
     if (!st) return;
-    if (S.px < st.c) return noPx();
-    S.px -= st.c; S.hw[r] = lv + 1; S.st.buys = (S.st.buys || 0) + 1;
+    if (S.px < hwC(st)) return noPx();
+    S.px -= hwC(st); S.hw[r] = lv + 1; S.st.buys = (S.st.buys || 0) + 1;
     note(N(r === `ram` ? `r` + st.to : r + st.to));
   },
   hg: w => hackGuess(w),
   hb: k => hackBracket(+k),
   hexit() { H = null; },
+  ...TREE_A,
   buy: id => buyProg(id),
   pat(id) { const p = E().PA.find(x => x.id === id); if (S.patch[id]) return; if (S.px < p.cost) return noPx(); S.px -= p.cost; S.patch[id] = 1; S.st.buys = (S.st.buys || 0) + 1; refreshOwn(); },
   end() { const en = E().end; if (S.px < en.c) return noPx(); endEra(); },
@@ -724,7 +728,7 @@ const A = {
   nyi(k) { const l = NYI[k]; toast(T(l[Math.random() * l.length | 0])); },
   pfold() { S.opt.pfold = S.opt.pfold ? 0 : 1; },
 };
-const SAFE = new Set([`lang`, `exp`, `imp`, `hard`, `dlgOk`, `dlgNo`, `save`, `keep`, `ngplus`, `bsodOk`, `safeOk`]);
+const SAFE = new Set([`lang`, `exp`, `imp`, `hard`, `dlgOk`, `dlgNo`, `save`, `keep`, `ngplus`, `bsodOk`, `safeOk`, `tree`, `tclose`, `tbuy`, `treset`]);
 function act(s) {
   const i = s.indexOf(`:`), k = i < 0 ? s : s.slice(0, i), v = i < 0 ? `` : s.slice(i + 1);
   if (busy && !SAFE.has(k)) return;
@@ -800,12 +804,14 @@ function tick() {
   const now = performance.now(), dt = Math.min((now - prev) / 1000, 2);
   prev = now;
   S.time += dt; S.hackCd = Math.max(0, S.hackCd - dt);
-  if (S.era === 0) { if (!busy) gain(zPerSec() * dt); zTriggers(); }
+  if (S.era === 0) { if (!busy) gain((zPerSec() + (TR(`c3`) ? zClick() * 5 : 0)) * dt); zTriggers(); }
   else if (!busy) {
     idle += dt;
     const on = !!S.run.saver && idle >= 20;
     if (on !== saverOn) { saverOn = on; $(`saver`).classList.toggle(`on`, on); if (on) { S.once.saverOn = 1; saverStart(); } else saverStop(); }
     gain(perSec() * dt); fragTick(dt); milestones();
+    // Ghost finger: 5 free clicks per second
+    if (TR(`c3`)) gain(clickPow() * 5 * dt);
     if (E().tick) E().tick(dt);
     piTick(dt);
   }
@@ -848,7 +854,7 @@ function start() {
     for (const id in S.run) if (S.run[id] && prog(id)) makeWin(id);
     setTimeout(relayout, 300);
     if (!S.once[`boot` + S.era]) {
-      S.once[`boot` + S.era] = 1; note(N(`start`));
+      S.once[`boot` + S.era] = 1; note(N(`start`)); treeRamStart();
       if (E().enter) E().enter();
       $(`boot`).innerHTML = `<div><i></i>${E().os}<br><br><span class="dim">${esc(T(E().bootT || [`Welcome. Mostly.`, `Bienvenue. En gros.`]))}</span></div>`;
       $(`boot`).classList.add(`on`);

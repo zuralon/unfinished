@@ -259,8 +259,10 @@ ERA[6] = {
     },
     keep() { $(`fin`).classList.remove(`on`, `green`, `q`); busy = false; },
     ngplus() {
-      const keep = { ach: S.ach, st: S.st, lang: S.lang, opt: S.opt, life: S.life, time: S.time, clicks: S.clicks, logs: S.logs, ng: (S.ng || 0) + 1 };
+      const ng = (S.ng || 0) + 1, pts = treeGain(ng, S.era === 7);
+      const keep = { ach: S.ach, st: S.st, lang: S.lang, opt: S.opt, life: S.life, time: S.time, clicks: S.clicks, logs: S.logs, ng, tree: S.tree || {}, tp: (S.tp || 0) + pts };
       restart(Object.assign(fresh(), keep));
+      if (pts) setTimeout(() => { zSay(tf(TRT.gain, { n: pts })); }, 2500);
     },
   },
   async finale() {

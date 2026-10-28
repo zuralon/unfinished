@@ -62,7 +62,7 @@ const TK = [
 function nice(v) { const p = 10 ** Math.max(0, Math.floor(Math.log10(Math.max(v, 1))) - 1); return Math.ceil(v / p) * p; }
 function multiPick() { return E().P.find(p => p.multi && p.prod && (S.bought[p.id] || 0) >= 2 && (S.run[p.id] || 0) < S.bought[p.id]); }
 
-const tkRew = r => Math.max(basePerSec() * 75 * r, clickPow() * 50 * r, 30);
+const tkRew = r => Math.max(basePerSec() * 75 * r, clickPow() * 50 * r, 30) * (TR(`u3`) ? 3 : 1);
 function tkNew() {
   // the first task of an era is always the easy one
   const x = S.x, list = x.tkLast ? TK.filter(t => t.id !== x.tkLast && (!t.ok || t.ok())) : [TK[0]];
