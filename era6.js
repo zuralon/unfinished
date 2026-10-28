@@ -260,7 +260,7 @@ ERA[6] = {
     keep() { $(`fin`).classList.remove(`on`, `green`, `q`); busy = false; },
     ngplus() {
       const ng = (S.ng || 0) + 1, pts = treeGain(ng, S.era === 7);
-      const keep = { ach: S.ach, st: S.st, lang: S.lang, opt: S.opt, life: S.life, time: S.time, clicks: S.clicks, logs: S.logs, ng, tree: S.tree || { core: 1 }, treeV: 2, tp: (S.tp || 0) + pts, auto: S.auto || {} };
+      const keep = { ach: S.ach, st: S.st, lang: S.lang, opt: S.opt, life: S.life, time: S.time, clicks: S.clicks, logs: S.logs, ng, tree: S.tree || { core: 1 }, treeV: 2, tp: (S.tp || 0) + pts, auto: S.auto || {}, p2: S.p2 };
       const d = Object.assign(fresh(), keep);
       // Skip the tutorial: start straight at act 1
       if (autoOn(`skip0`)) Object.assign(d.z, { paid: 1, seen: { boot: 1 } });

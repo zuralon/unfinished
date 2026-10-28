@@ -26,7 +26,7 @@ const autoOn = id => { const a = AUTOS.find(x => x.id === id); return !!(S.auto 
 const autoOpen = () => (S.ng || 0) >= 2;
 let autoT = 0;
 function autoTick(dt) {
-  if (!S.era || busy || (autoT += dt) < 0.5) return;
+  if (!S.era || busy || rule().noauto || (autoT += dt) < 0.5) return;
   autoT = 0;
   const e = E(), lim = Math.max(S.total * 2.5, 60);
   if (autoOn(`hw`)) for (const tr of e.HW) { const st = tr.s[S.hw[tr.r] || 0]; if (st && S.px >= hwC(st)) A.hw(tr.r); }
@@ -85,6 +85,11 @@ const RULES = [
   { id: `goldfish`, pts: 3, ram: 2, cost: 2, t: [`Goldfish memory`, `Mémoire de poisson rouge`], d: [`Memory x2, but everything costs twice as much.`, `Mémoire x2, mais tout coûte deux fois plus cher.`] },
   { id: `drama`, pts: 2, ev: 4, evV: 3, t: [`Drama queen`, `Tragédienne`], d: [`A dilemma every minute or so, with rewards x3.`, `Un dilemme toutes les minutes environ, avec des récompenses x3.`] },
   { id: `cats`, pts: 2, cat: 60, t: [`Cats everywhere`, `Des chats partout`], d: [`Schrödinger's cat brings a surprise every minute, in every act.`, `Le chat de Schrödinger apporte une surprise toutes les minutes, dans tous les actes.`] },
+  // challenges, from the tenth New Game+ on: slower runs for more points
+  { id: `marathon`, ng: 10, pts: 12, p: 0.25, t: [`Marathon`, `Marathon`], d: [`CHALLENGE. Production divided by 4 for the whole run.`, `DÉFI. Production divisée par 4 pendant toute la partie.`] },
+  { id: `amnesia`, ng: 10, pts: 10, noauto: 1, t: [`Amnesia`, `Amnésie`], d: [`CHALLENGE. The automation forgot everything: you do it all by hand this run.`, `DÉFI. L'automatisation a tout oublié : tu fais tout à la main pendant cette partie.`] },
+  { id: `inflation`, ng: 10, pts: 10, cost: 5, t: [`Hyperinflation`, `Hyperinflation`], d: [`CHALLENGE. Everything costs 5 times more.`, `DÉFI. Tout coûte 5 fois plus cher.`] },
+  { id: `onefinger`, ng: 10, pts: 8, c: 0.1, t: [`One finger`, `Un seul doigt`], d: [`CHALLENGE. Clicks divided by 10. Even the ghost ones.`, `DÉFI. Clics divisés par 10. Même ceux des fantômes.`] },
   { id: `glass`, pts: 4, p: 4, c: 4, ram: 0.5, t: [`Glass cannon`, `Canon de verre`], d: [`Production and clicks x4, but half the memory.`, `Production et clics x4, mais moitié moins de mémoire.`] },
 ];
 const rule = () => RULES.find(r => r.id === S.rule) || {};
@@ -96,8 +101,9 @@ const ruleRam = r => (r === `ram` ? rule().ram || 1 : 1);
 const RLT = { title: [`Pick the rule of this run`, `Choisis la règle de cette partie`], sub: [`Each rule changes the run and gives reset points ◆ right away.`, `Chaque règle change la partie et donne des points de reset ◆ tout de suite.`], none: [`No rule`, `Pas de règle`], pts: [`+{n} ◆`, `+{n} ◆`] };
 function rulesShow() {
   if (!$(`rules`)) document.body.insertAdjacentHTML(`beforeend`, `<div id="rules"></div>`);
-  const pick = shuffle(RULES.slice()).slice(0, 3);
-  $(`rules`).innerHTML = `<div class="rp"><h2>${T(RLT.title)}</h2><p>${T(RLT.sub)}</p><div class="rcs">${pick.map(r => `<div class="rc" data-act="rpick:${r.id}"><b>${T(r.t)}</b><span>${T(r.d)}</span><i>${fill(T(RLT.pts), { n: r.pts })}</i></div>`).join(``)}</div><button class="btn" data-act="rpick:none">${T(RLT.none)}</button></div>`;
+  // from the tenth New Game+ on, one of the three is a challenge
+  const pick = (S.ng || 0) >= 10 ? [...shuffle(RULES.filter(r => !r.ng)).slice(0, 2), shuffle(RULES.filter(r => r.ng))[0]] : shuffle(RULES.filter(r => !r.ng)).slice(0, 3);
+  $(`rules`).innerHTML = `<div class="rp"><h2>${T(RLT.title)}</h2><p>${T(RLT.sub)}</p><div class="rcs">${pick.map(r => `<div class="rc${r.ng ? ` hard` : ``}" data-act="rpick:${r.id}"><b>${T(r.t)}</b><span>${T(r.d)}</span><i>${fill(T(RLT.pts), { n: r.pts })}</i></div>`).join(``)}</div><button class="btn" data-act="rpick:none">${T(RLT.none)}</button></div>`;
   $(`rules`).classList.add(`on`);
 }
 let ruleCat = 60;
@@ -135,5 +141,6 @@ ACH.push(
   [`auto1`, [`Hands free`, `Sans les mains`], [`Turn on an automation.`, `Activer une automatisation.`], () => AUTOS.some(a => autoOn(a.id))],
   [`miles`, [`Milestone`, `Palier`], [`Reach a program milestone.`, `Atteindre un palier de programme.`], () => (S.st.miles || 0) >= 1],
   [`rules5`, [`House rules`, `Règles maison`], [`Play 5 runs with a rule.`, `Jouer 5 parties avec une règle.`], () => (S.st.rules || 0) >= 5],
+  [`hard1`, [`Challenger`, `Challenger`], [`Pick a challenge rule.`, `Choisir une règle défi.`], () => !!rule().ng],
   [`upside`, [`Downside up`, `À l'endroit de l'envers`], [`Pick the Upside down rule.`, `Choisir la règle À l'envers.`], () => S.rule === `upside`],
 );

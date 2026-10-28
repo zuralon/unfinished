@@ -231,7 +231,7 @@ function zRender() {
   setH(`tHint`, S.clicks < 3 ? T(TERM.block) : ``);
   setH(`tMenu`, H && H.era === 0 ? hackHtml() : zMenu());
   setH(`tLog`, z.log.map(e => `<div class="${e.id === z.n ? `new` : ``}">${esc(T(e.t))}</div>`).join(``));
-  setH(`tSys`, `${T(TERM.sys)}: <span class="tl" data-act="lang">[${T(TERM.langSw)}]</span><span class="tl" data-act="exp">[${T(TERM.exp)}]</span><span class="tl" data-act="imp">[${T(TERM.imp)}]</span><span class="tl" data-act="hard">[${T(TERM.reset)}]</span><span class="tl" data-act="anim">[${T(S.opt.anim ? TERM.anim : TERM.animOff)}]</span>` + (treeOpen() ? `<span class="tl" data-act="tree">[${T(TRT.title)}]</span>` : ``) + (autoOpen() ? `<span class="tl" data-act="auto">[${T(AUT.title)}]</span>` : ``));
+  setH(`tSys`, `${T(TERM.sys)}: <span class="tl" data-act="lang">[${T(TERM.langSw)}]</span><span class="tl" data-act="exp">[${T(TERM.exp)}]</span><span class="tl" data-act="imp">[${T(TERM.imp)}]</span><span class="tl" data-act="hard">[${T(TERM.reset)}]</span><span class="tl" data-act="anim">[${T(S.opt.anim ? TERM.anim : TERM.animOff)}]</span>` + (treeOpen() ? `<span class="tl" data-act="tree">[${T(TRT.title)}]</span>` : ``) + (autoOpen() ? `<span class="tl" data-act="auto">[${T(AUT.title)}]</span>` : ``) + (p2Unlocked() ? `<span class="tl" data-act="p2go">[PIXEL-OS 2]</span>` : ``));
 }
 const st0 = { next: 25, left: 0, good: true };
 function zStrayTick(dt) {
@@ -549,7 +549,7 @@ function winBody(id) {
 }
 
 const MENU = {
-  file: u => [[`save`, u.save], [`exp`, u.exp], [`imp`, u.imp], ...(treeOpen() ? [[`tree`, T(TRT.title), `sepi`]] : []), ...(autoOpen() ? [[`auto`, T(AUT.title)]] : []), [`hard`, u.hard, `sepi`]],
+  file: u => [[`save`, u.save], [`exp`, u.exp], [`imp`, u.imp], ...(treeOpen() ? [[`tree`, T(TRT.title), `sepi`]] : []), ...(autoOpen() ? [[`auto`, T(AUT.title)]] : []), ...(p2Unlocked() ? [[`p2go`, `PIXEL-OS 2`]] : []), [`hard`, u.hard, `sepi`]],
   edit: u => [[`lang`, u.lang], [`sci`, (S.opt.sci ? `[x] ` : `[ ] `) + u.sci], [`anim`, (S.opt.anim ? `[x] ` : `[ ] `) + u.anim]],
   help: u => (S.run.help ? [[`tip`, u.tip], [`about`, u.about, `sepi`]] : [[``, u.helpOff, `dis`], [`about`, u.about, `sepi`]]),
 };
@@ -756,8 +756,9 @@ const A = {
   pclaim: () => tkClaim(),
   nyi(k) { const l = NYI[k]; toast(T(l[Math.random() * l.length | 0])); },
   pfold() { S.opt.pfold = S.opt.pfold ? 0 : 1; },
+  p2go: () => p2Enter(),
 };
-const SAFE = new Set([`lang`, `exp`, `imp`, `hard`, `dlgOk`, `dlgNo`, `save`, `keep`, `ngplus`, `bsodOk`, `safeOk`, `tree`, `tclose`, `tbuy`, `treset`, `tsel`, `tcenter`, `auto`, `aclose`, `atog`, `rpick`, `anim`]);
+const SAFE = new Set([`lang`, `exp`, `imp`, `hard`, `dlgOk`, `dlgNo`, `save`, `keep`, `ngplus`, `bsodOk`, `safeOk`, `tree`, `tclose`, `tbuy`, `treset`, `tsel`, `tcenter`, `auto`, `aclose`, `atog`, `rpick`, `anim`, `p2free`, `p2back`]);
 function act(s) {
   const i = s.indexOf(`:`), k = i < 0 ? s : s.slice(0, i), v = i < 0 ? `` : s.slice(i + 1);
   if (busy && !SAFE.has(k)) return;
@@ -819,7 +820,7 @@ document.addEventListener(`visibilitychange`, () => { if (document.hidden) save(
 // ---------- loops ----------
 function render() {
   const b = document.body.classList;
-  b.toggle(`e0`, S.era === 0); b.toggle(`e1`, S.era >= 1);
+  b.toggle(`e0`, S.era === 0); b.toggle(`e1`, S.era >= 1 && S.era !== 8); b.toggle(`p2`, S.era === 8);
   for (let i = 1; i <= 6; i++) b.toggle(`s` + i, S.era >= 1 && E().skin === i);
   // QUANTUM-OS (act 7) is drawn over the Winbows 12 look
   b.toggle(`q7`, S.era === 7);
@@ -828,7 +829,7 @@ function render() {
   b.toggle(`nocursor`, S.era === 0 || (S.era === 1 && !S.run.cursor));
   b.toggle(`cga`, S.era === 1 && !!S.run.cga);
   b.toggle(`noanim`, !S.opt.anim);
-  if (S.era === 0) zRender(); else deskRender();
+  if (S.era === 0) zRender(); else if (S.era === 8) p2Render(); else deskRender();
   piRender();
 }
 let prev = performance.now(), achT = 0, saveT = 0;
@@ -837,6 +838,7 @@ function tick() {
   prev = now;
   S.time += dt; S.hackCd = Math.max(0, S.hackCd - dt);
   if (S.era === 0) { if (!busy) gain((zPerSec() + zClick() * tsum(`cps`)) * dt); zTriggers(); }
+  else if (S.era === 8) { if (!busy) p2Tick(dt); }
   else if (!busy) {
     idle += dt;
     const on = !!S.run.saver && idle >= 20;
@@ -858,7 +860,7 @@ function frame(now) {
   fprev = now;
   dx += (mx - dx) * 0.14; dy += (my - dy) * 0.14;
   $(`dot`).style.transform = `translate(${dx - 4}px,${dy - 4}px)`;
-  if (S.era === 0) zStrayTick(dt); else strayTick(dt);
+  if (S.era === 0) zStrayTick(dt); else if (S.era === 8) p2Frame(now); else strayTick(dt);
   vizFrame(now);
   requestAnimationFrame(frame);
 }
@@ -870,7 +872,8 @@ function restart(d) {
   for (const k in cache) delete cache[k];
   if (saverOn) { saverOn = false; saverStop(); }
   busy = false; noSave = false; H = null; dlgCb = dlgNoCb = null; dq.length = 0; tq.length = 0; drag = null; saverOn = false;
-  for (const id of [`boot`, `bsod`, `safe`, `dead`, `notif`, `fin`, `saver`, `dlg`, `drop`, `toast`, `stray`, `tStray`]) if ($(id)) $(id).classList.remove(`on`, `green`, `q`);
+  for (const id of [`boot`, `bsod`, `safe`, `dead`, `notif`, `fin`, `saver`, `dlg`, `drop`, `toast`, `stray`, `tStray`, `p2end`]) if ($(id)) $(id).classList.remove(`on`, `green`, `q`, `p2i`);
+  p2Panel = ``;
   document.body.classList.remove(`flick`, `lag`, `shake`);
   load(d === undefined ? undefined : d && JSON.parse(JSON.stringify(d)));
   start();
@@ -883,7 +886,8 @@ function start() {
   if (S.era === 0) {
     if (S.z.paid) toEra1();
     else if (!S.z.seen.boot) zBoot();
-  } else {
+  } else if (S.era === 8) p2Start();
+  else {
     for (const id in S.run) if (S.run[id] && prog(id)) makeWin(id);
     setTimeout(relayout, 300);
     if (!S.once[`boot` + S.era]) {

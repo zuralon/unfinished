@@ -46,9 +46,17 @@ const TNODES = [
   { id: `s1`, x: 1.25, y: -1.25, ic: `bolt`, max: 3, c: 3, req: [`p1`, `c1`], k: `pc`, v: 0.25, t: [`Coffee + finger`, `Café + doigt`], d: [`+25% production and clicks per level.`, `+25 % de production et de clics par niveau.`] },
   { id: `s2`, x: -1.25, y: -1.25, ic: `hourglass`, max: 2, c: 4, req: [`p1`, `q1`], k: `offx`, v: 1, t: [`Time loop`, `Boucle temporelle`], d: [`Offline progress x2 per level.`, `Progression hors ligne x2 par niveau.`] },
   { id: `s3`, x: 1.25, y: 1.25, ic: `cassette`, max: 3, c: 3, req: [`c1`, `r1`], k: `cps`, v: 3, t: [`Keyboard macro`, `Macro clavier`], d: [`3 more free clicks per second per level.`, `3 clics gratuits de plus par seconde par niveau.`] },
+  // ----- Beyond: from the tenth New Game+ on, a crown around the keystones; its top opens PIXEL-OS 2 -----
+  { id: `x1`, x: 3.9, y: -3.9, ic: `star`, max: 3, c: 3, ng: 10, req: [`pK`, `cK`], k: `pc`, v: 1, t: [`Golden pixel`, `Pixel d'or`], d: [`BEYOND. +100% production and clicks per level.`, `AU-DELÀ. +100 % de production et de clics par niveau.`] },
+  { id: `x2`, x: 3.9, y: 3.9, ic: `floppy`, max: 2, c: 4, ng: 10, req: [`cK`, `rK`], k: `ramlv`, v: 2, t: [`SSD`, `Disque SSD`], d: [`BEYOND. Every act starts with 2 more memory upgrades per level.`, `AU-DELÀ. Chaque acte commence avec 2 améliorations de mémoire de plus par niveau.`] },
+  { id: `x3`, x: -3.9, y: 3.9, ic: `note`, max: 2, c: 3, ng: 10, req: [`rK`, `qK`], k: `tk`, v: 1, t: [`Laminated post-it`, `Post-it plastifié`], d: [`BEYOND. +100% post-it rewards per level.`, `AU-DELÀ. +100 % de récompense du post-it par niveau.`] },
+  { id: `x4`, x: -3.9, y: -3.9, ic: `atom`, max: 2, c: 5, ng: 10, req: [`qK`, `pK`], k: `ng`, v: 0.25, t: [`Meta-prestige`, `Méta-prestige`], d: [`BEYOND. Each New Game+ gives +0.25 more per level.`, `AU-DELÀ. Chaque Nouvelle partie+ donne +0,25 de plus par niveau.`] },
+  { id: `x5`, x: 0, y: -7.4, ic: `pixel`, max: 1, c: 10, ks: 1, ng: 10, req: [`x1`, `x2`, `x3`, `x4`], draw: [`x1`, `x4`], k: `p2`, v: 1, t: [`The second pixel`, `Le deuxième pixel`], d: [`KEYSTONE. Opens PIXEL-OS 2: a new game, next to this one. Needs the whole crown.`, `PIERRE ANGULAIRE. Ouvre PIXEL-OS 2 : un nouveau jeu, à côté de celui-ci. Nécessite toute la couronne.`] },
   { id: `s4`, x: -1.25, y: 1.25, ic: `atom`, max: 2, c: 8, req: [`q1`, `r1`], k: `ng`, v: 0.25, t: [`Prestige++`, `Prestige++`], d: [`Each New Game+ gives +0.25 more per level (x2 becomes x2.25...).`, `Chaque Nouvelle partie+ donne +0,25 de plus par niveau (x2 devient x2,25...).`] },
 ];
-const TBR = [[`FACTORY`, `USINE`, 0, -6.3], [`FINGER`, `DOIGT`, 6.4, 0], [`SHORTCUTS`, `RACCOURCIS`, 0, 6.3], [`CHAOS`, `CHAOS`, -6.4, 0]];
+const TBR = [[`FACTORY`, `USINE`, 0, -6.3], [`FINGER`, `DOIGT`, 6.4, 0], [`SHORTCUTS`, `RACCOURCIS`, 0, 6.3], [`CHAOS`, `CHAOS`, -6.4, 0], [`BEYOND`, `AU-DELÀ`, 0, -8.3, 10]];
+// the crown shows from the tenth New Game+ on (or once learned)
+const tvis = n => !n.ng || (S.ng || 0) >= n.ng || tlv(n.id) > 0;
 const TRT = {
   title: [`Skill tree`, `Arbre de compétences`], pts: [`{n} ◆ to spend`, `{n} ◆ à dépenser`], next: [`Next New Game+: +{n} ◆`, `Prochaine Nouvelle partie+ : +{n} ◆`],
   how: [`◆ reset points: 10 per New Game+ (15 after act 7) and 2 per act finished. The tree resets for free. Drag to move, wheel to zoom.`, `◆ points de reset : 10 par Nouvelle partie+ (15 après l'acte 7) et 2 par acte fini. L'arbre se réinitialise gratuitement. Glisse pour te déplacer, molette pour zoomer.`],
@@ -67,7 +75,7 @@ const treeOpen = () => (S.ng || 0) >= 2 || (S.tp || 0) > 0;
 const tcost = n => n.c * (tlv(n.id) + 1);
 const treeSpent = () => TNODES.reduce((s, n) => s + n.c * tlv(n.id) * (tlv(n.id) + 1) / 2, 0);
 const treeLeft = () => (S.tp || 0) - treeSpent();
-const tneeds = n => (n.req ? n.req.every(TR) : true) && (n.any ? n.any.some(TR) : true);
+const tneeds = n => (S.ng || 0) >= (n.ng || 0) && (n.req ? n.req.every(TR) : true) && (n.any ? n.any.some(TR) : true);
 // effects, read by the engine
 const treeP = () => (1 + tsum(`p`) + tsum(`pc`)) * (1 + tsum(`pm`));
 const treeC = () => (1 + tsum(`c`) + tsum(`pc`)) * (1 + tsum(`cm`));
@@ -83,17 +91,17 @@ const nextGain = () => treeGain((S.ng || 0) + 1, S.era === 7);
 // ----- the map -----
 const TV = { x: 0, y: 0, z: 0, sel: `core` };
 // zoom that shows the whole tree, branch names included
-const tfit = () => { const m = $(`tree`).querySelector(`.tmap`); return Math.max(0.4, Math.min(1.2, Math.min(m.clientWidth, m.clientHeight) / (14 * TU))); };
+const tfit = () => { const m = $(`tree`).querySelector(`.tmap`), r = (S.ng || 0) >= 10 ? 18 : 14; return Math.max(0.35, Math.min(1.2, Math.min(m.clientWidth, m.clientHeight) / (r * TU))); };
 function treeHtml() {
   const ln = (a, b, on, av) => `<line x1="${a.x * TU}" y1="${a.y * TU}" x2="${b.x * TU}" y2="${b.y * TU}" class="${on ? `on` : av ? `av` : ``}"/>`;
   let lines = ``;
-  for (const n of TNODES) for (const p of [...(n.req || []), ...(n.any || [])]) lines += ln(TNODE[p], n, TR(p) && TR(n.id), TR(p));
+  for (const n of TNODES) if (tvis(n)) for (const p of n.draw || [...(n.req || []), ...(n.any || [])]) lines += ln(TNODE[p], n, TR(p) && TR(n.id), TR(p));
   const node = n => {
     const l = tlv(n.id), st = l >= n.max ? `max` : l ? `part` : tneeds(n) ? (treeLeft() >= tcost(n) ? `can` : `av`) : `lock`;
     return `<div class="tnd ${st}${n.ks ? ` ks` : ``}${TV.sel === n.id ? ` sel` : ``}" style="left:${n.x * TU}px;top:${n.y * TU}px;--p:${l / n.max * 100}%" data-act="tsel:${n.id}"><i style="background-image:url('${iconUrl(n.ic, `w11`)}')"></i>${n.max > 1 ? `<em>${l}/${n.max}</em>` : ``}</div>`;
   };
-  const brs = TBR.map(b => `<div class="tbr" style="left:${b[2] * TU}px;top:${b[3] * TU}px">${b[L()]}</div>`).join(``);
-  return `<svg class="tsv" viewBox="-800 -800 1600 1600" width="1600" height="1600">${lines}</svg>${brs}${TNODES.map(node).join(``)}`;
+  const brs = TBR.filter(b => !b[4] || (S.ng || 0) >= b[4]).map(b => `<div class="tbr" style="left:${b[2] * TU}px;top:${b[3] * TU}px">${b[L()]}</div>`).join(``);
+  return `<svg class="tsv" viewBox="-800 -800 1600 1600" width="1600" height="1600">${lines}</svg>${brs}${TNODES.filter(tvis).map(node).join(``)}`;
 }
 function treeSide() {
   const n = TNODE[TV.sel] || TNODE.core, l = tlv(n.id), need = n.req ? n.req : n.any || [];
@@ -109,7 +117,7 @@ function treeRender() {
     document.body.insertAdjacentHTML(`beforeend`, `<div id="tree"><div class="thd"></div><div class="tbody"><div class="tmap"><div class="tlay"></div></div><div class="tside"></div></div></div>`);
     treeBind();
   }
-  $(`tree`).querySelector(`.thd`).innerHTML = `<h2>${T(TRT.title)}</h2><span class="tpill">${fill(T(TRT.pts), { n: fmt(treeLeft()) })}</span><span class="tsub">${fill(T(TRT.spent), { n: fmt(treeSpent()) })} · ${fill(T(TRT.next), { n: nextGain() || 10 })}</span><span class="tsp"></span><button class="btn" data-act="tcenter">${T(TRT.center)}</button><button class="btn" data-act="treset">${T(TRT.reset)}</button><button class="btn" data-act="tclose">${T(TRT.close)}</button><p class="thow">${T(TRT.how)}</p>`;
+  $(`tree`).querySelector(`.thd`).innerHTML = `<h2>${T(TRT.title)}</h2><span class="tpill">${fill(T(TRT.pts), { n: fmt(treeLeft()) })}</span><span class="tsub">${fill(T(TRT.spent), { n: fmt(treeSpent()) })} · ${fill(T(TRT.next), { n: nextGain() || 10 })}</span><span class="tsp"></span>${p2Unlocked() && S.era !== 8 ? `<button class="btn tp2" data-act="p2go">PIXEL-OS 2 →</button>` : ``}<button class="btn" data-act="tcenter">${T(TRT.center)}</button><button class="btn" data-act="treset">${T(TRT.reset)}</button><button class="btn" data-act="tclose">${T(TRT.close)}</button><p class="thow">${T(TRT.how)}</p>`;
   $(`tree`).querySelector(`.tlay`).innerHTML = treeHtml();
   $(`tree`).querySelector(`.tside`).innerHTML = treeSide();
   treeView();
@@ -144,6 +152,8 @@ const TREE_A = {
     S.tree = S.tree || {}; S.tree[id] = tlv(id) + 1; S.st.skills = (S.st.skills || 0) + 1;
     if (n.k === `ramlv` || n.k === `kit`) treeBoot();
     treeRender(); save();
+    // the last skill opens PIXEL-OS 2
+    if (!S.once.p2un && p2Unlocked()) { S.once.p2un = 1; dlg(T(X8.unlock), { cancel: true, okT: `PIXEL-OS 2 →`, ok: () => p2Enter() }); }
   },
   treset() { S.tree = { core: 1 }; TV.sel = `core`; treeRender(); save(); },
 };
