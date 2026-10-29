@@ -484,16 +484,35 @@ function p3Frame(now) {
   if (ch.width !== w * dpr || ch.height !== h * dpr) { ch.width = w * dpr; ch.height = h * dpr; ch.style.width = w + `px`; ch.style.height = h + `px`; }
   const y = ch.getContext(`2d`);
   y.setTransform(dpr, 0, 0, dpr, 0, 0); y.clearRect(0, 0, w, h);
-  const hs = p.hist.length ? p.hist : [0], top = Math.max(p3Cap(), ...hs) * 1.1 || 1;
-  y.strokeStyle = `rgba(255,255,255,.06)`; y.lineWidth = 1;
-  for (let k = 1; k < 4; k++) { y.beginPath(); y.moveTo(0, h * k / 4 + 0.5); y.lineTo(w, h * k / 4 + 0.5); y.stroke(); }
-  const capY = h - p3Cap() / top * h;
-  y.setLineDash([5, 4]); y.strokeStyle = `rgba(255,110,130,.7)`; y.beginPath(); y.moveTo(0, capY); y.lineTo(w, capY); y.stroke(); y.setLineDash([]);
-  y.fillStyle = `rgba(255,110,130,.8)`; y.font = `11px system-ui`; y.fillText(T([`server capacity`, `capacité des serveurs`]), 6, Math.max(12, capY - 4));
-  const X = i => (i / Math.max(1, 179)) * w, Y = v => h - v / top * h;
-  const gr = y.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, `rgba(64,224,208,.45)`); gr.addColorStop(1, `rgba(64,224,208,0)`);
-  y.beginPath(); y.moveTo(X(0), h); hs.forEach((v, i) => y.lineTo(X(i + 180 - hs.length), Y(v))); y.lineTo(X(179), h); y.closePath(); y.fillStyle = gr; y.fill();
-  y.beginPath(); hs.forEach((v, i) => (i ? y.lineTo : y.moveTo).call(y, X(i + 180 - hs.length), Y(v))); y.strokeStyle = `#40e0d0`; y.lineWidth = 2; y.stroke();
+  // axes: player counts on the left, time underneath, the current count at the end of the line
+  const hs = p.hist.length ? p.hist : [0], cap = p3Cap(), L = 58, B = 18, R = 70, pw = w - L - R, ph = h - B - 6;
+  const peak = Math.max(10, ...hs), top = (cap <= peak * 1.6 ? Math.max(cap, peak) : peak) * 1.2;
+  const X = i => L + (i / 179) * pw, Y = v => 6 + ph - v / top * ph;
+  y.font = `11px system-ui`; y.textBaseline = `middle`;
+  for (let k = 0; k <= 4; k++) {
+    const v = top * k / 4, yy = Math.round(Y(v)) + 0.5;
+    y.strokeStyle = `rgba(255,255,255,${k ? 0.06 : 0.15})`; y.lineWidth = 1; y.beginPath(); y.moveTo(L, yy); y.lineTo(L + pw, yy); y.stroke();
+    y.fillStyle = `#7f8ea3`; y.textAlign = `right`; y.fillText(fmt(v), L - 8, yy);
+  }
+  y.textAlign = `center`; y.textBaseline = `alphabetic`; y.fillStyle = `#7f8ea3`;
+  [[0, T([`-3 min`, `-3 min`])], [60, T([`-2 min`, `-2 min`])], [120, T([`-1 min`, `-1 min`])], [179, T([`now`, `maintenant`])]].forEach(([i, l]) => y.fillText(l, Math.min(X(i), L + pw - 20), h - 3));
+  // server capacity: a dashed line, or a note when it's far above
+  y.textAlign = `left`; y.fillStyle = `rgba(255,110,130,.9)`;
+  if (cap <= top) {
+    const capY = Y(cap);
+    y.setLineDash([5, 4]); y.strokeStyle = `rgba(255,110,130,.7)`; y.beginPath(); y.moveTo(L, capY); y.lineTo(L + pw, capY); y.stroke(); y.setLineDash([]);
+    y.fillText(fill(T([`server capacity: {n}`, `capacité des serveurs : {n}`]), { n: fmt(cap) }), L + 6, Math.max(14, capY - 5));
+  } else y.fillText(fill(T([`server capacity: {n} (above)`, `capacité des serveurs : {n} (plus haut)`]), { n: fmt(cap) }), L + 6, 16);
+  const gr = y.createLinearGradient(0, 6, 0, 6 + ph); gr.addColorStop(0, `rgba(64,224,208,.45)`); gr.addColorStop(1, `rgba(64,224,208,0)`);
+  const off = 180 - hs.length;
+  y.beginPath(); y.moveTo(X(off), Y(0)); hs.forEach((v, i) => y.lineTo(X(i + off), Y(v))); y.lineTo(X(179), Y(0)); y.closePath(); y.fillStyle = gr; y.fill();
+  y.beginPath(); hs.forEach((v, i) => (i ? y.lineTo : y.moveTo).call(y, X(i + off), Y(v))); y.strokeStyle = `#40e0d0`; y.lineWidth = 2; y.stroke();
+  // the current count, in a bubble at the end of the line
+  const last = hs[hs.length - 1], ly = Y(last), lt = fmt(last);
+  y.fillStyle = `#40e0d0`; y.beginPath(); y.arc(X(179), ly, 4, 0, Math.PI * 2); y.fill();
+  y.font = `600 12px system-ui`; const tw = y.measureText(lt).width + 12;
+  y.fillStyle = `#40e0d0`; y.beginPath(); y.roundRect(X(179) + 8, ly - 10, tw, 20, 6); y.fill();
+  y.fillStyle = `#06201d`; y.textBaseline = `middle`; y.fillText(lt, X(179) + 14, ly + 1);
 }
 
 // ---------- the end ----------
