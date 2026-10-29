@@ -60,15 +60,15 @@ const P3PATCH = [
   { id: `fix`, h: 40, ch: 0, bugs: 0.7, life: 1.15, t: [`Day-one patch`, `Patch du premier jour`], d: [`Fixes what should have been fixed before. Fewer bugs.`, `Corrige ce qui aurait dû l'être avant. Moins de bugs.`] },
   { id: `dark`, h: 150, ch: 1, life: 1.3, t: [`Dark mode`, `Mode sombre`], d: [`The pixel is white. The rest is darker. Players stay longer.`, `Le pixel est blanc. Le reste est plus sombre. Les joueurs restent plus longtemps.`] },
   { id: `ach`, h: 500, ch: 1, life: 1.3, wom: 1.3, t: [`Achievements`, `Succès`], d: [`"Click once": 98% of players have it. They talk about it.`, `« Cliquer une fois » : 98 % des joueurs l'ont. Ils en parlent.`] },
-  { id: `lang`, h: 1800, ch: 2, reach: 2, t: [`Translated in 40 languages`, `Traduit en 40 langues`], d: [`Including Klingon. The word for pixel is the same.`, `Dont le klingon. Le mot pour pixel est le même.`] },
-  { id: `multi`, h: 5000, ch: 2, life: 1.6, wom: 1.6, bugs: 1.3, t: [`Multiplayer`, `Multijoueur`], d: [`Two people, one pixel. More players talk about it, more bugs.`, `Deux personnes, un pixel. Plus de bouche-à-oreille, plus de bugs.`] },
-  { id: `px2`, h: 1.5e4, ch: 3, life: 1.4, mood: 0.3, t: [`A second pixel`, `Un deuxième pixel`], d: [`The players asked. Better reviews.`, `Les joueurs l'ont demandé. Meilleurs avis.`] },
-  { id: `micro`, h: 4e4, ch: 3, money: 2, mood: -0.4, t: [`Microtransactions`, `Microtransactions`], d: [`A golden pixel for 2 €. Money x2, and players online spend a little. Reviews hate it.`, `Un pixel doré à 2 €. Argent x2, et les joueurs en ligne dépensent un peu. Les avis détestent.`] },
-  { id: `br`, h: 1.1e5, ch: 4, wom: 1.6, mood: -0.3, bugs: 1.5, burst: 6, t: [`Battle royale`, `Battle royale`], d: [`100 players, 1 pixel, the circle shrinks. Huge hype, more bugs, purists sulk.`, `100 joueurs, 1 pixel, le cercle se rétrécit. Énorme hype, plus de bugs, les puristes boudent.`] },
-  { id: `catmode`, h: 3e5, ch: 5, life: 1.5, mood: 0.3, t: [`Cat mode`, `Mode chat`], d: [`You play the cat. You knock the pixel off the table.`, `Tu joues le chat. Tu fais tomber le pixel de la table.`] },
-  { id: `vr`, h: 9e5, ch: 5, life: 1.4, reach: 1.5, t: [`VR version`, `Version VR`], d: [`The pixel, in 3D. It's a cube. Nobody is happy. Everybody buys it.`, `Le pixel, en 3D. C'est un cube. Personne n'est content. Tout le monde l'achète.`] },
-  { id: `copi`, h: 3e6, ch: 6, life: 1.5, bugs: 0.6, t: [`Copixel as a sidekick`, `Copixel en compagnon`], d: [`He helps the players. He also fixes bugs. He's insufferable and useful.`, `Il aide les joueurs. Il corrige aussi des bugs. Il est insupportable et utile.`] },
-  { id: `v1`, h: 1e7, ch: 7, life: 2, mood: 0.5, t: [`Version 1.0 (finally)`, `Version 1.0 (enfin)`], d: [`The game leaves early access. After 44 years.`, `Le jeu sort de l'accès anticipé. Après 44 ans.`] },
+  { id: `lang`, h: 3000, ch: 2, reach: 2, t: [`Translated in 40 languages`, `Traduit en 40 langues`], d: [`Including Klingon. The word for pixel is the same.`, `Dont le klingon. Le mot pour pixel est le même.`] },
+  { id: `multi`, h: 6000, ch: 2, life: 1.6, wom: 1.6, bugs: 1.3, t: [`Multiplayer`, `Multijoueur`], d: [`Two people, one pixel. More players talk about it, more bugs.`, `Deux personnes, un pixel. Plus de bouche-à-oreille, plus de bugs.`] },
+  { id: `px2`, h: 12000, ch: 3, life: 1.4, mood: 0.3, t: [`A second pixel`, `Un deuxième pixel`], d: [`The players asked. Better reviews.`, `Les joueurs l'ont demandé. Meilleurs avis.`] },
+  { id: `micro`, h: 15000, ch: 3, money: 2, mood: -0.4, t: [`Microtransactions`, `Microtransactions`], d: [`A golden pixel for 2 €. Money x2, and players online spend a little. Reviews hate it.`, `Un pixel doré à 2 €. Argent x2, et les joueurs en ligne dépensent un peu. Les avis détestent.`] },
+  { id: `br`, h: 25000, ch: 4, wom: 1.6, mood: -0.3, bugs: 1.5, burst: 6, t: [`Battle royale`, `Battle royale`], d: [`100 players, 1 pixel, the circle shrinks. Huge hype, more bugs, purists sulk.`, `100 joueurs, 1 pixel, le cercle se rétrécit. Énorme hype, plus de bugs, les puristes boudent.`] },
+  { id: `catmode`, h: 30000, ch: 5, life: 1.5, mood: 0.3, t: [`Cat mode`, `Mode chat`], d: [`You play the cat. You knock the pixel off the table.`, `Tu joues le chat. Tu fais tomber le pixel de la table.`] },
+  { id: `vr`, h: 40000, ch: 5, life: 1.4, reach: 1.5, t: [`VR version`, `Version VR`], d: [`The pixel, in 3D. It's a cube. Nobody is happy. Everybody buys it.`, `Le pixel, en 3D. C'est un cube. Personne n'est content. Tout le monde l'achète.`] },
+  { id: `copi`, h: 50000, ch: 6, life: 1.5, bugs: 0.6, t: [`Copixel as a sidekick`, `Copixel en compagnon`], d: [`He helps the players. He also fixes bugs. He's insufferable and useful.`, `Il aide les joueurs. Il corrige aussi des bugs. Il est insupportable et utile.`] },
+  { id: `v1`, h: 70000, ch: 7, life: 2, mood: 0.5, t: [`Version 1.0 (finally)`, `Version 1.0 (enfin)`], d: [`The game leaves early access. After 44 years.`, `Le jeu sort de l'accès anticipé. Après 44 ans.`] },
 ];
 const P3MKT = [
   { id: `tweet`, cd: 15, ch: 0, c: () => 0, h: o => 8 + o * 0.0005, t: [`Tweet from the dev`, `Tweet du dev`], d: [`Free. "i made a game. it's a pixel. please."`, `Gratuit. « j'ai fait un jeu. c'est un pixel. s'il vous plaît. »`] },
@@ -426,7 +426,7 @@ function p3RoadHtml() {
   const p = S.p3;
   return P3PATCH.filter(x => x.ch <= p.ch + 1).map(x => {
     const done = p.patch[x.id], lock = x.ch > p.ch;
-    return `<div class="p3patch${done ? ` done` : lock ? ` lock` : ``}"><div><b>${T(x.t)}</b><small>${lock ? fill(T(X9.locked), { n: fmt(P3CH[x.ch - 1]) }) : T(x.d)}</small></div>${done ? `<span class="p3ok">${T(X9.shipped)}</span>` : lock ? `` : `<button class="p3mini${p.dh < x.h ? ` poor` : ``}" data-act="p3ship:${x.id}">${fill(T(X9.ship), { n: fmt(x.h) })}</button>`}</div>`;
+    return `<div class="p3patch${done ? ` done` : lock ? ` lock` : ``}"><div><b>${T(x.t)}</b><small>${lock ? fill(T(X9.locked), { n: fmt(P3CH[x.ch - 1]) }) : T(x.d)}</small></div>${done ? `<span class="p3ok">${T(X9.shipped)}</span>` : lock ? `` : `<button class="p3mini${p.dh < x.h ? ` poor` : ``}" data-act="p3ship:${x.id}">${fill(T(X9.ship), { n: fmt(x.h) })}${p.dh < x.h ? `<small class="p3eta">≈ ${dur((x.h - p.dh) / (p3n(`dev`) + 0.2))}</small>` : ``}</button>`}</div>`;
   }).join(``);
 }
 function p3MsgHtml() {
