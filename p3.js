@@ -52,7 +52,7 @@ const P3PLAT = [
 ];
 const P3HIRE = [
   { id: `dev`, c0: 60, k: 1.16, t: [`Developer`, `Développeur`], d: [`+1 dev hour per second, and fixes bugs alone.`, `+1 heure de dev par seconde, et corrige des bugs tout seul.`] },
-  { id: `srv`, c0: 100, k: 1.75, t: [`Server`, `Serveur`], d: [`+60% player capacity.`, `+60 % de places pour les joueurs.`] },
+  { id: `srv`, c0: 100, k: 1.5, t: [`Server`, `Serveur`], d: [`+60% player capacity.`, `+60 % de places pour les joueurs.`] },
   { id: `qa`, c0: 4000, k: 1.9, max: 10, ch: 1, t: [`Tester`, `Testeur`], d: [`12% fewer bugs.`, `12 % de bugs en moins.`] },
   { id: `cm`, c0: 9000, k: 1.9, max: 8, ch: 2, t: [`Community manager`, `Community manager`], d: [`Better reviews, and the trolls get an answer.`, `De meilleurs avis, et les trolls ont une réponse.`] },
 ];
@@ -63,7 +63,7 @@ const P3PATCH = [
   { id: `lang`, h: 1800, ch: 2, reach: 2, t: [`Translated in 40 languages`, `Traduit en 40 langues`], d: [`Including Klingon. The word for pixel is the same.`, `Dont le klingon. Le mot pour pixel est le même.`] },
   { id: `multi`, h: 5000, ch: 2, life: 1.6, wom: 1.6, bugs: 1.3, t: [`Multiplayer`, `Multijoueur`], d: [`Two people, one pixel. More players talk about it, more bugs.`, `Deux personnes, un pixel. Plus de bouche-à-oreille, plus de bugs.`] },
   { id: `px2`, h: 1.5e4, ch: 3, life: 1.4, mood: 0.3, t: [`A second pixel`, `Un deuxième pixel`], d: [`The players asked. Better reviews.`, `Les joueurs l'ont demandé. Meilleurs avis.`] },
-  { id: `micro`, h: 4e4, ch: 3, money: 2, mood: -0.6, t: [`Microtransactions`, `Microtransactions`], d: [`A golden pixel for 2 €. Money x2. Reviews hate it.`, `Un pixel doré à 2 €. Argent x2. Les avis détestent.`] },
+  { id: `micro`, h: 4e4, ch: 3, money: 2, mood: -0.4, t: [`Microtransactions`, `Microtransactions`], d: [`A golden pixel for 2 €. Money x2, and players online spend a little. Reviews hate it.`, `Un pixel doré à 2 €. Argent x2, et les joueurs en ligne dépensent un peu. Les avis détestent.`] },
   { id: `br`, h: 1.1e5, ch: 4, wom: 1.6, mood: -0.3, bugs: 1.5, burst: 6, t: [`Battle royale`, `Battle royale`], d: [`100 players, 1 pixel, the circle shrinks. Huge hype, more bugs, purists sulk.`, `100 joueurs, 1 pixel, le cercle se rétrécit. Énorme hype, plus de bugs, les puristes boudent.`] },
   { id: `catmode`, h: 3e5, ch: 5, life: 1.5, mood: 0.3, t: [`Cat mode`, `Mode chat`], d: [`You play the cat. You knock the pixel off the table.`, `Tu joues le chat. Tu fais tomber le pixel de la table.`] },
   { id: `vr`, h: 9e5, ch: 5, life: 1.4, reach: 1.5, t: [`VR version`, `Version VR`], d: [`The pixel, in 3D. It's a cube. Nobody is happy. Everybody buys it.`, `Le pixel, en 3D. C'est un cube. Personne n'est content. Tout le monde l'achète.`] },
@@ -71,15 +71,15 @@ const P3PATCH = [
   { id: `v1`, h: 1e7, ch: 7, life: 2, mood: 0.5, t: [`Version 1.0 (finally)`, `Version 1.0 (enfin)`], d: [`The game leaves early access. After 44 years.`, `Le jeu sort de l'accès anticipé. Après 44 ans.`] },
 ];
 const P3MKT = [
-  { id: `tweet`, cd: 15, ch: 0, c: () => 0, h: a => 8 + a * 0.01, t: [`Tweet from the dev`, `Tweet du dev`], d: [`Free. "i made a game. it's a pixel. please."`, `Gratuit. « j'ai fait un jeu. c'est un pixel. s'il vous plaît. »`] },
-  { id: `trailer`, cd: 60, ch: 1, c: ch => 400 * 5 ** ch, h: a => 60 + a * 0.08, t: [`Trailer`, `Bande-annonce`], d: [`Epic music over a still pixel.`, `Une musique épique sur un pixel immobile.`] },
-  { id: `stream`, cd: 150, ch: 2, c: ch => 4000 * 5 ** ch, h: a => 400 + a * 0.25, t: [`Pay a streamer`, `Payer un streamer`], d: [`Big hype. Sometimes the streamer hates it, live.`, `Grosse hype. Parfois le streamer déteste, en direct.`] },
-  { id: `expo`, cd: 300, ch: 4, c: ch => 2e5 * 5 ** ch, h: a => 4000 + a * 0.8, t: [`Game show booth`, `Stand au salon du jeu vidéo`], d: [`A booth with one pixel on a giant screen. The queue goes around the block.`, `Un stand avec un pixel sur un écran géant. La queue fait le tour du bâtiment.`] },
+  { id: `tweet`, cd: 15, ch: 0, c: () => 0, h: o => 8 + o * 0.0005, t: [`Tweet from the dev`, `Tweet du dev`], d: [`Free. "i made a game. it's a pixel. please."`, `Gratuit. « j'ai fait un jeu. c'est un pixel. s'il vous plaît. »`] },
+  { id: `trailer`, cd: 60, ch: 1, c: ch => 400 * 5 ** ch, h: o => 60 + o * 0.002, t: [`Trailer`, `Bande-annonce`], d: [`Epic music over a still pixel.`, `Une musique épique sur un pixel immobile.`] },
+  { id: `stream`, cd: 150, ch: 2, c: ch => 4000 * 5 ** ch, h: o => 400 + o * 0.006, t: [`Pay a streamer`, `Payer un streamer`], d: [`Big hype. Sometimes the streamer hates it, live.`, `Grosse hype. Parfois le streamer déteste, en direct.`] },
+  { id: `expo`, cd: 300, ch: 4, c: ch => 2e5 * 5 ** ch, h: o => 4000 + o * 0.015, t: [`Game show booth`, `Stand au salon du jeu vidéo`], d: [`A booth with one pixel on a giant screen. The queue goes around the block.`, `Un stand avec un pixel sur un écran géant. La queue fait le tour du bâtiment.`] },
 ];
 // chapters: owners to reach
 const P3CH = [100, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9, 8e9];
 // the pace: conversion, word of mouth, how long a player stays (seconds)
-let P3K = 1, P3W = 0.004, P3L = 120;
+let P3K = 1, P3W = 0.0004, P3L = 120, P3SEAT = 2.5;
 const X9 = {
   intro: [
     [`THE DEV: the game is finished. really finished. it even has two pixels now. and nine paintings.`, `LE DEV : le jeu est fini. vraiment fini. il a même deux pixels, maintenant. et neuf tableaux.`],
@@ -183,19 +183,21 @@ const p3PatchSum = (k, d) => { let m = d; for (const p of P3PATCH) if (S.p3.patc
 const p3Market = () => Math.min(9e9, P3PLAT.reduce((s, p) => s + (S.p3.plat[p.id] ? p.market : 0), 0) * p3PatchSum(`reach`, 1));
 // near the size of the market, fewer and fewer new buyers
 const p3Sat = () => Math.max(0, 1 - S.p3.owners / p3Market());
-const p3Reach = () => 1 + 0.25 * (Object.keys(S.p3.plat).length - 1);
+const p3Reach = () => 1;
 const p3Cap = () => Math.floor(30 * 1.6 ** p3n(`srv`) * (S.p3.ev.down > 0 ? 0.3 : 1));
 const p3Rating = () => { const r = S.p3.rev; if (!r.length) return 4; return r.reduce((s, x) => s + x.s, 0) / r.length; };
 const p3fR = () => Math.max(0.05, Math.min(2.2, ((p3Rating() - 1) / 4) ** 2 * 2.2));
 const p3Price = () => P3PRICE[S.p3.price];
-const p3HireCost = h => Math.ceil(h.c0 * h.k ** p3n(h.id));
+// a server costs the same per player seat it adds, so it stays affordable at any size
+const p3Seats = n => Math.floor(30 * 1.6 ** (n + 1)) - Math.floor(30 * 1.6 ** n);
+const p3HireCost = h => Math.ceil(h.id === `srv` ? p3Seats(p3n(`srv`)) * P3SEAT : h.c0 * h.k ** p3n(h.id));
 // how players feel right now: the base of every new review
 function p3Mood() {
   const p = S.p3, pr = p3Price();
   let m = 4.4 + pr.mood + p3PatchSum(`mood`, 0) + Math.min(0.5, p.fresh * 0.004) + p3n(`cm`) * 0.08;
   m -= 0.12 * Math.min(15, p.bugN);
   if (p.bugs.some(b => b.sev === 2)) m -= 0.4;
-  if (p.full > 0) m -= 1.3;
+  if (p.full > 0) m -= 0.8;
   if (pr.ads) m -= 0.2;
   return m;
 }
@@ -205,19 +207,22 @@ let P3F = { vis: 0, nw: 0, full: 0 };
 function p3Tick(dt) {
   const p = S.p3;
   if (!p || p.fin === 1) return;
-  const pr = p3Price(), sale = p.ev.sale > 0 ? 1.8 : 1, life = P3L * p3PatchSum(`life`, 1);
+  const pr = p3Price(), sale = p.ev.sale > 0 ? 1.8 : 1, life = P3L * (1 + P3PATCH.reduce((s, x) => s + (S.p3.patch[x.id] && x.life ? x.life - 1 : 0), 0));
   // hype fades, players talk about it
-  p.hype = p.hype * Math.exp(-dt / 30) + p.act * P3W * p3fR() * p3PatchSum(`wom`, 1) * (p.ev.clone > 0 ? 0.5 : 1) * dt + 0.3 * dt;
-  const vis = p.hype * p3Reach(), crit = p.bugs.some(b => b.sev === 2) ? 0.7 : 1;
+  // marketing makes hype, hype fades; players who own the game talk about it (more with every patch)
+  p.hype = p.hype * Math.exp(-dt / 30) + 0.3 * dt;
+  // a big game is harder to grow: word of mouth slows down after a million players
+  const wom = p.owners * P3W * 0.7 ** Math.max(0, p.ch - 4) * p3PatchSum(`wom`, 1) * (1 + 0.08 * Object.keys(p.patch).length) * (p.ev.clone > 0 ? 0.5 : 1);
+  const vis = p.hype * p3Reach() + wom / 0.08, crit = p.bugs.some(b => b.sev === 2) ? 0.7 : 1;
   const nw = vis * 0.08 * p3fR() * pr.conv * sale * crit * p3Sat() * P3K;
   p.owners = Math.min(8e9, p.owners + nw * dt);
-  p.money += (nw * pr.p * (sale > 1 ? 0.5 : 1) * p3PatchSum(`money`, 1) + (pr.ads ? p.act * 0.01 : 0)) * dt;
+  p.money += ((nw * pr.p * (sale > 1 ? 0.5 : 1) + (pr.ads ? p.act * 0.01 : 0)) * p3PatchSum(`money`, 1) + (p.patch.micro ? p.act * 0.01 : 0)) * dt;
   // players who already own it come back now and then: more if the game keeps them busy
-  p.act += (nw + p.owners * 0.0005) * dt - p.act / life * dt;
+  p.act += (nw + p.owners * 0.0002) * dt - p.act / life * dt;
   // the servers: who can't get in leaves, angry
   const cap = p3Cap();
   p.full = p.act > cap ? 3 : Math.max(0, (p.full || 0) - dt);
-  if (p.act > cap) p.act = cap;
+  if (p.act > cap) { p.act = cap; if (!p.seen.full) { p.seen.full = 1; p3Say([`THE DEV: the servers are full! players can't get in and they write angry reviews. buy a server in the Studio, quick.`, `LE DEV : les serveurs sont pleins ! des joueurs restent dehors et écrivent des avis fâchés. achète un serveur dans le Studio, vite.`]); } }
   p.act = Math.min(p.act, p.owners);
   // bugs come with players; developers fix them alone
   const bugRate = 0.03 * (1 + Math.log10(p.act + 1)) * p3PatchSum(`bugs`, 1) * 0.88 ** p3n(`qa`);
@@ -281,7 +286,7 @@ function p3Event() {
   if (k === `viral`) p.hype *= 3;
   else if (k === `clone`) { p.hype *= 0.6; p.ev.clone = 60; }
   else if (k === `down`) p.ev.down = 20;
-  else if (k === `star`) { const n = 200 + p.act * 0.3; p.hype += n; m = tf(m, { n: fmt(n) }); }
+  else if (k === `star`) { const n = 200 + p.owners * 0.005; p.hype += n; m = tf(m, { n: fmt(n) }); }
   else if (k === `sale`) p.ev.sale = 60;
   else if (k === `cat`) { const n = P3PATCH.find(x => !p.patch[x.id] && x.ch <= p.ch); if (n && Math.random() < 0.5) { p.patch[n.id] = 1; p.fresh = 120; } else for (let i = 0; i < 5; i++) p3Bug(); }
   else if (k === `bomb`) {
@@ -300,7 +305,7 @@ const P3A = {
     if (!m || p.cd[id] > 0 || m.ch > p.ch) return;
     const c = m.c(p.ch);
     if (p.money < c) return toast(T(X9.poor));
-    p.money -= c; p.cd[id] = m.cd; p.hype += m.h(p.act); S.st.p3mkt = (S.st.p3mkt || 0) + 1;
+    p.money -= c; p.cd[id] = m.cd; p.hype += m.h(p.owners); S.st.p3mkt = (S.st.p3mkt || 0) + 1;
     // the streamer hated it, live
     if (id === `stream` && Math.random() < 0.2) { for (let i = 0; i < 3; i++) p3Review(1); p3Say([`THE DEV: the streamer said "it's a pixel" for 3 hours. it was a compliment, i think. no.`, `LE DEV : le streamer a dit « c'est un pixel » pendant 3 heures. c'était un compliment, je crois. non.`]); }
   },
@@ -390,7 +395,7 @@ function p3Render() {
   // left: marketing, price, studio, platforms
   const mk = P3MKT.filter(m => m.ch <= p.ch).map(m => { const c = m.c(p.ch); return `<button class="p3act${p.cd[m.id] > 0 ? ` cool` : ``}${p.money < c ? ` poor` : ``}" data-act="p3mkt:${m.id}"><b>${T(m.t)}</b><em>${p.cd[m.id] > 0 ? `⏳ ${Math.ceil(p.cd[m.id])} s` : c ? p3fmtM(c) : T(X9.free)}</em><small>${T(m.d)}</small>${p3cdHtml(m.id, m.cd)}</button>`; }).join(``);
   const prc = `<div class="p3seg">${P3PRICE.map((x, i) => `<button class="${p.price === i ? `on` : ``}" data-act="p3price:${i}">${x.p ? x.p + ` €` : T([`Free`, `Gratuit`])}</button>`).join(``)}</div><p class="p3dim">${p3Price().ads ? T([`Free with ads: more players, money from ads, reviews a bit worse.`, `Gratuit avec pubs : plus de joueurs, l'argent vient des pubs, avis un peu moins bons.`]) : T([`Cheaper sells more. Too expensive, reviews complain.`, `Moins cher vend plus. Trop cher, les avis râlent.`])}</p>`;
-  const hi = P3HIRE.filter(h => (h.ch || 0) <= p.ch).map(h => { const n = p3n(h.id), mx = h.max && n >= h.max, c = p3HireCost(h); return `<button class="p3row${mx ? ` done` : p.money < c ? ` poor` : ``}" data-act="p3hire:${h.id}"><div><b>${T(h.t)} <span class="p3n">×${n}</span></b><small>${T(h.d)}</small></div><em>${mx ? `max` : p3fmtM(c)}</em></button>`; }).join(``);
+  const hi = P3HIRE.filter(h => (h.ch || 0) <= p.ch).map(h => { const n = p3n(h.id), mx = h.max && n >= h.max, c = p3HireCost(h); return `<button class="p3row${mx ? ` done` : p.money < c ? ` poor` : ``}${h.id === `srv` && p.full > 0 ? ` hot` : ``}" data-act="p3hire:${h.id}"><div><b>${T(h.t)} <span class="p3n">×${n}</span></b><small>${h.id === `srv` ? fill(T([`+{n} places for players.`, `+{n} places pour les joueurs.`]), { n: fmt(p3Seats(n)) }) : T(h.d)}</small></div><em>${mx ? `max` : p3fmtM(c)}</em></button>`; }).join(``);
   const pl = P3PLAT.filter(x => x.ch <= p.ch + 1).map(x => { const own = p.plat[x.id], lock = x.ch > p.ch; return `<button class="p3row${own ? ` done` : lock ? ` lock` : p.money < x.cost ? ` poor` : ``}" data-act="p3plat:${x.id}"><div><b>${T(x.t)} <span class="p3n">+${fmt(x.market)}</span></b><small>${lock ? fill(T(X9.locked), { n: fmt(P3CH[x.ch - 1]) }) : T(x.d)}</small></div><em>${own ? `✓` : lock ? `🔒` : p3fmtM(x.cost)}</em></button>`; }).join(``);
   setH(`p3left`, `<section class="p3card"><h3>${T(X9.mkt)}</h3>${mk}</section><section class="p3card"><h3>${T(X9.price)}</h3>${prc}</section><section class="p3card"><h3>${T(X9.studio)}</h3>${hi}</section><section class="p3card"><h3>${T(X9.plat)}</h3>${pl}</section>`);
   setH(`p3mapH`, T(X9.map));
