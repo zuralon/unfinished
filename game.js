@@ -231,7 +231,7 @@ function zRender() {
   setH(`tHint`, S.clicks < 3 ? T(TERM.block) : ``);
   setH(`tMenu`, H && H.era === 0 ? hackHtml() : zMenu());
   setH(`tLog`, z.log.map(e => `<div class="${e.id === z.n ? `new` : ``}">${esc(T(e.t))}</div>`).join(``));
-  setH(`tSys`, `${T(TERM.sys)}: <span class="tl" data-act="lang">[${T(TERM.langSw)}]</span><span class="tl" data-act="exp">[${T(TERM.exp)}]</span><span class="tl" data-act="imp">[${T(TERM.imp)}]</span><span class="tl" data-act="hard">[${T(TERM.reset)}]</span><span class="tl" data-act="anim">[${T(S.opt.anim ? TERM.anim : TERM.animOff)}]</span>` + (treeOpen() ? `<span class="tl" data-act="tree">[${T(TRT.title)}]</span>` : ``) + (autoOpen() ? `<span class="tl" data-act="auto">[${T(AUT.title)}]</span>` : ``) + (p2Unlocked() ? `<span class="tl" data-act="p2go">[PIXEL-OS 2]</span>` : ``) + (p3Unlocked() ? `<span class="tl" data-act="p3go">[PIXEL-OS 3]</span>` : ``));
+  setH(`tSys`, `${T(TERM.sys)}: <span class="tl" data-act="lang">[${T(TERM.langSw)}]</span><span class="tl" data-act="exp">[${T(TERM.exp)}]</span><span class="tl" data-act="imp">[${T(TERM.imp)}]</span><span class="tl" data-act="hard">[${T(TERM.reset)}]</span><span class="tl" data-act="anim">[${T(S.opt.anim ? TERM.anim : TERM.animOff)}]</span>` + (treeOpen() ? `<span class="tl" data-act="tree">[${T(TRT.title)}]</span>` : ``) + (autoOpen() ? `<span class="tl" data-act="auto">[${T(AUT.title)}]</span>` : ``) + (p2Unlocked() ? `<span class="tl" data-act="p2go">[PIXEL-OS 2]</span>` : ``) + (p3Unlocked() ? `<span class="tl" data-act="p3go">[PIXEL-OS 3]</span>` : ``) + (p4Unlocked() ? `<span class="tl" data-act="p4go">[PIXEL-OS 4]</span>` : ``));
 }
 const st0 = { next: 25, left: 0, good: true };
 function zStrayTick(dt) {
@@ -549,7 +549,7 @@ function winBody(id) {
 }
 
 const MENU = {
-  file: u => [[`save`, u.save], [`exp`, u.exp], [`imp`, u.imp], ...(treeOpen() ? [[`tree`, T(TRT.title), `sepi`]] : []), ...(autoOpen() ? [[`auto`, T(AUT.title)]] : []), ...(p2Unlocked() ? [[`p2go`, `PIXEL-OS 2`]] : []), ...(p3Unlocked() ? [[`p3go`, `PIXEL-OS 3`]] : []), [`hard`, u.hard, `sepi`]],
+  file: u => [[`save`, u.save], [`exp`, u.exp], [`imp`, u.imp], ...(treeOpen() ? [[`tree`, T(TRT.title), `sepi`]] : []), ...(autoOpen() ? [[`auto`, T(AUT.title)]] : []), ...(p2Unlocked() ? [[`p2go`, `PIXEL-OS 2`]] : []), ...(p3Unlocked() ? [[`p3go`, `PIXEL-OS 3`]] : []), ...(p4Unlocked() ? [[`p4go`, `PIXEL-OS 4`]] : []), [`hard`, u.hard, `sepi`]],
   edit: u => [[`lang`, u.lang], [`sci`, (S.opt.sci ? `[x] ` : `[ ] `) + u.sci], [`anim`, (S.opt.anim ? `[x] ` : `[ ] `) + u.anim]],
   help: u => (S.run.help ? [[`tip`, u.tip], [`about`, u.about, `sepi`]] : [[``, u.helpOff, `dis`], [`about`, u.about, `sepi`]]),
 };
@@ -762,8 +762,9 @@ const A = {
   pfold() { S.opt.pfold = S.opt.pfold ? 0 : 1; },
   p2go: () => p2Enter(),
   p3go: () => p3Enter(),
+  p4go: () => p4Enter(),
 };
-const SAFE = new Set([`lang`, `exp`, `imp`, `hard`, `dlgOk`, `dlgNo`, `save`, `keep`, `ngplus`, `bsodOk`, `safeOk`, `tree`, `tclose`, `tbuy`, `treset`, `tsel`, `tcenter`, `auto`, `aclose`, `atog`, `rpick`, `anim`, `p2free`, `p2back`, `p3go`, `p3keep`, `p3back`]);
+const SAFE = new Set([`lang`, `exp`, `imp`, `hard`, `dlgOk`, `dlgNo`, `save`, `keep`, `ngplus`, `bsodOk`, `safeOk`, `tree`, `tclose`, `tbuy`, `treset`, `tsel`, `tcenter`, `auto`, `aclose`, `atog`, `rpick`, `anim`, `p2free`, `p2back`, `p3go`, `p3keep`, `p3back`, `p4go`, `p4keep`, `p4back`]);
 function act(s) {
   const i = s.indexOf(`:`), k = i < 0 ? s : s.slice(0, i), v = i < 0 ? `` : s.slice(i + 1);
   if (busy && !SAFE.has(k)) return;
@@ -825,7 +826,7 @@ document.addEventListener(`visibilitychange`, () => { if (document.hidden) save(
 // ---------- loops ----------
 function render() {
   const b = document.body.classList;
-  b.toggle(`e0`, S.era === 0); b.toggle(`e1`, S.era >= 1 && !MODES[S.era]); b.toggle(`p2`, S.era === 8); b.toggle(`p3`, S.era === 9);
+  b.toggle(`e0`, S.era === 0); b.toggle(`e1`, S.era >= 1 && !MODES[S.era]); b.toggle(`p2`, S.era === 8); b.toggle(`p3`, S.era === 9); b.toggle(`p4`, S.era === 10);
   for (let i = 1; i <= 6; i++) b.toggle(`s` + i, S.era >= 1 && E().skin === i);
   // QUANTUM-OS (act 7) is drawn over the Winbows 12 look
   b.toggle(`q7`, S.era === 7);

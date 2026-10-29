@@ -361,6 +361,7 @@ function p3Start() {
     for (let i = 0; i < steps; i++) p3Tick(n / steps);
   }
   if (p.fin === 1) p.fin = 2;
+  setTimeout(p4Tell, 1500);
 }
 
 // ---------- screen ----------
@@ -440,7 +441,7 @@ function p3OptHtml() {
   return `<div class="p3menu">` + o(`p3back`, `↩ ${T(X8.back)}`) + o(`p3p2`, `🎨 PIXEL-OS 2`) + o(`save`, T([`Save`, `Sauvegarder`])) + o(`lang`, `English / Français`)
     + o(`sci`, `[${S.opt.sci ? `x` : ` `}] ${T(X8.sci)}`) + o(`anim`, `[${S.opt.anim ? `x` : ` `}] ${T(X8.anim)}`)
     + o(`exp`, T([`Export the save`, `Exporter la sauvegarde`])) + o(`imp`, T([`Import a save`, `Importer une sauvegarde`]))
-    + (S.p3.fin ? o(`p3fin`, T(X9.again)) : ``) + o(`p3about`, T([`About`, `À propos`])) + o(`hard`, T([`Erase everything`, `Tout effacer`])) + o(`p3close`, T(X8.close)) + `</div>`;
+    + (p4Unlocked() ? o(`p4go`, `⚔ PIXEL-OS 4`) : ``) + (S.p3.fin ? o(`p3fin`, T(X9.again)) : ``) + o(`p3about`, T([`About`, `À propos`])) + o(`hard`, T([`Erase everything`, `Tout effacer`])) + o(`p3close`, T(X8.close)) + `</div>`;
 }
 
 // ---------- the map and the chart ----------
@@ -537,7 +538,7 @@ async function p3Final() {
 function p3Credits() {
   const p = S.p3, el = $(`p3end`);
   el.classList.add(`on`);
-  el.querySelector(`.p3et`).innerHTML = `<div class="big">${T(X9.thanks)}</div><pre>${esc(fill(T(X9.credits), { n: fmt(p.owners), r: fmt(p.revN), b: fmt(p.fixed), s: p3Rating().toFixed(1).replace(`.`, S.lang === `fr` ? `,` : `.`), t: dur(S.time) }))}</pre><div class="fb"><button class="p3btn on" data-act="p3keep">${T(X9.keep)}</button><button class="p3btn" data-act="p3back">${T(X8.back)}</button></div>`;
+  el.querySelector(`.p3et`).innerHTML = `<div class="big">${T(X9.thanks)}</div><pre>${esc(fill(T(X9.credits), { n: fmt(p.owners), r: fmt(p.revN), b: fmt(p.fixed), s: p3Rating().toFixed(1).replace(`.`, S.lang === `fr` ? `,` : `.`), t: dur(S.time) }))}</pre><div class="fb"><button class="p3btn on" data-act="p3keep">${T(X9.keep)}</button>${p4Unlocked() ? `<button class="p3btn on" data-act="p4go">PIXEL-OS 4 →</button>` : ``}<button class="p3btn" data-act="p3back">${T(X8.back)}</button></div>`;
 }
 
 // ---------- era 9 ----------

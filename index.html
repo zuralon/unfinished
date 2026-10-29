@@ -1185,6 +1185,83 @@ body.p3 #dlg .body{padding:14px}
 body.p3 #dlg .btn{font:14px system-ui;color:#dfe7f2;background:#1f2c40;border:1px solid #2a3a50;border-radius:8px;padding:6px 14px}
 @media (max-width:1250px){.p3body{grid-template-columns:260px minmax(0,1fr) 300px}.p3kpi{min-width:0;padding:6px 10px}}
 @media (max-width:860px){.p3body{grid-template-columns:1fr;overflow:auto}.p3top{flex-wrap:wrap}.p3kpis{flex-wrap:wrap;justify-content:flex-start}}
+/* ---------- PIXEL-OS 4: the Pixel's adventure (old RPG menus) ---------- */
+#p4{display:none}
+body.p4 #desk,body.p4 #term{display:none}
+body.p4 #p4{display:flex;flex-direction:column;position:fixed;inset:0;z-index:5;color:#fff;font:19px/1.15 'VT323',ui-monospace,monospace;background:#05061a;cursor:default}
+.p4top{display:flex;align-items:center;gap:20px;padding:8px 16px;background:linear-gradient(#1b2a8f,#0b1252);border-bottom:3px solid #fff;box-shadow:0 3px 0 #000}
+.p4logo{display:flex;align-items:center;gap:8px}
+.p4logo i{width:16px;height:16px;background:#fff;box-shadow:0 0 10px #fff}
+.p4logo b{font-size:30px;font-weight:normal;letter-spacing:2px;text-shadow:2px 2px 0 #000}
+.p4where{flex:1;display:flex;flex-direction:column;align-items:center;line-height:1}
+.p4where b{font-weight:normal;font-size:26px;color:#ffd166;text-shadow:2px 2px 0 #000}
+.p4where span{font-size:18px;color:#cfd6ff}
+.p4boss{font-style:normal;color:#ff5a6e;animation:p4bl 1s steps(2) infinite}
+@keyframes p4bl{50%{opacity:.4}}
+body.noanim .p4boss{animation:none}
+.p4gold{text-align:right;line-height:1}
+.p4gold b{font-weight:normal;font-size:30px;color:#ffd166;text-shadow:2px 2px 0 #000}
+.p4gold small{display:block;font-size:15px;color:#cfd6ff}
+.p4b{font:inherit;font-size:20px;color:#fff;background:linear-gradient(#2a3cb8,#121d73);border:2px solid #fff;border-radius:6px;padding:4px 14px;cursor:pointer;box-shadow:0 0 0 2px #000,inset 0 0 0 1px #6f7fe6;text-shadow:1px 1px 0 #000}
+.p4b:hover{background:linear-gradient(#3a4ed0,#1a2a8f)}
+.p4b.on{background:linear-gradient(#e0a92c,#a5700c);color:#fff}
+.p4stage{position:relative;flex:1;min-height:0;border-bottom:3px solid #fff}
+.p4stage canvas{display:block;width:100%;height:100%;cursor:crosshair}
+.p4hud{position:absolute;left:12px;top:10px;display:flex;align-items:center;gap:14px}
+.p4adv{font-size:18px}
+.p4adv:not(.on){background:linear-gradient(#8a2232,#4d0d18)}
+.p4timer{position:relative;width:260px;height:20px;background:#000;border:2px solid #fff;border-radius:4px;overflow:hidden}
+.p4timer i{display:block;height:100%;background:linear-gradient(90deg,#ff5a6e,#ffd166)}
+.p4timer span{position:absolute;inset:0;text-align:center;line-height:18px;text-shadow:1px 1px 0 #000}
+.p4wins{display:grid;grid-template-columns:1.25fr 1fr 1fr 1fr;gap:10px;padding:10px;height:42vh;min-height:250px}
+.p4win{background:linear-gradient(#1c2a8a,#0a1150);border:3px solid #fff;border-radius:8px;box-shadow:0 0 0 2px #000,inset 0 0 0 2px #4b5bd6;padding:8px 10px;overflow:auto;min-height:0}
+.p4win h3{margin:0 0 6px;font-weight:normal;font-size:22px;color:#ffd166;text-shadow:2px 2px 0 #000}
+.p4stats{display:grid;grid-template-columns:1fr 1fr;gap:2px 10px;font-size:17px;color:#cfd6ff;margin-bottom:6px}
+.p4stats b{font-weight:normal;color:#fff}
+.p4row,.p4mi{position:relative;display:flex;align-items:center;gap:6px;width:100%;text-align:left;font:inherit;color:#fff;background:none;border:0;border-radius:4px;padding:3px 4px 3px 18px;cursor:pointer;text-shadow:1px 1px 0 #000}
+.p4row:hover,.p4mi:hover{background:rgba(255,255,255,.08)}
+.p4cur{position:absolute;left:3px;top:4px;color:#fff;opacity:0}
+.p4row:hover .p4cur,.p4mi:hover .p4cur{opacity:1;animation:p4cur .5s steps(2) infinite}
+@keyframes p4cur{50%{transform:translateX(3px)}}
+.p4row>div{flex:1;min-width:0}
+.p4row b{font-weight:normal;font-size:19px}
+.p4row b small{color:#9fb0ff;font-size:16px}
+.p4row>div>small{display:block;font-size:15px;color:#b9c3ff;line-height:1.05}
+.p4row em{font-style:normal;color:#ffd166;white-space:nowrap}
+.p4row.poor em{color:#ff8a98}
+.p4row.done em{color:#3ddc84}.p4row.done{cursor:default}
+.p4row.lock{opacity:.45;cursor:default}
+.p4sk{position:relative;display:block;width:100%;text-align:left;font:inherit;color:#fff;background:rgba(0,0,0,.25);border:2px solid #6f7fe6;border-radius:6px;padding:4px 8px;margin-bottom:6px;cursor:pointer;overflow:hidden;text-shadow:1px 1px 0 #000}
+.p4sk b{font-weight:normal;font-size:20px}
+.p4sk small{display:block;font-size:15px;color:#b9c3ff;line-height:1.05}
+.p4sk em{position:absolute;right:8px;top:5px;font-style:normal;color:#3ddc84}
+.p4sk.ready{border-color:#3ddc84}.p4sk.ready:hover{background:rgba(61,220,132,.15)}
+.p4sk.cool{opacity:.7;cursor:default}.p4sk.cool em{color:#ffd166}
+.p4sk.lock{opacity:.4;cursor:default}.p4sk.lock em{color:#fff}
+.p4sk i{position:absolute;left:0;bottom:0;height:3px;background:#ffd166}
+.p4dim{color:#9fb0ff;font-size:15px;margin:4px 0 0}
+.p4log p{margin:0 0 6px;font-size:17px;line-height:1.1;color:#dfe5ff}
+.p4log p b{font-weight:normal;color:#3ddc84}
+.p4log p.cop b{color:#ff9a3f}.p4log p.cat b{color:#c88cff}.p4log p.fin b{color:#ff5a6e}.p4log p.px b{color:#fff}.p4log p.bip b{color:#ffd166}.p4log p.mom b{color:#ff7ab6}
+.p4log p.sys{color:#ffd166}
+#p4pan{display:none}
+#p4pan.on{display:flex;position:fixed;inset:0;z-index:20;background:rgba(0,0,10,.5);align-items:flex-start;justify-content:flex-end;padding:62px 16px}
+.p4menu{width:320px;max-height:80vh}
+#p4end{display:none}
+#p4end.on{display:flex;position:fixed;inset:0;z-index:30;background:#fff;color:#111;align-items:center;justify-content:center;padding:24px;overflow:auto}
+.p4et{max-width:780px;width:100%;font:24px/1.4 'VT323',monospace}
+.p4et>div{margin:6px 0;animation:p2in .5s ease-out}
+.p4et .dev{color:#0a7a3a}.p4et .cop{color:#c25e00}.p4et .cat{color:#7a2ec2}.p4et .fin{font-family:Georgia,serif;font-style:italic;color:#000}.p4et .sys{color:#555}
+.p4et .big{font-size:50px;color:#111;text-align:center;margin-bottom:18px}
+.p4et pre{font:inherit;text-align:center;white-space:pre-wrap;margin:0}
+.p4et .fb{display:flex;gap:12px;justify-content:center;margin-top:22px}
+body.p4 #toast{background:linear-gradient(#1c2a8a,#0a1150);color:#fff;border:3px solid #fff;border-radius:8px;box-shadow:0 0 0 2px #000;font:20px 'VT323',monospace;bottom:18px;right:18px;padding:8px 14px}
+body.p4 #dlg{background:rgba(0,0,10,.5)}
+body.p4 #dlg .win{background:linear-gradient(#1c2a8a,#0a1150);color:#fff;border:3px solid #fff;border-radius:8px;box-shadow:0 0 0 2px #000;font:20px/1.2 'VT323',monospace}
+body.p4 #dlg .title{background:none;color:#ffd166;padding:6px 12px;font:22px 'VT323',monospace;border:0}
+body.p4 #dlg .body{padding:10px 14px}
+body.p4 #dlg .btn{font:20px 'VT323',monospace;color:#fff;background:linear-gradient(#2a3cb8,#121d73);border:2px solid #fff;border-radius:6px;padding:3px 14px}
+@media (max-width:1100px){.p4wins{grid-template-columns:1fr 1fr;height:auto;max-height:50vh;overflow:auto}}
 </style>
 </head>
 <body class="nocursor">
@@ -1217,21 +1294,22 @@ body.p3 #dlg .btn{font:14px system-ui;color:#dfe7f2;background:#1f2c40;border:1p
 <div id="boot"><div><i></i>PIXEL-OS 1<br><br><span class="dim">Welcome. Mostly.</span></div></div>
 <div id="dlg"><div class="win"><div class="title"><b id="dlgH">PIXEL-OS</b></div><div class="body"><div id="dlgT"></div><textarea id="dlgI" spellcheck="false"></textarea><div id="dlgB"></div></div></div></div>
 
-<script src="data.js?v=68"></script>
-<script src="era2.js?v=68"></script>
-<script src="era3.js?v=68"></script>
-<script src="era4.js?v=68"></script>
-<script src="era5.js?v=68"></script>
-<script src="era6.js?v=68"></script>
-<script src="era7.js?v=68"></script>
-<script src="icons.js?v=68"></script>
-<script src="savers.js?v=68"></script>
-<script src="visuals.js?v=68"></script>
-<script src="postit.js?v=68"></script>
-<script src="tree.js?v=68"></script>
-<script src="auto.js?v=68"></script>
-<script src="p2.js?v=68"></script>
-<script src="p3.js?v=68"></script>
-<script src="game.js?v=68"></script>
+<script src="data.js?v=69"></script>
+<script src="era2.js?v=69"></script>
+<script src="era3.js?v=69"></script>
+<script src="era4.js?v=69"></script>
+<script src="era5.js?v=69"></script>
+<script src="era6.js?v=69"></script>
+<script src="era7.js?v=69"></script>
+<script src="icons.js?v=69"></script>
+<script src="savers.js?v=69"></script>
+<script src="visuals.js?v=69"></script>
+<script src="postit.js?v=69"></script>
+<script src="tree.js?v=69"></script>
+<script src="auto.js?v=69"></script>
+<script src="p2.js?v=69"></script>
+<script src="p3.js?v=69"></script>
+<script src="p4.js?v=69"></script>
+<script src="game.js?v=69"></script>
 </body>
 </html>
