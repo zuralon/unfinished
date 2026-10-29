@@ -117,7 +117,7 @@ function treeRender() {
     document.body.insertAdjacentHTML(`beforeend`, `<div id="tree"><div class="thd"></div><div class="tbody"><div class="tmap"><div class="tlay"></div></div><div class="tside"></div></div></div>`);
     treeBind();
   }
-  $(`tree`).querySelector(`.thd`).innerHTML = `<h2>${T(TRT.title)}</h2><span class="tpill">${fill(T(TRT.pts), { n: fmt(treeLeft()) })}</span><span class="tsub">${fill(T(TRT.spent), { n: fmt(treeSpent()) })} · ${fill(T(TRT.next), { n: nextGain() || 10 })}</span><span class="tsp"></span>${p2Unlocked() && S.era !== 8 ? `<button class="btn tp2" data-act="p2go">PIXEL-OS 2 →</button>` : ``}<button class="btn" data-act="tcenter">${T(TRT.center)}</button><button class="btn" data-act="treset">${T(TRT.reset)}</button><button class="btn" data-act="tclose">${T(TRT.close)}</button><p class="thow">${T(TRT.how)}</p>`;
+  $(`tree`).querySelector(`.thd`).innerHTML = `<h2>${T(TRT.title)}</h2><span class="tpill">${fill(T(TRT.pts), { n: fmt(treeLeft()) })}</span><span class="tsub">${fill(T(TRT.spent), { n: fmt(treeSpent()) })} · ${fill(T(TRT.next), { n: nextGain() || 10 })}</span><span class="tsp"></span>${p2Unlocked() && S.era < 8 ? `<button class="btn tp2" data-act="p2go">PIXEL-OS 2 →</button>` : ``}<button class="btn" data-act="tcenter">${T(TRT.center)}</button><button class="btn" data-act="treset">${T(TRT.reset)}</button><button class="btn" data-act="tclose">${T(TRT.close)}</button><p class="thow">${T(TRT.how)}</p>`;
   $(`tree`).querySelector(`.tlay`).innerHTML = treeHtml();
   $(`tree`).querySelector(`.tside`).innerHTML = treeSide();
   treeView();

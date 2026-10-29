@@ -280,11 +280,14 @@ const X8 = {
   about: [`PIXEL-OS 2\nThe second pixel\n\nA game by zuralon.\nThe first pixel was made in 1984. This one, with you.`, `PIXEL-OS 2\nLe deuxième pixel\n\nUn jeu de zuralon.\nLe premier pixel a été fait en 1984. Celui-ci, avec toi.`],
 };
 
+// the side games (PIXEL-OS 2 and 3) plug into the engine here, one per era number
+const MODES = {};
+
 // ---------- state ----------
 // opened by the last skill of the crown (or a tree learned to the end); kept forever, even after a tree reset
 const p2Unlocked = () => { if (!S.st.p2un && (S.p2 || TR(`x5`) || TNODES.every(n => tlv(n.id) >= n.max))) S.st.p2un = 1; return !!S.st.p2un; };
 // tell it once, out loud: a menu entry alone is easy to miss
-function p2Tell() { if (S.era !== 8 && p2Unlocked() && !S.st.p2told) { S.st.p2told = 1; dlg(T(X8.unlock), { cancel: true, okT: `PIXEL-OS 2 →`, ok: () => p2Enter() }); } }
+function p2Tell() { if (S.era < 8 && p2Unlocked() && !S.st.p2told) { S.st.p2told = 1; dlg(T(X8.unlock), { cancel: true, okT: `PIXEL-OS 2 →`, ok: () => p2Enter() }); } }
 const p2Fresh = () => ({ pic: 0, grid: [], px: 0, tot: 0, gal: [], up: {}, chat: [], bat: {}, crash: {}, roll: 1, rollT: 5, crashT: 40, copT: 0, bugs: [], bugT: 50, sel: `g`, tool: `paint`, sym: 0, clicks: 0, placed: 0, squash: 0, reboots: 0, fin: 0, seen: {} });
 const p2k = () => P2K[S.p2.pic];
 const p2pic = () => P2PICS[S.p2.pic];
@@ -513,10 +516,16 @@ async function p2Enter() {
     await wait(1000);
     $(`fin`).classList.remove(`p2i`);
   }
-  const back = {};
-  for (const k of Object.keys(eraFresh(0))) back[k] = S[k];
-  S.back = JSON.parse(JSON.stringify(back));
-  Object.assign(S, eraFresh(8));
+  modeSwitch(8);
+}
+// go to a side game: the run of the main game waits in S.back, untouched, until you come back
+function modeSwitch(era) {
+  if (S.era < 8) {
+    const back = {};
+    for (const k of Object.keys(eraFresh(0))) back[k] = S[k];
+    S.back = JSON.parse(JSON.stringify(back));
+  }
+  Object.assign(S, eraFresh(era));
   restart(S);
 }
 function p2Leave() {
@@ -534,6 +543,7 @@ function p2Start() {
   p2Mount();
   p2Calc();
   const away = (Date.now() - S.last) / 1000;
+  setTimeout(p3Tell, 1500);
   if (away > 60 && p2ps() > 0) {
     const n = p2ps() * Math.min(away, 8 * 3600) * (p2has(`off`) ? 1 : 0.5);
     p2Gain(n); dlg(fill(T(X8.away), { t: dur(away), n: fmt(n) }));
@@ -591,7 +601,7 @@ function p2Credits() {
   const p = S.p2, el = $(`p2end`);
   const n = p.gal.reduce((s, x) => s + [...x.grid].filter(c => c && c !== `P` && c !== `.`).length, 0);
   el.classList.add(`on`);
-  el.querySelector(`.p2et`).innerHTML = `<div class="big">${T(X8.thanks)}</div><pre>${esc(fill(T(X8.credits), { n: fmt(n), b: fmt(p.squash), t: dur(S.time) }))}</pre><div class="fb"><button class="p2b on" data-act="p2free">${T(X8.freeGo)}</button><button class="p2b" data-act="p2back">${T(X8.back)}</button></div>`;
+  el.querySelector(`.p2et`).innerHTML = `<div class="big">${T(X8.thanks)}</div><pre>${esc(fill(T(X8.credits), { n: fmt(n), b: fmt(p.squash), t: dur(S.time) }))}</pre><div class="fb"><button class="p2b on" data-act="p2free">${T(X8.freeGo)}</button>${p3Unlocked() ? `<button class="p2b on" data-act="p3go">PIXEL-OS 3 →</button>` : ``}<button class="p2b" data-act="p2back">${T(X8.back)}</button></div>`;
 }
 
 // ---------- screen ----------
@@ -678,7 +688,7 @@ function p2OptHtml() {
   return `<div class="p2box p2menu">` + o(`p2back`, `↩ ${T(X8.back)}`) + o(`save`, U().save || T([`Save`, `Sauvegarder`])) + o(`lang`, `English / Français`)
     + o(`sci`, `[${S.opt.sci ? `x` : ` `}] ${T(X8.sci)}`) + o(`anim`, `[${S.opt.anim ? `x` : ` `}] ${T(X8.anim)}`)
     + o(`exp`, T([`Export the save`, `Exporter la sauvegarde`])) + o(`imp`, T([`Import a save`, `Importer une sauvegarde`]))
-    + (S.p2.fin ? o(`p2fin`, T(X8.again)) : ``) + o(`p2about`, T([`About`, `À propos`])) + o(`hard`, T([`Erase everything`, `Tout effacer`])) + o(`p2close`, T(X8.close)) + `</div>`;
+    + (p3Unlocked() ? o(`p3go`, `📈 PIXEL-OS 3`) : ``) + (S.p2.fin ? o(`p2fin`, T(X8.again)) : ``) + o(`p2about`, T([`About`, `À propos`])) + o(`hard`, T([`Erase everything`, `Tout effacer`])) + o(`p2close`, T(X8.close)) + `</div>`;
 }
 
 // ---------- the canvas ----------
@@ -860,3 +870,5 @@ ACH.push(
   [`p2zero`, [`God lost`, `Dieu a perdu`], [`See God's die roll a 0.`, `Voir le dé de Dieu faire 0.`], () => !!S.st.p2zero, 8],
   [`p2fin`, [`Finished. Signed.`, `Fini. Signé.`], [`Sign the last painting.`, `Signer le dernier tableau.`], () => !!S.st.p2fin, 8],
 );
+
+MODES[8] = { start: () => p2Start(), tick: dt => p2Tick(dt), render: () => p2Render(), frame: now => p2Frame(now), reset() { if ($(`p2end`)) $(`p2end`).classList.remove(`on`); p2Panel = ``; } };

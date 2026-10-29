@@ -40,6 +40,7 @@ Tu commences dans un terminal vert, tu trouves une carte perforée, puis tu trav
 - Pour rejouer sans corvée : **automatisation** (achats, matériel, actes suivants, tuto sauté), **paliers** qui doublent la production des programmes, et une **règle différente à chaque partie** à choisir parmi trois.
 - À partir de la 10e Nouvelle partie+ : la **couronne « Au-delà »** de l'arbre, et des **règles défi** qui ralentissent la partie contre plus de points.
 - **PIXEL-OS 2 : le deuxième pixel**, un nouveau jeu qui s'ouvre avec la toute dernière compétence de l'arbre. On y peint neuf tableaux, un par époque, case par case, en suivant un modèle. Chaque couleur a sa règle (le phosphore aime les lignes, le bleu plante, le gris est une batterie, Copixel peint à ta place, les qubits jouent aux dés), et il y a des bugs à écraser. On peut aller et revenir entre les deux jeux à tout moment.
+- **PIXEL-OS 3 : la sortie**, qui s'ouvre une fois PIXEL-OS 2 fini. Le jeu est fini, il faut maintenant le sortir : tableau de bord de boutique, prix, tweets, streamers, serveurs qui saturent, bugs à corriger, avis à lire (et à qui répondre), mises à jour à publier, nouvelles plateformes (consoles, téléphones, frigos, la Lune…). La carte du monde s'allume au fil des joueurs, jusqu'à 8 milliards.
 - Environ 10 heures pour la première partie, en français et en anglais.
 - Sauvegarde automatique, plus export et import d'une sauvegarde dans les menus.
 
@@ -65,6 +66,7 @@ Aucune installation ni compilation : c'est du HTML et du JavaScript sans dépend
 | `tree.js` | L'arbre de compétences |
 | `auto.js` | L'automatisation, les paliers et les règles de partie |
 | `p2.js` | PIXEL-OS 2 : le deuxième pixel |
+| `p3.js` | PIXEL-OS 3 : la sortie |
 
 Les textes sont stockés par paires `[anglais, français]` et affichés avec `T()`.
 
@@ -102,6 +104,7 @@ Start in a green terminal, find a punched card, then live through six operating 
 - To replay without the chores: **automation** (buying, hardware, next acts, skipping the tutorial), **milestones** that double program production, and a **different rule each run**, picked among three.
 - From the 10th New Game+ on: the **Beyond crown** of the skill tree, and **challenge rules** that slow the run down for more points.
 - **PIXEL-OS 2: the second pixel**, a new game opened by the very last skill of the tree. Paint nine pictures, one per era, cell by cell, following a model. Each colour has its own rule (phosphor loves lines, blue crashes, grey is a battery, Copixel paints for you, qubits roll dice), and there are bugs to squash. You can go back and forth between both games at any time.
+- **PIXEL-OS 3: the release**, opened once PIXEL-OS 2 is finished. The game is done, now it has to come out: a store dashboard, price, tweets, streamers, servers filling up, bugs to fix, reviews to read (and answer), patches to ship, new platforms (consoles, phones, fridges, the Moon…). The world map lights up as players arrive, up to 8 billion.
 - About 10 hours for a first run, in English and French.
 - Saves automatically, with save export and import in the menus.
 
@@ -127,6 +130,7 @@ Nothing to install or build: it's plain HTML and JavaScript with no dependencies
 | `tree.js` | The skill tree |
 | `auto.js` | Automation, milestones and run rules |
 | `p2.js` | PIXEL-OS 2: the second pixel |
+| `p3.js` | PIXEL-OS 3: the release |
 
 Texts are stored as `[english, french]` pairs and shown with `T()`.
 

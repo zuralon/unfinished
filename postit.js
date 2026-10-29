@@ -165,7 +165,7 @@ function piTick(dt) {
 }
 function piRender() {
   const el = $(`postit`);
-  el.hidden = !S.era || S.era === 8 || !!$(`fin`)?.classList.contains(`on`);
+  el.hidden = !S.era || S.era >= 8 || !!$(`fin`)?.classList.contains(`on`);
   if (el.hidden) return;
   const x = S.x, c = tkNow();
   let h = `<div class="pt" data-act="pfold"><b>${T(PI.head)}</b>${S.tkn ? ` #${S.tkn}` : ``}<span>${T(S.opt.pfold ? PI.show : PI.hide)}</span></div>`;
