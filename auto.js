@@ -77,8 +77,8 @@ function autoTick(dt) {
 // ---------- the rule of the run ----------
 // p/c/cost/ram multiply production, clicks, prices and memory; strayF/strayV the stray pixels; ev the dilemmas; flip turns the screen
 const RULES = [
-  { id: `fairy`, pts: 3, p: 0.5, c: 10, t: [`Fairy fingers`, `Doigts de fée`], d: [`Clicks x10, production halved.`, `Clics x10, production divisée par 2.`] },
-  { id: `mad`, pts: 4, p: 3, c: 0.2, t: [`Mad factory`, `Usine folle`], d: [`Production x3, clicks /5. Let the machines work.`, `Production x3, clics divisés par 5. Laisse bosser les machines.`] },
+  { id: `fairy`, pts: 3, p: 0.5, c: 10, t: [`Nimble fingers`, `Doigts de fée`], d: [`Clicks x10, production halved.`, `Clics x10, production divisée par 2.`] },
+  { id: `mad`, pts: 4, p: 3, c: 0.2, t: [`Runaway factory`, `Usine folle`], d: [`Production x3, clicks /5. Let the machines work.`, `Production x3, clics divisés par 5. Laisse bosser les machines.`] },
   { id: `sale`, pts: 3, cost: 0.5, ram: 0.7, t: [`Clearance sale`, `Grandes soldes`], d: [`Everything costs half price, but memory is 30% smaller.`, `Tout est à moitié prix, mais la mémoire est 30 % plus petite.`] },
   { id: `wild`, pts: 2, strayF: 3, strayV: 5, t: [`Wild pixels`, `Pixels sauvages`], d: [`Stray pixels come 4 times more often and are worth x5. Bad ones too.`, `Les pixels égarés passent 4 fois plus souvent et valent x5. Les mauvais aussi.`] },
   { id: `upside`, pts: 5, p: 2, flip: 1, t: [`Upside down`, `À l'envers`], d: [`The whole screen is upside down for the whole run. Production x2. Good luck.`, `Tout l'écran est à l'envers pendant toute la partie. Production x2. Bon courage.`] },

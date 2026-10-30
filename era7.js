@@ -4,8 +4,8 @@
 const X7 = {
   pos: [`Measure the speed`, `Mesurer la vitesse`], vel: [`Measure the pixels`, `Mesurer les pixels`],
   unc: [`Uncertainty principle: you can know your pixels or your speed. Not both.`, `Principe d'incertitude : tu peux connaître tes pixels ou ta vitesse. Pas les deux.`],
-  open: [`Open the box`, `Ouvrir la boîte`], shut: [`The cat is in a superposition. Back in {s} s.`, `Le chat est dans une superposition. Retour dans {s} s.`],
-  boxQ: [`Inside: a cat. Or no cat. Or something else. Opening the box decides.`, `Dedans : un chat. Ou pas de chat. Ou autre chose. Ouvrir la boîte décide.`],
+  open: [`Open the box`, `Ouvrir la boîte`], shut: [`The cat is in a superposition. Back in {s} s.`, `Le chat est en superposition. Retour dans {s} s.`],
+  boxQ: [`Inside: a cat. Or no cat. Or something else. Opening the box decides.`, `Dedans : un chat. Ou pas de chat. Ou autre chose. Ouvrir la boîte en décide.`],
   ghost: [`Your click also landed in a parallel universe.`, `Ton clic est aussi tombé dans un univers parallèle.`],
   dice: [`Dice: x{m}`, `Dé : x{m}`],
   deco: [`Decoherence: `, `Décohérence : `],
@@ -152,15 +152,15 @@ ERA[7] = {
     clock: [`THE DEV: the clock runs backwards. i'm getting younger. i don't feel younger.`, `LE DEV : l'horloge tourne à l'envers. je rajeunis. je ne me sens pas plus jeune.`],
     dice: [`THE DEV: Einstein said God doesn't play dice. God bought some anyway. they're in your Multistore.`, `LE DEV : Einstein disait que Dieu ne joue pas aux dés. Dieu en a acheté quand même. ils sont dans ta Multiboutique.`],
     calc: [`THE DEV: 2 + 2 = 4. most of the time. in universe 6 it's "fish".`, `LE DEV : 2 + 2 = 4. la plupart du temps. dans l'univers 6, ça fait « poisson ».`],
-    hack: [`THE DEV: a terminal again. the prompt is in a superposition. type carefully.`, `LE DEV : encore un terminal. l'invite est dans une superposition. tape doucement.`],
+    hack: [`THE DEV: a terminal again. the prompt is in a superposition. type carefully.`, `LE DEV : encore un terminal. l'invite est en superposition. tape avec précaution.`],
     saver: [`THE DEV: quantum foam. tiny universes popping in and out. one of them had a better version of this game. it popped.`, `LE DEV : de la mousse quantique. de tout petits univers qui apparaissent et disparaissent. l'un d'eux avait une meilleure version de ce jeu. il a éclaté.`],
     tunnel: [`THE DEV: the tunnel miner went through the wall. and the neighbor's wall. the neighbor is fine. confused.`, `LE DEV : le mineur est passé à travers le mur. et le mur du voisin. le voisin va bien. perplexe.`],
     loop: [`THE DEV: the time loop works. the time loop works. the time loop works.`, `LE DEV : la boucle temporelle marche. la boucle temporelle marche. la boucle temporelle marche.`],
     multi: [`THE DEV (universe 404): universe not found. please try another universe.`, `LE DEV (univers 404) : univers introuvable. merci d'essayer un autre univers.`],
-    hole: [`THE DEV: we got a black hole. it's small. it's cute. it ate the remote. we don't need the remote.`, `LE DEV : on a pris un trou noir. il est petit. il est mignon. il a mangé la télécommande. on n'a pas besoin de la télécommande.`],
+    hole: [`THE DEV: we got a black hole. it's small. it's cute. it ate the remote. we don't need the remote.`, `LE DEV : on a adopté un trou noir. il est petit. il est mignon. il a mangé la télécommande. on n'a pas besoin de la télécommande.`],
     last: [`THE DEV: the last pixel. i made it in 1984. i'm making it right now. both are true. it's beautiful.`, `LE DEV : le dernier pixel. je l'ai fait en 1984. je le fais en ce moment. les deux sont vrais. c'est magnifique.`],
     oom: [`THE DEV: out of qubits. close something. or open it. in a superposition it's the same.`, `LE DEV : plus de qubits. ferme quelque chose. ou ouvre-le. en superposition, c'est pareil.`],
-    shopClosed: [`THE DEV (universe 2): in my universe you didn't close the Multistore. i'm just saying.`, `LE DEV (univers 2) : dans mon univers, tu n'as pas fermé la Multiboutique. je dis ça.`],
+    shopClosed: [`THE DEV (universe 2): in my universe you didn't close the Multistore. i'm just saying.`, `LE DEV (univers 2) : dans mon univers, tu n'as pas fermé la Multiboutique. je dis ça, je dis rien.`],
     blind: [`THE DEV: no score. now you know neither your pixels nor your speed. very zen.`, `LE DEV : plus de score. maintenant tu ne connais ni tes pixels ni ta vitesse. très zen.`],
     stray: [`THE DEV: stray pixels. they're in two places at once now. catch the right one.`, `LE DEV : des pixels égarés. ils sont à deux endroits à la fois, maintenant. attrape le bon.`],
     deco: [`THE DEV: if the screen flips or the language changes: decoherence. not a bug. well. not only a bug. more coherence = less of it.`, `LE DEV : si l'écran se retourne ou que la langue change : décohérence. ce n'est pas un bug. enfin. pas seulement un bug. plus de cohérence = moins de décohérence.`],
@@ -235,7 +235,7 @@ ERA[7] = {
     else if (k === `future`) {
       const next = E().P.filter(p => p.cost && !S.bought[p.id]).sort((a, b) => costOf(a.id) - costOf(b.id))[0];
       note(next ? tf(X7.futureBuy, { a: next.file }) : X7.futureEnd);
-    } else if (k === `lang`) { x.langWas = S.lang; S.lang = S.lang === `fr` ? `en` : `fr`; x.langT = 8; }
+    } else if (k === `lang`) { x.langWas = S.lang; S.lang = S.lang === `en` ? `fr` : `en`; x.langT = 8; }
     S.st.deco = (S.st.deco || 0) + 1;
     toast(T(X7.deco) + T(m));
   },
@@ -244,7 +244,7 @@ ERA[7] = {
     b.toggle(`q7flip`, x.flip > 0); b.toggle(`q7mirror`, x.mirror > 0);
   },
   simTick() { S.x.dice = 1.25; dq.length = 0; },
-  taskExtra() { return S.run.dice ? `<span class="meter">${fill(T(X7.dice), { m: String(diceM()).replace(`.`, S.lang === `fr` ? `,` : `.`) })}</span>` : ``; },
+  taskExtra() { return S.run.dice ? `<span class="meter">${fill(T(X7.dice), { m: String(diceM()).replace(`.`, decP()) })}</span>` : ``; },
   A: {
     end() {
       if (S.once.fin) { busy = true; return ERA[7].finScreen(); }
@@ -270,7 +270,7 @@ ERA[7] = {
     f.classList.add(`on`, `q`); box.innerHTML = ``;
     for (const l of X7.fin) {
       const d = document.createElement(`div`);
-      d.textContent = T(l); d.className = /^(THE DEV|LE DEV|THE CAT|LE CHAT)/.test(T(l)) ? `dev` : ``;
+      d.textContent = T(l); d.className = /dev|cat/.test(spk(l)) ? `dev` : ``;
       // already seen once: the lines come fast
       box.appendChild(d); await wait((T(l).length * 35 + 900) * (S.st.fin7 ? 0.15 : 1));
     }

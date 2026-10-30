@@ -5,8 +5,8 @@
 const SV = { raf: 0, era: 0, t0: 0 };
 const SVT = {
   slide: [`slide to unlock`, `glisser pour déverrouiller`],
-  slide7: [`slide to unlock`, `faire glisser pour déverrouiller`], swipe: [`Swipe up to open`, `Balayez vers le haut pour ouvrir`],
-  focus: [`Focus session`, `Session de concentration`],
+  slide7: [`slide to unlock`, `glisser pour déverrouiller`], swipe: [`Swipe up to open`, `Glisse vers le haut pour ouvrir`],
+  focus: [`Focus Session`, `Session de concentration`],
   boost: [`Production x{m} while you're away`, `Production x{m} pendant ton absence`],
 };
 

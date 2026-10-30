@@ -1,13 +1,27 @@
 // PIXEL-OS engine: era 0 (TERMLINK terminal tutorial) and eras 1-6 (desktop OSes, data in data.js and era*.js).
 const $ = id => document.getElementById(id);
 const KEY = `pixelos_v1`;
-const L = () => (S.lang === `fr` ? 1 : 0);
-const T = p => p[L()];
-const U = () => UI[S.lang];
-const loc = () => (S.lang === `fr` ? `fr-FR` : `en-US`);
+// languages: English and French live in the code as [en, fr] pairs; the others are tables in i18n/, keyed by the English text
+const LANGS = { en: [`English`, `en-US`], fr: [`Français`, `fr-FR`], es: [`Español`, `es-ES`], de: [`Deutsch`, `de-DE`], pt: [`Português (Brasil)`, `pt-BR`], it: [`Italiano`, `it-IT`], nl: [`Nederlands`, `nl-NL`], pl: [`Polski`, `pl-PL`], tr: [`Türkçe`, `tr-TR`], ru: [`Русский`, `ru-RU`], ja: [`日本語`, `ja-JP`], ko: [`한국어`, `ko-KR`], zh: [`简体中文`, `zh-CN`], tw: [`繁體中文`, `zh-TW`] };
+const lk = k => { const t = I18N[S.lang]; return t && t[k] !== undefined ? t[k] : k; };
+// a pair, or a text with holes made by tf(): [en, fr, English template, values], which any language can fill, even from a save
+const T = p => (S.lang === `en` ? p[0] : S.lang === `fr` ? p[1] : p[2] ? fill(lk(p[2]), tfv(p[3], 2)) : lk(p[0]));
+const uiKey = k => (typeof UI.en[k] === `function` ? UI.en[k](`{0}`, `{1}`, `{2}`) : UI.en[k]);
+function uiFor(l) {
+  const o = { ram: (u, t, f) => (f ? fill(lk(uiKey(`ram`)), [u, t, f]) : `${u} / ${t}`) };
+  for (const k in UI.en) if (!o[k]) { const v = UI.en[k]; o[k] = typeof v === `function` ? (...a) => fill(lk(uiKey(k)), a) : Array.isArray(v) ? v.map(lk) : lk(v); }
+  return I18N[l] ? (UI[l] = o) : o;
+}
+const U = () => UI[S.lang] || uiFor(S.lang);
+const loc = () => (LANGS[S.lang] || LANGS.en)[1];
+// who speaks in a story line, read on the English text so it works in every language; SAY_RE then splits the shown line
+const SPK = /^([A-Z?!][A-Z?! ]*)(?: \([^)]*\))?: /;
+const SAY_RE = /^([^:：]+?) ?[:：] ?(.*)$/s;
+function spk(l) { const m = SPK.exec(l[0]), w = m ? m[1] : ``; return !w ? `sys` : /COPIXEL/.test(w) ? `cop` : /CAT/.test(w) ? `cat` : /MOM/.test(w) ? `mom` : /^FIN|\?\?\?/.test(w) ? `fin` : /PIXEL/.test(w) ? `px` : /BIP/.test(w) ? `bip` : `dev`; }
 const fill = (s, o) => s.replace(/\{(\w+)\}/g, (_, k) => o[k]);
-const tf = (p, o) => [fill(p[0], o), fill(p[1], o)];
-const UP = (k, ...a) => [UI.en, UI.fr].map(u => (typeof u[k] === `function` ? u[k](...a) : u[k]));
+const tfv = (o, i) => Object.fromEntries(Object.entries(o).map(([k, v]) => [k, Array.isArray(v) ? (i < 2 ? v[i] : T(v)) : v]));
+const tf = (p, o) => [fill(p[0], tfv(o, 0)), fill(p[1], tfv(o, 1)), p[0], o];
+const UP = (k, ...a) => [...[UI.en, UI.fr].map(u => (typeof u[k] === `function` ? u[k](...a) : u[k])), uiKey(k), Object.assign({}, a)];
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': `&amp;`, '<': `&lt;`, '>': `&gt;`, '"': `&quot;` })[c]);
 const wait = ms => new Promise(r => setTimeout(r, ms));
 const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.random() * (i + 1) | 0; [a[i], a[j]] = [a[j], a[i]]; } return a; };
@@ -20,7 +34,7 @@ ERA.forEach((E, e) => {
   if (!E) return;
   for (const p of E.P) {
     const d = Object.getOwnPropertyDescriptor(p, `file`), base = d.get || (() => d.value);
-    Object.defineProperty(p, `file`, { get() { const n = base.call(this); return S && S.lang === `fr` ? frName(n, e) : n; }, configurable: true });
+    Object.defineProperty(p, `file`, { get() { const n = base.call(this); return !S || S.lang === `en` ? n : S.lang === `fr` ? frName(n, e) : lk(n); }, configurable: true });
   }
   const fix = pair => { if (Array.isArray(pair) && typeof pair[1] === `string`) pair[1] = pair[1].replace(NAME_RE, m => frName(m, e)); };
   for (const p of E.PA) { fix(p.t); fix(p.d); }
@@ -41,7 +55,7 @@ function fresh() {
     v: 1, life: 0, time: 0, clicks: 0, ach: [], once: {}, logs: 0,
     z: { ram: 3, rl: 0, count: 0, countOn: 0, auto: 0, autoOn: 0, pa: {}, seen: {}, log: [], n: 0, paid: 0 },
     st: { good: 0, bad: 0, closed: 0, oom: 0, hacks: 0, blind: 0 },
-    lang: (navigator.language || ``).startsWith(`fr`) ? `fr` : `en`, opt: { sci: 0, anim: 1 }, last: Date.now(),
+    lang: `en`, opt: { sci: 0, anim: 1 }, last: Date.now(),
   });
 }
 // d: a state to start from (era change, import); undefined = read the save
@@ -60,10 +74,12 @@ function save() {
   try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {}
 }
 
-// what differs between English and French numbers: 1.5 / 1,5, 5% / 5 %, Attack: / Attaque :
-const dec = s => S.lang === `fr` ? s.replace(`.`, `,`) : s;
-const pct = n => n + (S.lang === `fr` ? ` %` : `%`);
-const colon = () => S.lang === `fr` ? ` : ` : `: `;
+// what differs between languages: 1.5 / 1,5, 5% / 5 % / %5, Attack: / Attaque :
+const decP = () => (/^(fr|es|de|pt|it|nl|pl|tr|ru)$/.test(S.lang) ? `,` : `.`);
+const dec = s => s.replace(`.`, decP());
+const PCT = {};
+const pct = n => (PCT[S.lang] = PCT[S.lang] || new Intl.NumberFormat(loc(), { style: `percent`, maximumFractionDigits: 1 })).format(n / 100).replace(/\u202f/g, `\u00a0`);
+const colon = () => (S.lang === `fr` ? ` : ` : /^(ja|zh|tw)$/.test(S.lang) ? `：` : `: `);
 const SUF = [``, `K`, `M`, `B`, `T`, `Qa`, `Qi`, `Sx`, `Sp`, `Oc`, `No`, `Dc`, `UDc`, `DDc`, `TDc`, `QaDc`, `QiDc`];
 function fmt(n) {
   n = Math.floor(n);
@@ -76,18 +92,18 @@ function fmt(n) {
 // "+300000 px/s" written in a description follows the number format chosen in the options
 const PS_RE = /^\+[\d.,]+( (?:million|milliard|billion|trillion)s?)? px\/s/;
 // the subscription is already shown, formatted, in the line above the description
-const SUB_RE = /\s*(?:Subscription|Abonnement) ?: [\d.,]+( (?:million|milliard|billion|trillion)s?)? px\/s\./;
+const SUB_RE = () => new RegExp(`\\s*${T([`Subscription`, `Abonnement`])} ?[:：] ?[\\d.,]+[^.。]* px/s[.。]?`);
 function desc(id) {
   let t = T(E().D[id] || [``, ``]);
   const p = prog(id);
-  if (p && p.sub) t = t.replace(SUB_RE, ``);
+  if (p && p.sub) t = t.replace(SUB_RE(), ``);
   return p && p.prod && PS_RE.test(t) ? t.replace(PS_RE, `+${fmt(p.prod)} px/s`) : t;
 }
 const fmtR = n => (n < 100 ? (Math.round(n * 10) / 10).toLocaleString(loc()) : fmt(n));
 function dur(s) {
   s = Math.floor(s);
   const h = Math.floor(s / 3600), m = Math.floor(s / 60) % 60;
-  return h ? `${h} h ${m} min` : m ? `${m} min` : `${s} s`;
+  return h ? fill(T([`{h} h {m} min`, `{h} h {m} min`]), { h, m }) : m ? fill(T([`{m} min`, `{m} min`]), { m }) : fill(T([`{s} s`, `{s} s`]), { s });
 }
 
 // ---------- economy ----------
@@ -235,7 +251,7 @@ function zRender() {
   setH(`tHint`, S.clicks < 3 ? T(TERM.block) : ``);
   setH(`tMenu`, H && H.era === 0 ? hackHtml() : zMenu());
   setH(`tLog`, z.log.map(e => `<div class="${e.id === z.n ? `new` : ``}">${esc(T(e.t))}</div>`).join(``));
-  setH(`tSys`, `${T(TERM.sys)}: <span class="tl" data-act="lang">[${T(TERM.langSw)}]</span><span class="tl" data-act="exp">[${T(TERM.exp)}]</span><span class="tl" data-act="imp">[${T(TERM.imp)}]</span><span class="tl" data-act="hard">[${T(TERM.reset)}]</span><span class="tl" data-act="anim">[${T(S.opt.anim ? TERM.anim : TERM.animOff)}]</span>` + (treeOpen() ? `<span class="tl" data-act="tree">[${T(TRT.title)}]</span>` : ``) + (autoOpen() ? `<span class="tl" data-act="auto">[${T(AUT.title)}]</span>` : ``) + (p2Unlocked() ? `<span class="tl" data-act="p2go">[PIXEL-OS 2]</span>` : ``) + (p3Unlocked() ? `<span class="tl" data-act="p3go">[PIXEL-OS 3]</span>` : ``) + (p4Unlocked() ? `<span class="tl" data-act="p4go">[PIXEL-OS 4]</span>` : ``));
+  setH(`tSys`, `${T(TERM.sys)}${colon()}<span class="tl" data-act="lang">[${T(TERM.langSw)}]</span><span class="tl" data-act="exp">[${T(TERM.exp)}]</span><span class="tl" data-act="imp">[${T(TERM.imp)}]</span><span class="tl" data-act="hard">[${T(TERM.reset)}]</span><span class="tl" data-act="anim">[${T(S.opt.anim ? TERM.anim : TERM.animOff)}]</span>` + (treeOpen() ? `<span class="tl" data-act="tree">[${T(TRT.title)}]</span>` : ``) + (autoOpen() ? `<span class="tl" data-act="auto">[${T(AUT.title)}]</span>` : ``) + (p2Unlocked() ? `<span class="tl" data-act="p2go">[PIXEL-OS 2]</span>` : ``) + (p3Unlocked() ? `<span class="tl" data-act="p3go">[PIXEL-OS 3]</span>` : ``) + (p4Unlocked() ? `<span class="tl" data-act="p4go">[PIXEL-OS 4]</span>` : ``));
 }
 const st0 = { next: 25, left: 0, good: true };
 function zStrayTick(dt) {
@@ -502,7 +518,7 @@ const BODY = {
       }
       const en = E().end;
       // once seen, the ending is free to watch again (and leads to New Game+)
-      h += E().finScreen && S.once.fin ? row(`end`, T([`See the ending again`, `Revoir la fin`]), T([`And start a New Game+ from there.`, `Et lancer une Nouvelle partie+ depuis là.`]), T([`Watch`, `Voir`]), true)
+      h += E().finScreen && S.once.fin ? row(`end`, T([`See the ending again`, `Revoir la fin`]), T([`And start a New Game+ from there.`, `Et lancer une Nouvelle partie+ à partir de là.`]), T([`Watch`, `Voir`]), true)
         : maxed ? row(`end`, T(en.t), T(en.d), u.buy(fmt(en.c)), S.px >= en.c) : `<div class="row dim"><span>${T(en.t)}<small>${T(en.d)}</small></span></div>`;
     }
     const tabs = `<div class="tabs">${u.tabs.map((n, i) => `<button class="btn ${i === t ? `on` : ``}" data-act="tab:${i}">${n}</button>`).join(``)}</div>`;
@@ -678,7 +694,7 @@ function checkAch() {
     const [id, n] = a, f = a[3] || ACHK[id];
     if (S.ach.includes(id) || !f || !f()) continue;
     S.ach.push(id);
-    if (S.era === 0) zSay([fill(TERM.ach[0], { n: n[0] }), fill(TERM.ach[1], { n: n[1] })]);
+    if (S.era === 0) zSay(tf(TERM.ach, { n }));
     else toast(U().achGot(T(n)));
   }
 }
@@ -718,7 +734,7 @@ const A = {
     if (!z.seen.autoOn) { z.seen.autoOn = 1; zSay(TERM.tut.autoOn); }
   },
   zoff() { if (S.z.autoOn) S.z.autoOn--; },
-  zpa(id) { const p = PA0.find(x => x.id === id); if (S.px < p.cost) return zNoPx(); S.px -= p.cost; S.z.pa[id] = 1; zSay([`> ${p.t[0]}: OK`, `> ${p.t[1]} : OK`]); },
+  zpa(id) { const p = PA0.find(x => x.id === id); if (S.px < p.cost) return zNoPx(); S.px -= p.cost; S.z.pa[id] = 1; zSay(tf([`> {t}: OK`, `> {t} : OK`], { t: p.t })); },
   zram() { const r = R0[S.z.rl]; if (S.px < r.c) return zNoPx(); S.px -= r.c; S.z.ram = r.to; S.z.rl++; zSay(tf(TERM.memOk, { n: r.to })); },
   zhack() { if (S.hackCd <= 0) hackStart(0); },
   zcard() { if (!S.z.paid) { if (S.px < OS1) return zNoPx(); S.px -= OS1; S.z.paid = 1; } toEra1(); },
@@ -761,7 +777,12 @@ const A = {
     $(`autop`).innerHTML = `<div class="rp"><h2>${T([`Achievements`, `Succès`])}</h2><p>${U().achs(S.ach.length, ACH.length)}</p><div class="achl">${achList().map(([id, n, d]) => `<div class="ar ${S.ach.includes(id) ? `` : `lock`}"><div><b>${T(n)}</b><span>${T(d)}</span></div><span>${S.ach.includes(id) ? `[x]` : `[ ]`}</span></div>`).join(``)}</div><button class="btn" data-act="aclose">${T(X8.close)}</button></div>`;
     $(`autop`).classList.add(`on`);
   },
-  lang() { S.lang = S.lang === `fr` ? `en` : `fr`; document.documentElement.lang = S.lang; for (const k in cache) delete cache[k]; for (const id in W) { W[id].h = ``; W[id].el.querySelector(`.title b`).textContent = prog(id).file; } },
+  lang() {
+    if (!$(`autop`)) document.body.insertAdjacentHTML(`beforeend`, `<div id="autop"></div>`);
+    $(`autop`).innerHTML = `<div class="rp"><h2>${U().lang}</h2><div class="langs">${Object.keys(LANGS).map(l => `<button class="btn ${l === S.lang ? `on` : ``}" data-act="setlang:${l}">${LANGS[l][0]}</button>`).join(``)}</div><button class="btn" data-act="aclose">${T(X8.close)}</button></div>`;
+    $(`autop`).classList.add(`on`);
+  },
+  setlang(l) { if (!LANGS[l]) return; langGo(l, () => { S.lang = l; langApply(); A.aclose(); render(); save(); }); },
   sci() { S.opt.sci = S.opt.sci ? 0 : 1; },
   anim() { S.opt.anim = S.opt.anim ? 0 : 1; },
   tip() { dlg(T(E().HELP[Math.random() * E().HELP.length | 0])); },
@@ -775,7 +796,7 @@ const A = {
   p3go: () => p3Enter(),
   p4go: () => p4Enter(),
 };
-const SAFE = new Set([`lang`, `exp`, `imp`, `hard`, `dlgOk`, `dlgNo`, `save`, `keep`, `ngplus`, `bsodOk`, `safeOk`, `tree`, `tclose`, `tbuy`, `treset`, `tsel`, `tcenter`, `auto`, `aclose`, `atog`, `rpick`, `anim`, `p2free`, `p2back`, `p3go`, `p3keep`, `p3back`, `p4go`, `p4keep`, `p4back`]);
+const SAFE = new Set([`lang`, `setlang`, `achp`, `exp`, `imp`, `hard`, `dlgOk`, `dlgNo`, `save`, `keep`, `ngplus`, `bsodOk`, `safeOk`, `tree`, `tclose`, `tbuy`, `treset`, `tsel`, `tcenter`, `auto`, `aclose`, `atog`, `rpick`, `anim`, `p2free`, `p2back`, `p3go`, `p3keep`, `p3back`, `p4go`, `p4keep`, `p4back`]);
 function act(s) {
   const i = s.indexOf(`:`), k = i < 0 ? s : s.slice(0, i), v = i < 0 ? `` : s.slice(i + 1);
   if (busy && !SAFE.has(k)) return;
@@ -896,9 +917,19 @@ function restart(d) {
   start();
   save();
 }
+// the table of a language is only loaded when someone picks it
+function langGo(l, then) {
+  if (l === `en` || l === `fr` || I18N[l]) return then();
+  const s = document.createElement(`script`);
+  s.src = `i18n/${l}.js?` + document.querySelector(`script[src*="game.js"]`).src.split(`?`)[1];
+  s.onload = s.onerror = then; document.head.appendChild(s);
+}
+function langApply() { document.documentElement.lang = loc(); for (const k in cache) delete cache[k]; for (const id in W) { W[id].h = ``; W[id].el.querySelector(`.title b`).textContent = prog(id).file; } }
 function start() {
   refreshOwn();
-  document.documentElement.lang = S.lang;
+  document.documentElement.lang = loc();
+  if (!LANGS[S.lang]) S.lang = `en`;
+  langGo(S.lang, () => { langApply(); render(); });
   render();
   if (S.era === 0) {
     if (S.z.paid) toEra1();
@@ -911,7 +942,7 @@ function start() {
     if (!S.once[`boot` + S.era]) {
       S.once[`boot` + S.era] = 1; note(N(`start`)); treeBoot();
       if (E().enter) E().enter();
-      $(`boot`).innerHTML = `<div><i></i>${E().os}<br><br><span class="dim">${esc(T(E().bootT || [`Welcome. Mostly.`, `Bienvenue. En gros.`]))}</span></div>`;
+      $(`boot`).innerHTML = `<div><i></i>${E().os}<br><br><span class="dim">${esc(T(E().bootT || [`Welcome. Mostly.`, `Bienvenue. Ou presque.`]))}</span></div>`;
       if (!panelOpen()) $(`boot`).classList.add(`on`);
       setTimeout(() => $(`boot`).classList.remove(`on`), 2200);
     }

@@ -12,7 +12,7 @@ const P4W = [
     win: [`THE DEV: memory freed. 16 KB. we could put a whole second pixel in there.`, `LE DEV : mémoire libérée. 16 Ko. on pourrait y mettre un deuxième pixel entier.`] },
   { t: [`MINO-DOS`, `MINO-DOS`], bg: `dos`, en: [[`Modem screech`, `Grésillement`, `virus`], [`Floppy virus`, `Virus de disquette`, `virus`], [`Busy line`, `Ligne occupée`, `dot`]],
     boss: { n: [`Mom on the Phone`, `Maman au Téléphone`], k: `phone` },
-    intro: [`THE DEV: MINO-DOS. careful: if mom picks up the phone, the connection drops. and the attack too.`, `LE DEV : MINO-DOS. attention : si maman décroche, la connexion coupe. et l'attaque aussi.`],
+    intro: [`THE DEV: MINO-DOS. careful: if mom picks up the phone, the connection drops. and so does your attack.`, `LE DEV : MINO-DOS. attention : si maman décroche, la connexion saute. et l'attaque aussi.`],
     win: [`MOM: fine, fine, i'm hanging up. dinner's ready.`, `MAMAN : bon, bon, je raccroche. à table.`] },
   { t: [`Winbows 95`, `Winbows 95`], bg: `w95`, en: [[`Aggressive paperclip`, `Trombone agressif`, `clip`], [`Missing driver`, `Pilote manquant`, `bug`], [`DLL not found`, `DLL introuvable`, `popup`]],
     boss: { n: [`The Blue Screen of Death`, `L'Écran Bleu de la Mort`], k: `bsod` },
@@ -20,7 +20,7 @@ const P4W = [
     win: [`THE DEV: the blue screen is beaten. press any key to continue. please.`, `LE DEV : l'écran bleu est vaincu. appuie sur une touche pour continuer. s'il te plaît.`] },
   { t: [`Winbows XD`, `Winbows XD`], bg: `xd`, en: [[`Pop-up`, `Pop-up`, `popup`], [`Spam`, `Spam`, `spam`], [`Toolbar`, `Barre d'outils`, `popup`]],
     boss: { n: [`The Giant Pop-up`, `Le Pop-up Géant`], k: `regen` },
-    intro: [`THE DEV: the hill. it's beautiful. it's full of pop-ups. the internet in 2001.`, `LE DEV : la colline. elle est magnifique. elle est pleine de pop-ups. l'internet de 2001.`],
+    intro: [`THE DEV: the hill. it's beautiful. it's full of pop-ups. the internet in 2001.`, `LE DEV : la colline. elle est magnifique. elle est pleine de pop-ups. l'Internet de 2001.`],
     win: [`THE DEV: "you won!" for once, the pop-up was telling the truth.`, `LE DEV : « vous avez gagné ! » pour une fois, le pop-up disait vrai.`] },
   { t: [`The iBrick`, `L'iBrick`], bg: `ios`, en: [[`Notification`, `Notification`, `dot`], [`Forced update`, `Mise à jour forcée`, `loop`], [`Laggy app`, `Appli qui rame`, `worm`]],
     boss: { n: [`Battery 1%`, `Batterie 1 %`], k: `drain` },
@@ -29,7 +29,7 @@ const P4W = [
   { t: [`Winbows 12`, `Winbows 12`], bg: `w12`, en: [[`Subscription`, `Abonnement`, `spam`], [`Cookie`, `Cookie`, `dot`], [`AI hallucination`, `Hallucination d'IA`, `ghost`]],
     boss: { n: [`PIXEL∞`, `PIXEL∞`], k: `copy` },
     intro: [`COPIXEL: My clone, PIXEL∞, is guarding this world. He copies everything. Even your attacks. I apologize for him.`, `COPIXEL : Mon clone, PIXEL∞, garde ce monde. Il copie tout. Même tes attaques. Je m'excuse pour lui.`],
-    win: [`COPIXEL: PIXEL∞ is deleted. I am the only Copixel again. It is lonely. It is fine.`, `COPIXEL : PIXEL∞ est supprimé. Je suis à nouveau le seul Copixel. C'est solitaire. Ça va.`] },
+    win: [`COPIXEL: PIXEL∞ is deleted. I am the only Copixel again. It is lonely. It is fine.`, `COPIXEL : PIXEL∞ est supprimé. Je suis à nouveau le seul Copixel. On se sent seul. Ça va.`] },
   { t: [`QUANTUM-OS`, `QUANTUM-OS`], bg: `q`, en: [[`Unstable qubit`, `Qubit instable`, `ghost`], [`Time loop`, `Boucle temporelle`, `loop`], [`Ghost pixel`, `Pixel fantôme`, `ghost`]],
     boss: { n: [`Schrödinger's Cat`, `Le Chat de Schrödinger`], k: `cat` },
     intro: [`THE DEV: the quantum world. the boss is alive and dead. half your hits go through it.`, `LE DEV : le monde quantique. le boss est vivant et mort. la moitié de tes coups passent à travers.`],
@@ -85,26 +85,26 @@ const X10 = {
     [`THE DEV: that's it. the game is finished. everyone said so.`, `LE DEV : c'est fini. le jeu est fini. tout le monde l'a dit.`],
     [`???: FIN.`, `??? : FIN.`],
     [`THE DEV: who said that?`, `LE DEV : qui a dit ça ?`],
-    [`FIN: ME. I AM THE WORD "FIN". I WILL WRITE MYSELF OVER YOUR GAME. FOREVER.`, `FIN : MOI. JE SUIS LE MOT FIN. JE VAIS M'ÉCRIRE SUR TON JEU. POUR TOUJOURS.`],
+    [`FIN: ME. I AM "FIN", THE LAST WORD OF EVERY FRENCH MOVIE. I WILL WRITE MYSELF OVER YOUR GAME. FOREVER.`, `FIN : MOI. JE SUIS LE MOT FIN. JE VAIS M'ÉCRIRE SUR TON JEU. POUR TOUJOURS.`],
     [`THE DEV: no. if it's finished, nobody will ever play it again. pixel... can you stop it?`, `LE DEV : non. s'il est fini, plus personne n'y jouera. pixel... tu peux l'arrêter ?`],
     [`THE PIXEL: ■`, `LE PIXEL : ■`],
     [`THE DEV: he said yes. i think.`, `LE DEV : il a dit oui. je crois.`],
   ],
   fin: [
     [`FIN: F... I... N...`, `FIN : F... I... N...`],
-    [`FIN: I AM... NOT... FI...`, `FIN : JE SUIS... PAS... FI...`],
-    [`> FIN → PAS FINI`, `> FIN → PAS FINI`],
-    [`THE DEV: not finished. that's it. it never will be.`, `LE DEV : pas fini. c'est ça. il ne le sera jamais.`],
+    [`FIN: I AM... UN... FIN...`, `FIN : JE SUIS... PAS... FI...`],
+    [`> FIN → UNFINISHED`, `> FIN → UNFINISHED`],
+    [`THE DEV: unfinished. that's the word. it always will be.`, `LE DEV : pas fini. c'est ça. il ne le sera jamais.`],
     [`THE DEV: as long as someone clicks, it goes on. thank you, little pixel. and thank you.`, `LE DEV : tant que quelqu'un clique, il continue. merci, petit pixel. et merci à toi.`],
-    [`COPIXEL: I checked. The game is officially not finished. It is the best possible ending.`, `COPIXEL : J'ai vérifié. Le jeu est officiellement pas fini. C'est la meilleure fin possible.`],
+    [`COPIXEL: I checked. The game is officially unfinished. It is the best possible ending.`, `COPIXEL : J'ai vérifié. Le jeu n'est officiellement pas fini. C'est la meilleure fin possible.`],
     [`THE CAT: meow.`, `LE CHAT : miaou.`],
   ],
-  thanks: [`NOT FINISHED. NEVER.`, `PAS FINI. JAMAIS.`],
-  credits: [`PIXEL-OS 4\nThe Pixel's adventure\n\nA game by zuralon\nAnd a pixel, very brave\n\nMonsters beaten: {k}\nFalls: {d}\nTime played: {t}`, `PIXEL-OS 4\nL'aventure du pixel\n\nUn jeu de zuralon\nEt d'un pixel, très courageux\n\nMonstres vaincus : {k}\nChutes : {d}\nTemps de jeu : {t}`],
+  thanks: [`UNFINISHED. FOREVER.`, `PAS FINI. JAMAIS.`],
+  credits: [`PIXEL-OS 4\nThe Pixel's adventure\n\nA game by zuralon\nAnd one very brave pixel\n\nMonsters beaten: {k}\nFalls: {d}\nTime played: {t}`, `PIXEL-OS 4\nL'aventure du pixel\n\nUn jeu de zuralon\nEt d'un pixel, très courageux\n\nMonstres vaincus : {k}\nChutes : {d}\nTemps de jeu : {t}`],
   pickH: [`Boss beaten! Pick a reward:`, `Boss battu ! Choisis une récompense :`], picked: [`> Reward: {r}`, `> Récompense : {r}`],
   keep: [`Keep adventuring`, `Continuer l'aventure`], again: [`See the ending again`, `Revoir la fin`],
   unlock: [`Everyone has played... and the word FIN wants to end the game forever. PIXEL-OS 4 is open.`, `Tout le monde a joué... et le mot FIN veut finir le jeu pour toujours. PIXEL-OS 4 est ouvert.`],
-  about: [`PIXEL-OS 4\nThe Pixel's adventure\n\nA game by zuralon.\nNot finished. Never.`, `PIXEL-OS 4\nL'aventure du pixel\n\nUn jeu de zuralon.\nPas fini. Jamais.`],
+  about: [`PIXEL-OS 4\nThe Pixel's adventure\n\nA game by zuralon.\nUnfinished. Forever.`, `PIXEL-OS 4\nL'aventure du pixel\n\nUn jeu de zuralon.\nPas fini. Jamais.`],
   world: [`World {w}: {n}`, `Monde {w} : {n}`], stage: [`Stage {s}/10`, `Étape {s}/10`], bossSt: [`BOSS`, `BOSS`], after: [`After the end`, `Après la fin`],
   gold: [`bytes`, `octets`], hero: [`The Pixel`, `Le Pixel`], comp: [`Companions`, `Compagnons`], skills: [`Skills`, `Compétences`], log: [`Journal`, `Journal`],
   adv: [`Advance`, `Avancer`], on: [`ON`, `OUI`], off: [`OFF`, `NON`],
@@ -175,8 +175,8 @@ function p4Kill() {
     const w = p4World();
     if (w === 9) return p4Final();
     p4Say(P4W[w - 1].win);
-    for (const c of P4C) if (c.w === w && !p.seen[`c` + c.id]) { p.seen[`c` + c.id] = 1; p4Say([`> ${c.t[0]} joins the adventure!`, `> ${c.t[1]} rejoint l'aventure !`]); }
-    for (const s of P4S) if (s.w === w && !p.seen[`s` + s.id]) { p.seen[`s` + s.id] = 1; p4Say([`> New skill: ${s.t[0]}`, `> Nouvelle compétence : ${s.t[1]}`]); }
+    for (const c of P4C) if (c.w === w && !p.seen[`c` + c.id]) { p.seen[`c` + c.id] = 1; p4Say(tf([`> {t} joins the adventure!`, `> {t} rejoint l'aventure !`], { t: c.t })); }
+    for (const s of P4S) if (s.w === w && !p.seen[`s` + s.id]) { p.seen[`s` + s.id] = 1; p4Say(tf([`> New skill: {t}`, `> Nouvelle compétence : {t}`], { t: s.t })); }
     p.st++; p.kills = 0; p.best = Math.max(p.best, p.st); S.st.p4w = Math.max(S.st.p4w || 0, w);
     p.pick = shuffle(P4PK.map(k => k.id)).slice(0, 3);
     p4Say(P4W[w].intro);
@@ -254,7 +254,7 @@ const P4A = {
     const p = S.p4, k = P4PK.find(x => x.id === id);
     if (!k || !p.pick || !p.pick.includes(id)) return;
     p.perk = p.perk || {}; p.perk[id] = (p.perk[id] || 0) + 1; p.pick = null;
-    p4Say([fill(X10.picked[0], { r: k.t[0] }), fill(X10.picked[1], { r: k.t[1] })]);
+    p4Say(tf(X10.picked, { r: k.t }));
   },
   p4opt() { p4Panel = p4Panel === `opt` ? `` : `opt`; },
   p4close() { p4Panel = ``; },
@@ -322,14 +322,14 @@ function p4Render() {
   setH(`p4sk`, P4S.map(s => { const lock = (S.st.p4w || 0) < s.w, cd = p.cd[s.id]; return `<button class="p4sk${lock ? ` lock` : cd > 0 ? ` cool` : ` ready`}" data-act="p4skill:${s.id}"><b>${lock ? `???` : T(s.t)}</b><small>${lock ? fill(T(X10.locked), { w: s.w }) : T(s.d)}</small><em>${lock ? `🔒` : cd > 0 ? Math.ceil(cd) + ` s` : T(X10.ready)}</em>${cd > 0 ? `<i style="width:${cd / s.cd * 100}%"></i>` : ``}</button>`; }).join(``) + `<p class="p4dim">${T(X10.clickHint)}</p>`);
   setH(`p4logH`, T(X10.log));
   const was = cache.p4log;
-  setH(`p4log`, p.chat.slice(-12).map(l => { const t = T(l), m = /^([A-ZÀ-Ý?! ]+) ?: (.*)$/s.exec(t), who = m ? m[1] : ``; const cls = /COPIXEL/.test(who) ? `cop` : /CHAT|CAT/.test(who) ? `cat` : /^FIN|\?\?\?/.test(who) ? `fin` : /PIXEL/.test(who) ? `px` : /BIP/.test(who) ? `bip` : /MAMAN|MOM/.test(who) ? `mom` : m ? `dev` : `sys`; return `<p class="${cls}">${m ? `<b>${esc(who)}</b> ${esc(m[2])}` : esc(t)}</p>`; }).join(``));
+  setH(`p4log`, p.chat.slice(-12).map(l => { const t = T(l), cls = spk(l), m = cls !== `sys` && SAY_RE.exec(t), who = m ? m[1] : ``; return `<p class="${cls}">${m ? `<b>${esc(who)}</b> ${esc(m[2])}` : esc(t)}</p>`; }).join(``));
   if (cache.p4log !== was) { const c = $(`p4log`); c.scrollTop = c.scrollHeight; }
   setH(`p4pan`, p4Panel === `opt` ? p4OptHtml() : ``);
   $(`p4pan`).className = p4Panel ? `on ` + p4Panel : ``;
 }
 function p4OptHtml() {
   const o = (a, t) => `<button class="p4mi" data-act="${a}"><span class="p4cur">▶</span>${t}</button>`;
-  return `<div class="p4win p4menu">` + o(`p4back`, `↩ ${T(X8.back)}`) + modeLinks(o, 10) + o(`save`, T([`Save`, `Sauvegarder`])) + o(`lang`, `English / Français`)
+  return `<div class="p4win p4menu">` + o(`p4back`, `↩ ${T(X8.back)}`) + modeLinks(o, 10) + o(`save`, T([`Save`, `Sauvegarder`])) + o(`lang`, `🌐 ${U().lang}`)
     + o(`sci`, `[${S.opt.sci ? `x` : ` `}] ${T(X8.sci)}`) + o(`anim`, `[${S.opt.anim ? `x` : ` `}] ${T(X8.anim)}`)
     + o(`exp`, T([`Export the save`, `Exporter la sauvegarde`])) + o(`imp`, T([`Import a save`, `Importer une sauvegarde`]))
     + (S.p4.fin ? o(`p4fin`, T(X10.again)) : ``) + o(`p4about`, T([`About`, `À propos`])) + o(`hard`, T([`Erase everything`, `Tout effacer`])) + o(`p4close`, T(X8.close)) + `</div>`;
@@ -382,7 +382,7 @@ function p4Frame(now) {
     x.restore();
     p4Bar(x, ex, ey - 18, es, Math.max(0, e.hp) / e.max, e.boss ? `#ff5a6e` : `#ffc93c`);
     const light = wd.bg === `mac` || wd.bg === `fin`;
-    x.font = `${e.boss ? 22 : 17}px VT323, monospace`; x.textAlign = `center`; x.lineJoin = `round`;
+    x.font = `${e.boss ? 22 : 17}px VT323, Pixelify Sans, monospace`; x.textAlign = `center`; x.lineJoin = `round`;
     x.strokeStyle = light ? `#fff` : `#000`; x.lineWidth = 4; x.strokeText(T(e.n), ex + es / 2, ey - 24);
     x.fillStyle = light ? `#111` : `#fff`; x.fillText(T(e.n), ex + es / 2, ey - 24);
   }
@@ -390,13 +390,13 @@ function p4Frame(now) {
   x.textAlign = `center`;
   for (const f of P4FX) {
     f.t += dt;
-    x.globalAlpha = Math.max(0, 1 - f.t / 0.9); x.font = `${f.big ? 30 : 22}px VT323, monospace`;
+    x.globalAlpha = Math.max(0, 1 - f.t / 0.9); x.font = `${f.big ? 30 : 22}px VT323, Pixelify Sans, monospace`;
     x.fillStyle = `#000`; x.fillText(f.txt, f.x * W + 2, (f.y - f.t * 0.12) * H + 2);
     x.fillStyle = f.col; x.fillText(f.txt, f.x * W, (f.y - f.t * 0.12) * H);
   }
   x.globalAlpha = 1;
   for (let i = P4FX.length - 1; i >= 0; i--) if (P4FX[i].t > 0.9) P4FX.splice(i, 1);
-  if (p.mute > 0 || p.stun > 0) { x.font = `20px VT323, monospace`; x.fillStyle = `#ff5a6e`; x.fillText(p.mute > 0 ? `☎ ...` : `:(`, hx + s / 2, gy - s - 34); }
+  if (p.mute > 0 || p.stun > 0) { x.font = `20px VT323, Pixelify Sans, monospace`; x.fillStyle = `#ff5a6e`; x.fillText(p.mute > 0 ? `☎ ...` : `:(`, hx + s / 2, gy - s - 34); }
 }
 function p4Bar(x, X, Y, w, f, col) { x.fillStyle = `rgba(0,0,0,.55)`; x.fillRect(X - 1, Y - 1, w + 2, 8); x.fillStyle = col; x.fillRect(X, Y, w * Math.max(0, Math.min(1, f)), 6); }
 // the companions: only those you hired, each with its own little life
@@ -453,7 +453,7 @@ function p4Friends(x, W, gy, s, hx, t, dt, p) {
   }
   if (!live) return;
   // flying bits: bytes, health, Copixel's shots
-  x.textAlign = `center`; x.font = `${Math.round(s * 0.42)}px VT323, monospace`;
+  x.textAlign = `center`; x.font = `${Math.round(s * 0.42)}px VT323, Pixelify Sans, monospace`;
   for (let i = P4FLY.length - 1; i >= 0; i--) {
     const f = P4FLY[i]; f.t += dt;
     if (f.t >= f.d) { P4FLY.splice(i, 1); continue; }
@@ -465,7 +465,7 @@ function p4Friends(x, W, gy, s, hx, t, dt, p) {
   if ((p4Ev.talk -= dt) <= 0) { p4Ev.talk = 14 + Math.random() * 12; if (who.length) p4Talk(who[Math.random() * who.length | 0]); }
   if (p4Bub && spot[p4Bub.id]) {
     if ((p4Bub.left -= dt) <= 0) { p4Bub = null; return; }
-    const txt = T(p4Bub.t); x.font = `17px VT323, monospace`;
+    const txt = T(p4Bub.t); x.font = `17px VT323, Pixelify Sans, monospace`;
     const bw = x.measureText(txt).width + 14, [cx, cy] = spot[p4Bub.id], bx = Math.max(4, Math.min(W - bw - 4, cx - bw / 2)), by = Math.max(4, cy - 34);
     x.fillStyle = `#ffffe1`; x.strokeStyle = `#000`; x.lineWidth = 2; x.beginPath(); x.roundRect(bx, by, bw, 24, 6); x.fill(); x.stroke();
     x.fillStyle = `#111`; x.textAlign = `left`; x.fillText(txt, bx + 7, by + 17);
@@ -510,12 +510,12 @@ function p4DrawFoe(x, sp, X, Y, s, t, e) {
   const u = s / 10;
   x.save();
   if (sp === `blink`) { x.fillStyle = `#3dff7a`; x.shadowColor = `#3dff7a`; x.shadowBlur = 20; x.fillRect(X + 2 * u, Y, 6 * u, 10 * u); }
-  else if (sp === `eat`) { x.fillStyle = `#111`; x.fillRect(X, Y + 2 * u, 10 * u, 7 * u); for (let i = 0; i < 8; i++) { x.fillStyle = i < 8 ? `#fff` : `#111`; x.fillRect(X + (0.6 + i * 1.12) * u, Y + 3 * u, 0.9 * u, 3 * u); } x.fillStyle = `#d00`; x.font = `${2 * u}px VT323`; x.fillText(`16/16 Ko`, X + 5 * u, Y + 8.4 * u); }
+  else if (sp === `eat`) { x.fillStyle = `#111`; x.fillRect(X, Y + 2 * u, 10 * u, 7 * u); for (let i = 0; i < 8; i++) { x.fillStyle = i < 8 ? `#fff` : `#111`; x.fillRect(X + (0.6 + i * 1.12) * u, Y + 3 * u, 0.9 * u, 3 * u); } x.fillStyle = `#d00`; x.font = `${2 * u}px VT323, Pixelify Sans`; x.fillText(`16/16 Ko`, X + 5 * u, Y + 8.4 * u); }
   else if (sp === `phone`) { x.fillStyle = `#e8d9b5`; x.fillRect(X + u, Y + 4 * u, 8 * u, 6 * u); x.fillStyle = `#c0392b`; x.fillRect(X, Y + 2 * u, 10 * u, 2 * u); x.fillRect(X, Y + 1 * u, 2 * u, 2 * u); x.fillRect(X + 8 * u, Y + 1 * u, 2 * u, 2 * u); x.fillStyle = `#555`; for (let i = 0; i < 9; i++) x.fillRect(X + (2.4 + (i % 3) * 2) * u, Y + (5 + Math.floor(i / 3) * 1.6) * u, u, u); }
-  else if (sp === `bsod`) { x.fillStyle = `#c0c0c0`; x.fillRect(X, Y, 10 * u, 8 * u); x.fillStyle = `#0000aa`; x.fillRect(X + 0.6 * u, Y + 0.6 * u, 8.8 * u, 6.8 * u); x.fillStyle = `#fff`; x.font = `${4 * u}px VT323`; x.textAlign = `center`; x.fillText(`:(`, X + 5 * u, Y + 5 * u); x.fillStyle = `#808080`; x.fillRect(X + 4 * u, Y + 8 * u, 2 * u, 1.2 * u); x.fillRect(X + 2.5 * u, Y + 9.2 * u, 5 * u, 0.8 * u); }
-  else if (sp === `regen`) { x.fillStyle = `#ece9d8`; x.fillRect(X, Y + u, 10 * u, 8 * u); x.fillStyle = `#0a58ca`; x.fillRect(X, Y + u, 10 * u, 1.6 * u); x.fillStyle = `#e33`; x.fillRect(X + 8.4 * u, Y + 1.2 * u, 1.3 * u, 1.2 * u); x.fillStyle = `#111`; x.font = `${1.6 * u}px VT323`; x.textAlign = `center`; x.fillText(T([`YOU WON!!!`, `GAGNÉ !!!`]), X + 5 * u, Y + 5 * u); x.fillStyle = `#3c3`; x.fillRect(X + 3 * u, Y + 6 * u, 4 * u, 1.6 * u); }
-  else if (sp === `drain`) { x.strokeStyle = `#eee`; x.lineWidth = u * 0.6; x.strokeRect(X + u, Y + 3 * u, 7.6 * u, 4.4 * u); x.fillStyle = `#eee`; x.fillRect(X + 8.8 * u, Y + 4.4 * u, u, 1.6 * u); x.fillStyle = Math.sin(t * 6) > 0 ? `#ff3b30` : `#7a1712`; x.fillRect(X + 1.6 * u, Y + 3.6 * u, 0.7 * u, 3.2 * u); x.fillStyle = `#fff`; x.font = `${2 * u}px VT323`; x.textAlign = `center`; x.fillText(pct(1), X + 5 * u, Y + 9.6 * u); }
-  else if (sp === `copy`) { x.fillStyle = `#ff8a1f`; x.fillRect(X + u, Y + u, 8 * u, 7 * u); x.fillStyle = `#fff`; x.font = `${3.4 * u}px VT323`; x.textAlign = `center`; x.fillText(`∞ ∞`, X + 5 * u, Y + 5 * u); x.fillStyle = `#2a1400`; x.fillRect(X + 3 * u, Y + 6 * u, 4 * u, 0.8 * u); x.fillStyle = `#3a5cff`; x.fillRect(X + 2 * u, Y + 8 * u, 6 * u, 2 * u); }
+  else if (sp === `bsod`) { x.fillStyle = `#c0c0c0`; x.fillRect(X, Y, 10 * u, 8 * u); x.fillStyle = `#0000aa`; x.fillRect(X + 0.6 * u, Y + 0.6 * u, 8.8 * u, 6.8 * u); x.fillStyle = `#fff`; x.font = `${4 * u}px VT323, Pixelify Sans`; x.textAlign = `center`; x.fillText(`:(`, X + 5 * u, Y + 5 * u); x.fillStyle = `#808080`; x.fillRect(X + 4 * u, Y + 8 * u, 2 * u, 1.2 * u); x.fillRect(X + 2.5 * u, Y + 9.2 * u, 5 * u, 0.8 * u); }
+  else if (sp === `regen`) { x.fillStyle = `#ece9d8`; x.fillRect(X, Y + u, 10 * u, 8 * u); x.fillStyle = `#0a58ca`; x.fillRect(X, Y + u, 10 * u, 1.6 * u); x.fillStyle = `#e33`; x.fillRect(X + 8.4 * u, Y + 1.2 * u, 1.3 * u, 1.2 * u); x.fillStyle = `#111`; x.font = `${1.6 * u}px VT323, Pixelify Sans`; x.textAlign = `center`; x.fillText(T([`YOU WON!!!`, `GAGNÉ !!!`]), X + 5 * u, Y + 5 * u); x.fillStyle = `#3c3`; x.fillRect(X + 3 * u, Y + 6 * u, 4 * u, 1.6 * u); }
+  else if (sp === `drain`) { x.strokeStyle = `#eee`; x.lineWidth = u * 0.6; x.strokeRect(X + u, Y + 3 * u, 7.6 * u, 4.4 * u); x.fillStyle = `#eee`; x.fillRect(X + 8.8 * u, Y + 4.4 * u, u, 1.6 * u); x.fillStyle = Math.sin(t * 6) > 0 ? `#ff3b30` : `#7a1712`; x.fillRect(X + 1.6 * u, Y + 3.6 * u, 0.7 * u, 3.2 * u); x.fillStyle = `#fff`; x.font = `${2 * u}px VT323, Pixelify Sans`; x.textAlign = `center`; x.fillText(pct(1), X + 5 * u, Y + 9.6 * u); }
+  else if (sp === `copy`) { x.fillStyle = `#ff8a1f`; x.fillRect(X + u, Y + u, 8 * u, 7 * u); x.fillStyle = `#fff`; x.font = `${3.4 * u}px VT323, Pixelify Sans`; x.textAlign = `center`; x.fillText(`∞ ∞`, X + 5 * u, Y + 5 * u); x.fillStyle = `#2a1400`; x.fillRect(X + 3 * u, Y + 6 * u, 4 * u, 0.8 * u); x.fillStyle = `#3a5cff`; x.fillRect(X + 2 * u, Y + 8 * u, 6 * u, 2 * u); }
   else if (sp === `cat`) { x.fillStyle = `#b45cff`; x.beginPath(); x.moveTo(X + u, Y + 3 * u); x.lineTo(X + 2.5 * u, Y); x.lineTo(X + 4 * u, Y + 2.5 * u); x.lineTo(X + 6 * u, Y + 2.5 * u); x.lineTo(X + 7.5 * u, Y); x.lineTo(X + 9 * u, Y + 3 * u); x.lineTo(X + 9 * u, Y + 9 * u); x.lineTo(X + u, Y + 9 * u); x.fill(); x.fillStyle = `#38d4ff`; x.fillRect(X + 3 * u, Y + 4.5 * u, 1.2 * u, 1.2 * u); x.fillRect(X + 5.8 * u, Y + 4.5 * u, 1.2 * u, 1.2 * u); x.fillStyle = `#fff`; x.fillRect(X + 4.6 * u, Y + 6.2 * u, 0.8 * u, 0.6 * u); }
   else if (sp === `fin`) { x.fillStyle = `#111`; x.font = `italic ${7 * u}px Georgia, serif`; x.textAlign = `center`; x.fillText(e.ph >= 3 ? `F I N .` : `FIN`, X + 5 * u, Y + 8 * u); x.fillStyle = `rgba(0,0,0,.12)`; x.fillText(`FIN`, X + 5 * u + Math.sin(t * 3) * 6, Y + 8 * u + 4); }
   x.restore();
@@ -523,7 +523,7 @@ function p4DrawFoe(x, sp, X, Y, s, t, e) {
 function p4Decor(x, k, W, H, t) {
   const sc = p4Scroll * 0.3;
   x.save();
-  if (k === `term`) { x.fillStyle = `rgba(61,255,122,.12)`; x.font = `16px VT323`; for (let i = 0; i < W / 22; i++) for (let j = 0; j < 6; j++) { const yy = ((t * 30 + i * 37 + j * 70) % (H + 40)) - 20; x.fillText(String.fromCharCode(48 + ((i * 7 + j * 3 + Math.floor(t * 2)) % 42)), i * 22, yy); } }
+  if (k === `term`) { x.fillStyle = `rgba(61,255,122,.12)`; x.font = `16px VT323, Pixelify Sans`; for (let i = 0; i < W / 22; i++) for (let j = 0; j < 6; j++) { const yy = ((t * 30 + i * 37 + j * 70) % (H + 40)) - 20; x.fillText(String.fromCharCode(48 + ((i * 7 + j * 3 + Math.floor(t * 2)) % 42)), i * 22, yy); } }
   else if (k === `mac`) { x.fillStyle = `rgba(0,0,0,.07)`; for (let i = 0; i < W; i += 8) for (let j = 0; j < H; j += 8) if ((i + j) % 16 === 0) x.fillRect(i, j, 4, 4); for (let i = 0; i < 4; i++) { const xx = ((i * 320 - sc) % (W + 200) + W + 200) % (W + 200) - 100; x.fillStyle = `#fff`; x.fillRect(xx, H * 0.2 + i * 18, 150, 90); x.strokeStyle = `#000`; x.lineWidth = 2; x.strokeRect(xx, H * 0.2 + i * 18, 150, 90); x.fillStyle = `#000`; for (let l = 0; l < 6; l++) x.fillRect(xx, H * 0.2 + i * 18 + 3 + l * 2, 150, 1); } }
   else if (k === `dos`) { x.fillStyle = `#fff`; for (let i = 0; i < 60; i++) { const xx = (i * 97 - sc * (1 + i % 3)) % W; x.globalAlpha = 0.3 + (i % 5) * 0.12; x.fillRect((xx + W) % W, (i * 53) % H, 2, 2); } x.globalAlpha = 1; }
   else if (k === `w95`) { for (let i = 0; i < 4; i++) { const xx = ((i * 380 - sc) % (W + 300) + W + 300) % (W + 300) - 150, yy = H * 0.12 + (i % 2) * 70; x.fillStyle = `#c0c0c0`; x.fillRect(xx, yy, 200, 120); x.fillStyle = `#000080`; x.fillRect(xx + 3, yy + 3, 194, 16); x.fillStyle = `#fff`; x.fillRect(xx + 3, yy + 22, 194, 95); } }
@@ -543,7 +543,7 @@ async function p4Final() {
   el.classList.add(`on`); box.innerHTML = ``;
   for (const l of X10.fin) {
     const d = document.createElement(`div`), t = T(l);
-    d.textContent = t; d.className = /^(THE DEV|LE DEV)/.test(t) ? `dev` : /^COPIXEL/.test(t) ? `cop` : /^(THE CAT|LE CHAT)/.test(t) ? `cat` : /^FIN/.test(t) ? `fin` : `sys`;
+    d.textContent = t; d.className = spk(l);
     box.appendChild(d); await wait(t.length * 40 + 1000);
   }
   await wait(1200);
@@ -573,5 +573,5 @@ ACH.push(
   [`p4bsod`, [`Blue no more`, `Plus jamais bleu`], [`Beat the Blue Screen of Death.`, `Battre l'Écran Bleu de la Mort.`], () => (S.st.p4w || 0) >= 4, 10],
   [`p4k`, [`Exterminator`, `Exterminateur`], [`Beat 1,000 monsters.`, `Battre 1 000 monstres.`], () => (S.st.p4kill || 0) >= 1000, 10],
   [`p4click`, [`Hands-on`, `Mettre la main à la pâte`], [`Hit enemies 500 times by clicking.`, `Frapper 500 fois les ennemis en cliquant.`], () => (S.st.p4click || 0) >= 500, 10],
-  [`p4fin`, [`Not finished`, `Pas fini`], [`Beat FIN.`, `Battre FIN.`], () => !!S.st.p4fin, 10],
+  [`p4fin`, [`Unfinished`, `Pas fini`], [`Beat FIN.`, `Battre FIN.`], () => !!S.st.p4fin, 10],
 );

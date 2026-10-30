@@ -4,10 +4,10 @@
 const P2C = [
   { id: `g`, hex: `#3dff7a`, c0: 10, b: 1, t: [`Phosphor`, `Phosphore`], e: [`Terminal green. +25% for each phosphor in the same line.`, `Le vert du terminal. +25 % par phosphore sur la même ligne.`] },
   { id: `w`, hex: `#f3efe4`, c0: 30, b: 4, t: [`1984 White`, `Blanc 1984`], e: [`The first Mac. x2 when it touches an empty cell: it loves outlines.`, `Le premier Mac. x2 s'il touche une case vide : il adore les contours.`] },
-  { id: `c`, hex: `#38d4ff`, c0: 90, b: 14, t: [`Modem Cyan`, `Cyan modem`], e: [`Krrrr. +50% for each different colour around it.`, `Krrrr. +50 % par couleur différente autour de lui.`] },
+  { id: `c`, hex: `#38d4ff`, c0: 90, b: 14, t: [`Modem Cyan`, `Cyan modem`], e: [`Krrrr. +50% for each different color around it.`, `Krrrr. +50 % par couleur différente autour de lui.`] },
   { id: `b`, hex: `#3a5cff`, c0: 270, b: 50, t: [`Blue Screen`, `Écran bleu`], e: [`Strong, but it crashes now and then. Click it to reboot it: bonus.`, `Costaud, mais il plante de temps en temps. Clique dessus pour le redémarrer : bonus.`] },
   { id: `h`, hex: `#4cbb3c`, c0: 810, b: 180, t: [`Hill Green`, `Vert colline`], e: [`The wallpaper. +10% for each hill green in the same patch.`, `Le fond d'écran. +10 % par vert colline dans le même pré.`] },
-  { id: `i`, hex: `#a3abbb`, c0: 2430, b: 650, t: [`iBrick Grey`, `Gris iBrick`], e: [`A battery: produces and boosts its neighbours while charged. Click it, or the Pixel, to charge it.`, `Une batterie : produit et booste ses voisins tant qu'elle est chargée. Clique dessus, ou sur le Pixel, pour la charger.`] },
+  { id: `i`, hex: `#a3abbb`, c0: 2430, b: 650, t: [`iBrick Gray`, `Gris iBrick`], e: [`A battery: produces and boosts its neighbors while charged. Click it, or the Pixel, to charge it.`, `Une batterie : produit et booste ses voisins tant qu'elle est chargée. Clique dessus, ou sur le Pixel, pour la charger.`] },
   { id: `o`, hex: `#ff8a1f`, c0: 7290, b: 2400, t: [`Copixel Orange`, `Orange Copixel`], e: [`Each one paints a missing cell for you every 30 s. Copixel insists.`, `Chacun peint une case manquante à ta place toutes les 30 s. Copixel insiste.`] },
   { id: `q`, hex: `#b45cff`, c0: 21870, b: 9000, t: [`Qubit Violet`, `Violet qubit`], e: [`God rolls one die every 5 s for all the qubits: between x0 and x4.`, `Dieu lance un seul dé toutes les 5 s pour tous les qubits : entre x0 et x4.`] },
 ];
@@ -26,7 +26,7 @@ const P2PICS = [
     `............`,
     `.g.P........`],
     intro: [[`THE DEV: you learned every skill there is. every single one. in forty years, i made one pixel.`, `LE DEV : tu as appris toutes les compétences. toutes. moi, en quarante ans, j'ai fait un pixel.`],
-      [`THE DEV: i think i know why it never moved. i didn't need a better computer. i needed someone to paint with.`, `LE DEV : je crois que je sais pourquoi ça n'avançait pas. je n'avais pas besoin d'un meilleur ordinateur. j'avais besoin de quelqu'un pour peindre avec moi.`],
+      [`THE DEV: i think i know why it never got finished. i didn't need a better computer. i needed someone to paint with.`, `LE DEV : je crois que je sais pourquoi ça n'avançait pas. je n'avais pas besoin d'un meilleur ordinateur. j'avais besoin de quelqu'un pour peindre avec moi.`],
       [`THE DEV: let's start where it started. a green screen, some lines, and the pixel blinking like a cursor. click it for paint, then paint the dots of the model.`, `LE DEV : on commence là où tout a commencé. un écran vert, des lignes, et le pixel qui clignote comme un curseur. clique dessus pour avoir de la peinture, puis peins les points du modèle.`]],
     outro: [[`THE DEV: the first screen i ever saw. it looks better than i remember.`, `LE DEV : le premier écran que j'ai vu. il est plus beau que dans mon souvenir.`]] },
   { t: [`The first computer`, `Le premier ordinateur`], art: [
@@ -44,7 +44,7 @@ const P2PICS = [
     `..wwwwwwww..`],
     intro: [[`THE DEV: 1984. it was white, it had 128 KB and one floppy drive. i drew its outline a thousand times in my school notebooks.`, `LE DEV : 1984. il était blanc, il avait 128 Ko et un lecteur de disquette. j'ai dessiné son contour mille fois dans mes cahiers.`],
       [`THE DEV: white loves outlines. and watch out for bugs: they come out when someone is looking. like real ones.`, `LE DEV : le blanc adore les contours. et attention aux bugs : ils sortent quand quelqu'un regarde. comme les vrais.`]],
-    outro: [[`THE DEV: if you squint, it's exactly him. please squint.`, `LE DEV : si tu plisses les yeux, c'est exactement lui. plisse les yeux, s'il te plaît.`]] },
+    outro: [[`THE DEV: if you squint, it's a perfect likeness. please squint.`, `LE DEV : si tu plisses les yeux, c'est exactement lui. plisse les yeux, s'il te plaît.`]] },
   { t: [`The modem`, `Le modem`], art: [
     `..............`,
     `.c...c...c...c`,
@@ -57,8 +57,8 @@ const P2PICS = [
     `.w..........w.`,
     `.wwwwwwwwwwww.`,
     `...ww....ww...`],
-    intro: [[`THE DEV: biiiip krrrrr pshhhhh. remember the sound? i'm painting it in cyan. sounds are cyan, everybody knows that.`, `LE DEV : biiiip krrrrr pshhhhh. tu te souviens du bruit ? je le peins en cyan. les bruits sont cyans, tout le monde sait ça.`],
-      [`THE DEV: cyan likes company. the more different colours around it, the better it works. like a party line.`, `LE DEV : le cyan aime la compagnie. plus il a de couleurs différentes autour, mieux il marche. comme une ligne partagée.`]],
+    intro: [[`THE DEV: biiiip krrrrr pshhhhh. remember the sound? i'm painting it in cyan. sounds are cyan, everybody knows that.`, `LE DEV : biiiip krrrrr pshhhhh. tu te souviens du bruit ? je le peins en cyan. les bruits sont cyan, tout le monde sait ça.`],
+      [`THE DEV: cyan likes company. the more different colors around it, the better it works. like a party line.`, `LE DEV : le cyan aime la compagnie. plus il a de couleurs différentes autour, mieux il marche. comme une ligne partagée.`]],
     outro: [[`MOM: who's on the phone?`, `MAMAN : c'est qui, au téléphone ?`], [`THE DEV: nobody, mom. it's a painting.`, `LE DEV : personne, maman. c'est un tableau.`]] },
   { t: [`The blue screen`, `L'écran bleu`], art: [
     `................`,
@@ -89,7 +89,7 @@ const P2PICS = [
     `hhhhhhhhhhhhhhhhhh`,
     `hhhhhhhhhhhhhhhhhh`],
     intro: [[`THE DEV: the wallpaper. everybody saw this hill. nobody ever went there. let's go.`, `LE DEV : le fond d'écran. tout le monde a vu cette colline. personne n'y est jamais allé. on y va.`],
-      [`THE DEV: hill green grows in patches: the bigger the patch, the better. and that's a lot of sky. a paint bucket would help. just saying.`, `LE DEV : le vert colline pousse en prés : plus le pré est grand, mieux c'est. et ça fait beaucoup de ciel. un pot de peinture aiderait. je dis ça.`]],
+      [`THE DEV: hill green grows in patches: the bigger the patch, the better. and that's a lot of sky. a paint bucket would help. just saying.`, `LE DEV : le vert colline pousse en prés : plus le pré est grand, mieux c'est. et ça fait beaucoup de ciel. un pot de peinture aiderait. je dis ça, je dis rien.`]],
     outro: [[`THE DEV: i went there, in the painting. it's windy. the pixel is the sun now. it looks happy.`, `LE DEV : j'y suis allé, dans le tableau. il y a du vent. le pixel est le soleil, maintenant. il a l'air content.`]] },
   { t: [`The iBrick`, `L'iBrick`], art: [
     `..iiiiiiii..`,
@@ -110,7 +110,7 @@ const P2PICS = [
     `.iiiiiiiiii.`,
     `..iiiiiiii..`],
     intro: [[`THE DEV: the phone. it fit in a pocket. the game almost did.`, `LE DEV : le téléphone. il tenait dans la poche. le jeu aussi, presque.`],
-      [`THE DEV: grey is a battery. it drains. click it to charge it, or press the home button: the pixel is the home button now.`, `LE DEV : le gris est une batterie. elle se vide. clique dessus pour la charger, ou appuie sur le bouton d'accueil : le pixel est le bouton d'accueil, maintenant.`]],
+      [`THE DEV: gray is a battery. it drains. click it to charge it, or press the home button: the pixel is the home button now.`, `LE DEV : le gris est une batterie. elle se vide. clique dessus pour la charger, ou appuie sur le bouton d'accueil : le pixel est le bouton d'accueil, maintenant.`]],
     outro: [[`THE DEV: 20% battery. like always. let's frame it before it dies.`, `LE DEV : 20 % de batterie. comme toujours. on l'encadre avant qu'il s'éteigne.`]] },
   { t: [`Copixel`, `Copixel`], art: [
     `.......ww.......`,
@@ -147,7 +147,7 @@ const P2PICS = [
     intro: [[`THE CAT: meow.`, `LE CHAT : miaou.`],
       [`THE DEV: the cat from universe 7 came back. it wants to pose. in its box. or not in its box.`, `LE DEV : le chat de l'univers 7 est revenu. il veut poser. dans sa boîte. ou pas dans sa boîte.`],
       [`THE DEV: violet is quantum. God rolls one die for all the qubits. sometimes 0. sometimes 4. no refunds.`, `LE DEV : le violet est quantique. Dieu lance un seul dé pour tous les qubits. parfois 0. parfois 4. pas de remboursement.`]],
-    outro: [[`THE CAT: (looks at the painting, then pushes it off the table)`, `LE CHAT : (regarde le tableau, puis le pousse de la table)`], [`THE DEV: it likes it.`, `LE DEV : il aime bien.`]] },
+    outro: [[`THE CAT: (looks at the painting, then pushes it off the table)`, `LE CHAT : (regarde le tableau, puis le fait tomber de la table)`], [`THE DEV: it likes it.`, `LE DEV : il aime bien.`]] },
   { t: [`You`, `Toi`], art: [
     `..g.q..P..o.b.......`,
     `....c.ii..h.........`,
@@ -187,7 +187,7 @@ const P2UP = [
   { id: `c1`, x: 1, c: 2, t: [`Ball mouse`, `Souris à boule`], d: [`Clicks x2.`, `Clics x2.`] },
   { id: `g2`, x: 5, col: [`g`, 2], t: [`Long-glow phosphor`, `Phosphore rémanent`], d: [`Phosphor x2. It stays on the screen after you look away.`, `Phosphore x2. Il reste sur l'écran quand on ne regarde plus.`] },
   { id: `cafe`, x: 20, all: 1.5, t: [`The dev's coffee`, `Le café du dev`], d: [`Everything x1.5. He paints faster. He talks faster too.`, `Tout x1,5. Il peint plus vite. Il parle plus vite aussi.`] },
-  { id: `num`, x: 10, need: 1, tool: 1, t: [`Paint by numbers`, `Peinture par numéros`], d: [`Clicking an empty cell of the model paints its colour, whatever colour is selected.`, `Cliquer une case vide du modèle la peint de sa couleur, peu importe la couleur choisie.`] },
+  { id: `num`, x: 10, need: 1, tool: 1, t: [`Paint by numbers`, `Peinture par numéros`], d: [`Clicking an empty cell of the model paints its color, whatever color is selected.`, `Cliquer sur une case vide du modèle la peint de sa couleur, peu importe la couleur choisie.`] },
   { id: `debug`, x: 30, need: 1, t: [`Debugger`, `Débogueur`], d: [`Bugs walk half as fast.`, `Les bugs marchent deux fois moins vite.`] },
   { id: `w2`, x: 40, need: 1, col: [`w`, 2], t: [`Titanium white`, `Blanc de titane`], d: [`1984 White x2.`, `Blanc 1984 x2.`] },
   { id: `c2`, x: 60, need: 1, c: 3, t: [`Cat-hair brush`, `Pinceau en poil de chat`], d: [`Clicks x3. The cat was not asked.`, `Clics x3. On n'a pas demandé au chat.`] },
@@ -195,15 +195,15 @@ const P2UP = [
   { id: `c3b`, x: 40, need: 2, col: [`c`, 2], t: [`Twisted pair`, `Câble torsadé`], d: [`Modem Cyan x2.`, `Cyan modem x2.`] },
   { id: `cafe2`, x: 80, need: 2, all: 1.5, t: [`Double espresso`, `Double expresso`], d: [`Everything x1.5.`, `Tout x1,5.`] },
   { id: `cps`, x: 150, need: 2, cps: 0.05, t: [`Smart click`, `Clic intelligent`], d: [`Each click also gives 5% of your paint per second.`, `Chaque clic donne aussi 5 % de ta peinture par seconde.`] },
-  { id: `pot`, x: 30, need: 3, tool: 1, t: [`Paint bucket`, `Pot de peinture`], d: [`A new tool: fills a whole zone of the model at once (each cell is paid).`, `Un nouvel outil : remplit d'un coup toute une zone du modèle (chaque case est payée).`] },
+  { id: `pot`, x: 30, need: 3, tool: 1, t: [`Paint bucket`, `Pot de peinture`], d: [`A new tool: fills a whole zone of the model at once (you pay for each cell).`, `Un nouvel outil : remplit d'un coup toute une zone du modèle (chaque case est payée).`] },
   { id: `b2`, x: 60, need: 3, col: [`b`, 2], t: [`Signed driver`, `Pilote signé`], d: [`Blue Screen x2, and it crashes half as often.`, `Écran bleu x2, et il plante deux fois moins.`] },
   { id: `tests`, x: 120, need: 3, t: [`Unit tests`, `Tests unitaires`], d: [`Bugs give up after 20 s. Nobody knows why. Tests work like that.`, `Les bugs abandonnent au bout de 20 s. Personne ne sait pourquoi. Les tests, c'est comme ça.`] },
-  { id: `off`, x: 200, need: 3, t: [`Patron of the arts`, `Mécène`], d: [`Painting while you're away at 100% instead of 50%.`, `La peinture continue à 100 % au lieu de 50 % quand tu n'es pas là.`] },
+  { id: `off`, x: 200, need: 3, t: [`Patron of the arts`, `Mécène`], d: [`Offline painting at 100% instead of 50%.`, `La peinture continue à 100 % au lieu de 50 % quand tu n'es pas là.`] },
   { id: `h2`, x: 40, need: 4, col: [`h`, 2], t: [`Fertilizer`, `Engrais`], d: [`Hill Green x2.`, `Vert colline x2.`] },
   { id: `c4`, x: 100, need: 4, c: 4, t: [`Graphics tablet`, `Tablette graphique`], d: [`Clicks x4.`, `Clics x4.`] },
-  { id: `cafe3`, x: 200, need: 4, all: 2, t: [`Italian coffee pot`, `Cafetière italienne`], d: [`Everything x2. It whistles. Everything is fine.`, `Tout x2. Elle siffle. Tout va bien.`] },
-  { id: `i2`, x: 50, need: 5, col: [`i`, 2], t: [`Wireless charger`, `Chargeur sans fil`], d: [`iBrick Grey x2, and batteries drain half as fast.`, `Gris iBrick x2, et les batteries se vident deux fois moins vite.`] },
-  { id: `lamp`, x: 200, need: 5, all: 2, t: [`Architect's lamp`, `Lampe d'architecte`], d: [`Everything x2. You can finally see the colours.`, `Tout x2. On voit enfin les couleurs.`] },
+  { id: `cafe3`, x: 200, need: 4, all: 2, t: [`Moka pot`, `Cafetière italienne`], d: [`Everything x2. It whistles. Everything is fine.`, `Tout x2. Elle siffle. Tout va bien.`] },
+  { id: `i2`, x: 50, need: 5, col: [`i`, 2], t: [`Wireless charger`, `Chargeur sans fil`], d: [`iBrick Gray x2, and batteries drain half as fast.`, `Gris iBrick x2, et les batteries se vident deux fois moins vite.`] },
+  { id: `lamp`, x: 200, need: 5, all: 2, t: [`Architect's lamp`, `Lampe d'architecte`], d: [`Everything x2. You can finally see the colors.`, `Tout x2. On voit enfin les couleurs.`] },
   { id: `o2`, x: 50, need: 6, col: [`o`, 2], t: [`Copixel Pro`, `Copixel Pro`], d: [`Copixel Orange x2, and it paints twice as often. It's unbearable.`, `Orange Copixel x2, et il peint deux fois plus souvent. Il est insupportable.`] },
   { id: `easel`, x: 200, need: 6, all: 2, t: [`Oak easel`, `Chevalet en chêne`], d: [`Everything x2. It creaks like a real one.`, `Tout x2. Il grince comme un vrai.`] },
   { id: `q2`, x: 60, need: 7, col: [`q`, 2], t: [`Loaded die`, `Dé pipé`], d: [`Qubit Violet x2, and God never rolls under x1 anymore.`, `Violet qubit x2, et Dieu ne fait plus jamais moins de x1.`] },
@@ -218,10 +218,10 @@ const X8 = {
   onCv: [`{a} on the canvas · {b} left in the model`, `{a} sur la toile · reste {b} dans le modèle`],
   onCvFree: [`{a} on the canvas`, `{a} sur la toile`],
   like: [`Likeness`, `Ressemblance`], sign: [`Sign the painting`, `Signer le tableau`],
-  signHint: [`Every cell of the model is painted. Sign it to hang it in the gallery: everything x2, and a new colour.`, `Toutes les cases du modèle sont peintes. Signe-le pour l'accrocher dans la galerie : tout x2, et une nouvelle couleur.`],
+  signHint: [`Every cell of the model is painted. Sign it to hang it in the gallery: everything x2, and a new color.`, `Toutes les cases du modèle sont peintes. Signe-le pour l'accrocher dans la galerie : tout x2, et une nouvelle couleur.`],
   freeHow: [`No model here: paint whatever you like. Right-click erases.`, `Pas de modèle ici : peins ce que tu veux. Le clic droit efface.`],
   lastHint: [`The last cell is painted. Sign it. It's the last one.`, `La dernière case est peinte. Signe-le. C'est le dernier.`],
-  howTo: [`Click the Pixel for paint. Pick a colour, then click the dots of the model. Right-click erases.`, `Clique sur le Pixel pour avoir de la peinture. Choisis une couleur, puis clique sur les points du modèle. Le clic droit efface.`],
+  howTo: [`Click the Pixel for paint. Pick a color, then click the dots of the model. Right-click erases.`, `Clique sur le Pixel pour avoir de la peinture. Choisis une couleur, puis clique sur les points du modèle. Le clic droit efface.`],
   gal: [`Gallery`, `Galerie`], galT: [`The gallery`, `La galerie`], galSub: [`Each signed painting doubles your paint and your clicks.`, `Chaque tableau signé double ta peinture et tes clics.`],
   galNow: [`on the easel`, `sur le chevalet`], galDone: [`signed`, `signé`], close: [`Close`, `Fermer`],
   opt: [`Options`, `Options`], back: [`Back to PIXEL-OS`, `Revenir à PIXEL-OS`],
@@ -229,14 +229,14 @@ const X8 = {
   sci: [`Scientific notation`, `Notation scientifique`], anim: [`Animations`, `Animations`],
   ps: [`+{n} paint/s`, `+{n} peinture/s`], unit: [`paint`, `peinture`],
   cell: [`Cell {x},{y}`, `Case {x},{y}`], want: [`Model: {a}`, `Modèle : {a}`], none: [`nothing`, `rien`],
-  ok: [`right colour, x2`, `bonne couleur, x2`], bad: [`wrong colour, x0.5`, `mauvaise couleur, x0,5`], off: [`outside the model`, `hors du modèle`],
-  makes: [`{n}/s`, `{n}/s`], pixel: [`The Pixel. Click it: +{n} paint. Its neighbours make x2.`, `Le Pixel. Clique dessus : +{n} de peinture. Ses voisins produisent x2.`],
+  ok: [`right color, x2`, `bonne couleur, x2`], bad: [`wrong color, x0.5`, `mauvaise couleur, x0,5`], off: [`outside the model`, `hors du modèle`],
+  makes: [`{n}/s`, `{n}/s`], pixel: [`The Pixel. Click it: +{n} paint. Its neighbors produce x2.`, `Le Pixel. Clique dessus : +{n} de peinture. Ses voisins produisent x2.`],
   crashed: [`Crashed. Click to reboot.`, `Planté. Clique pour redémarrer.`], charge: [`Charge: {n}%`, `Charge : {n} %`],
   roll: [`God's die: x{m}`, `Dé de Dieu : x{m}`],
   poor: [`Not enough paint.`, `Pas assez de peinture.`],
   squash: [`Bug squashed! +{n}`, `Bug écrasé ! +{n}`], reboot: [`Rebooted! +{n}`, `Redémarré ! +{n}`],
   signed: [`"{a}" signed and hung in the gallery. Everything x2.`, `« {a} » signé et accroché dans la galerie. Tout x2.`],
-  newCol: [`New colour: {a}.`, `Nouvelle couleur : {a}.`],
+  newCol: [`New color: {a}.`, `Nouvelle couleur : {a}.`],
   away: [`While you were away ({t}), the painting earned {n} paint.`, `Pendant ton absence ({t}), le tableau a rapporté {n} de peinture.`],
   enter: [`PIXEL-OS 2: the second pixel`, `PIXEL-OS 2 : le deuxième pixel`],
   enterBack: [`PIXEL-OS 2`, `PIXEL-OS 2`],
@@ -254,7 +254,7 @@ const X8 = {
     low: [`THE DEV: a battery is almost empty. click it. or click the pixel: it charges every battery a little.`, `LE DEV : une batterie est presque vide. clique dessus. ou clique sur le pixel : ça recharge un peu toutes les batteries.`],
     cop: [`COPIXEL: I painted a cell. You're welcome. I will paint another one. You can't stop me. Well, you can erase me.`, `COPIXEL : J'ai peint une case. De rien. J'en peindrai une autre. Tu ne peux pas m'arrêter. Enfin, tu peux m'effacer.`],
     zero: [`THE DEV: God rolled a 0. the qubits are sulking. wait for the next roll.`, `LE DEV : Dieu a fait 0. les qubits boudent. attends le prochain lancer.`],
-    wrong: [`THE DEV: that's not the colour of the model. it works, but it clashes: half production. right-click to erase it.`, `LE DEV : ce n'est pas la couleur du modèle. ça marche, mais ça jure : production divisée par deux. clic droit pour l'effacer.`],
+    wrong: [`THE DEV: that's not the color of the model. it works, but it clashes: half production. right-click to erase it.`, `LE DEV : ce n'est pas la couleur du modèle. ça marche, mais ça jure : production divisée par deux. clic droit pour l'effacer.`],
     done: [`THE DEV: it's finished! sign it.`, `LE DEV : il est fini ! signe-le.`],
     pot: [`THE DEV: the bucket. one click, a whole zone. i should have bought one in 1984.`, `LE DEV : le pot. un clic, toute une zone. j'aurais dû en acheter un en 1984.`],
   },
@@ -512,7 +512,7 @@ async function p2Enter() {
   if (!S.p2) {
     if (!$(`fin`)) document.body.insertAdjacentHTML(`beforeend`, `<div id="fin"><div id="finT"></div></div>`);
     $(`fin`).classList.add(`on`, `p2i`); $(`finT`).innerHTML = ``;
-    for (const l of X8.intro) { const d = document.createElement(`div`); d.textContent = T(l); d.className = /^(THE DEV|LE DEV)/.test(T(l)) ? `dev` : ``; $(`finT`).appendChild(d); await wait(T(l).length * 30 + 700); }
+    for (const l of X8.intro) { const d = document.createElement(`div`); d.textContent = T(l); d.className = spk(l) === `dev` ? `dev` : ``; $(`finT`).appendChild(d); await wait(T(l).length * 30 + 700); }
     await wait(1000);
     $(`fin`).classList.remove(`p2i`);
   }
@@ -593,7 +593,7 @@ async function p2Final() {
   const n = p.gal.reduce((s, x) => s + [...x.grid].filter(c => c && c !== `P` && c !== `.`).length, 0);
   for (const l of X8.fin) {
     const d = document.createElement(`div`), t = fill(T(l), { n: fmt(n) });
-    d.textContent = t; d.className = /^(THE DEV|LE DEV)/.test(t) ? `dev` : /^COPIXEL/.test(t) ? `cop` : /^(THE CAT|LE CHAT)/.test(t) ? `cat` : ``;
+    d.textContent = t; d.className = spk(l);
     box.appendChild(d); await wait(t.length * 35 + 900);
   }
   await wait(1200);
@@ -634,7 +634,7 @@ function p2Render() {
   const p = S.p2, k = p2k(), pic = p2pic();
   setH(`p2title`, pic.free ? `<b>${T(pic.t)}</b>` : `<span>${fill(T(X8.pic), { n: p.pic + 1 })}</span><b>${T(pic.t)}</b>`);
   setH(`p2px`, fmt(p.px) + `<small> ${T(X8.unit)}</small>`);
-  setH(`p2ps`, fill(T(X8.ps), { n: fmtR(p2ps()) }) + (p.grid.includes(`q`) ? ` · ` + fill(T(X8.roll), { m: String(p.roll).replace(`.`, S.lang === `fr` ? `,` : `.`) }) : ``));
+  setH(`p2ps`, fill(T(X8.ps), { n: fmtR(p2ps()) }) + (p.grid.includes(`q`) ? ` · ` + fill(T(X8.roll), { m: String(p.roll).replace(`.`, decP()) }) : ``));
   setH(`p2btns`, `<button class="p2b" data-act="p2gal">${T(X8.gal)} <em>${p.gal.length}/9</em></button><button class="p2b" data-act="p2opt">${T(X8.opt)}</button>`);
   setH(`p2palH`, T(X8.palette));
   const tl = t => `<button class="p2tl${(t === `sym` ? p.sym : p.tool === t) ? ` on` : ``}" data-act="p2tool:${t}" title="${T(X8.tools[t])}">${P2SVG[t]}<span>${T(X8.tools[t])}</span></button>`;
@@ -649,7 +649,7 @@ function p2Render() {
   setH(`p2ups`, ups.map(u => `<button class="p2up${p.px < p2UpCost(u) ? ` poor` : ``}" data-act="p2buy:${u.id}"><b>${T(u.t)}</b><em>${fmt(p2UpCost(u))}</em><small>${T(u.d)}</small></button>`).join(``) || `<p class="p2dim">…</p>`);
   setH(`p2chatH`, T(X8.chat));
   const ch = p.chat.slice(-14).map((l, j, a) => {
-    const t = T(l), m = /^([A-ZÀ-Ý ]+) ?: (.*)$/s.exec(t), who = m ? m[1] : ``, cls = /COPIXEL/.test(who) ? `cop` : /CHAT|CAT/.test(who) ? `cat` : /MAMAN|MOM/.test(who) ? `mom` : `dev`;
+    const t = T(l), c = spk(l), m = c !== `sys` && SAY_RE.exec(t), who = m ? m[1] : ``, cls = c === `sys` ? `dev` : c;
     return `<p class="${cls}${j === a.length - 1 ? ` new` : ``}">${m ? `<b>${esc(who)}</b>${esc(m[2])}` : esc(t)}</p>`;
   }).join(``);
   const was = cache.p2chat;
@@ -688,7 +688,7 @@ function p2GalHtml() {
 }
 function p2OptHtml() {
   const o = (a, t) => `<button class="p2mi" data-act="${a}">${t}</button>`;
-  return `<div class="p2box p2menu">` + o(`p2back`, `↩ ${T(X8.back)}`) + modeLinks(o, 8) + o(`save`, U().save || T([`Save`, `Sauvegarder`])) + o(`lang`, `English / Français`)
+  return `<div class="p2box p2menu">` + o(`p2back`, `↩ ${T(X8.back)}`) + modeLinks(o, 8) + o(`save`, U().save || T([`Save`, `Sauvegarder`])) + o(`lang`, `🌐 ${U().lang}`)
     + o(`sci`, `[${S.opt.sci ? `x` : ` `}] ${T(X8.sci)}`) + o(`anim`, `[${S.opt.anim ? `x` : ` `}] ${T(X8.anim)}`)
     + o(`exp`, T([`Export the save`, `Exporter la sauvegarde`])) + o(`imp`, T([`Import a save`, `Importer une sauvegarde`]))
     + (S.p2.fin ? o(`p2fin`, T(X8.again)) : ``) + o(`p2about`, T([`About`, `À propos`])) + o(`hard`, T([`Erase everything`, `Tout effacer`])) + o(`p2close`, T(X8.close)) + `</div>`;
@@ -866,7 +866,7 @@ ERA[8] = {
 
 ACH.push(
   [`p2start`, [`The second pixel`, `Le deuxième pixel`], [`Start PIXEL-OS 2.`, `Démarrer PIXEL-OS 2.`], () => !!S.st.p2, 8],
-  [`p2pic1`, [`Opening night`, `Vernissage`], [`Sign a first painting.`, `Signer un premier tableau.`], () => (S.st.p2gal || 0) >= 1, 8],
+  [`p2pic1`, [`Opening night`, `Vernissage`], [`Sign your first painting.`, `Signer un premier tableau.`], () => (S.st.p2gal || 0) >= 1, 8],
   [`p2pic5`, [`Exhibition`, `Exposition`], [`Sign 5 paintings.`, `Signer 5 tableaux.`], () => (S.st.p2gal || 0) >= 5, 8],
   [`p2bug`, [`Human debugger`, `Débogueur humain`], [`Squash 25 bugs.`, `Écraser 25 bugs.`], () => (S.st.p2squash || 0) >= 25, 8],
   [`p2k`, [`A thousand pixels`, `Mille pixels`], [`Place 1,000 pixels.`, `Poser 1 000 pixels.`], () => (S.st.p2placed || 0) >= 1000, 8],

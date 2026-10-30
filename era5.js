@@ -5,7 +5,7 @@ const X5 = {
   hot: [`Your iBrick is warm. A battery kept plugged in at 100% wears out.`, `Ton iBrick chauffe. Une batterie laissée branchée à 100 % s'use.`],
   slow: [`Your battery is worn. The iBrick slows itself down to protect it. It's a feature.`, `Ta batterie est usée. L'iBrick se ralentit tout seul pour la ménager. C'est une fonctionnalité.`],
   health: [`Battery health: {n}%`, `Santé de la batterie : {n} %`], throttled: [`Performance reduced: x{n}`, `Performances réduites : x{n}`],
-  newbat: [`Replace the battery ({c} px)`, `Remplacer la batterie ({c} px)`], newbatDone: [`New battery installed. Like new. For now.`, `Batterie neuve installée. Comme neuf. Pour l'instant.`],
+  newbat: [`Replace the battery ({c} px)`, `Remplacer la batterie ({c} px)`], newbatDone: [`New battery installed. Like new. For now.`, `Batterie neuve installée. Comme neuve. Pour l'instant.`],
   dead: [`Battery empty.\n\nThe iBrick turned off. Every app was closed.\nIt's charging now. It'll turn back on at 15%.`, `Batterie vide.\n\nL'iBrick s'est éteint. Toutes les applis ont été fermées.\nIl charge, maintenant. Il se rallumera à 15 %.`],
   deadScr: [`Charging... {n}%`, `Charge... {n} %`],
   notifs: [
@@ -20,9 +20,9 @@ const X5 = {
   upd: [`{a} needs to update. It stops producing while it updates.`, `{a} doit se mettre à jour. Il ne produit plus pendant la mise à jour.`],
   updNow: [`Updating... {n}%`, `Mise à jour... {n} %`],
   hkTitle: [`Locked file`, `Fichier verrouillé`], hkOpen: [`Unlock`, `Déverrouiller`], hkLast: [`Last file opened`, `Dernier fichier ouvert`],
-  hkIntro: [`Guess the password among the words. Each try tells how many letters are in the right place.`, `Devine le mot de passe parmi les mots proposés. Chaque essai dit combien de lettres sont à la bonne place.`],
+  hkIntro: [`Find the password among these words. Each try tells you how many letters are in the right place.`, `Devine le mot de passe parmi les mots proposés. Chaque essai dit combien de lettres sont à la bonne place.`],
   hkWait: [`Too many tries. Wait {s} s.`, `Trop d'essais. Attends {s} s.`], hkTries: [`{n} tries left`, `{n} essais restants`],
-  hkHints: [`Hints: each one removes a wrong word, or sometimes gives the tries back`, `Indices : chacun retire un mauvais mot, ou parfois rend les essais`],
+  hkHints: [`Hints: each one removes a wrong word, or sometimes gives your tries back`, `Indices : chacun retire un mauvais mot, ou parfois rend les essais`],
   hkHist: [`Tries: letters in the right place (out of {n})`, `Essais : lettres à la bonne place (sur {n})`],
   hkDud: [`Hint: {w} was not it`, `Indice : ce n'était pas {w}`], hkReset: [`Hint: tries given back`, `Indice : essais rendus`],
   mtFull: [`Full screen`, `Plein écran`], mtSplit: [`Split View`, `Écran partagé`], mtSide: [`Close this side`, `Fermer ce côté`],
@@ -40,7 +40,7 @@ ERA[5] = {
   os: `iBrick OS`, skin: 5, year: 2007, unit: [`MB`, `Mo`], mul: 32, start: { ram: 8, bat: 800 }, color: true, allIcons: true,
   rn: { bat: [`BAT`, `BAT`] }, ru: { bat: [`mAh`, `mAh`] },
   bootT: [`Slide to unlock. (Just click.)`, `Glisser pour déverrouiller. (Clique, simplement.)`],
-  about: [`iBrick OS 1.0\n(c) 2007 a company with a fruit name that we won't name.\nWeight: 1.2 kg. Fits in a big pocket.\n\nA game by zuralon.`, `iBrick OS 1.0\n(c) 2007 une entreprise avec un nom de fruit qu'on ne citera pas.\nPoids : 1,2 kg. Rentre dans une grande poche.\n\nUn jeu de zuralon.`],
+  about: [`iBrick OS 1.0\n(c) 2007 a company named after a fruit. We won't say which.\nWeight: 1.2 kg. Fits in a big pocket.\n\nA game by zuralon.`, `iBrick OS 1.0\n(c) 2007 une entreprise avec un nom de fruit qu'on ne citera pas.\nPoids : 1,2 kg. Rentre dans une grande poche.\n\nUn jeu de zuralon.`],
   click: () => (S.run.flash ? 2 : 1),
   simKeep: [],
   P: [
@@ -76,8 +76,8 @@ ERA[5] = {
     { id: `retina`, cost: 1.6e11, g: 1.5, t: [`Retina pixels`, `Pixels Retina`], d: [`All production x1.5. So small you can't see them. So many you don't care.`, `Toute la production x1,5. Si petits qu'on ne les voit pas. Si nombreux qu'on s'en fiche.`] },
     { id: `bgrefresh`, cost: 8e11, g: 1.5, t: [`Over-the-air update`, `Mise à jour sans fil`], d: [`All production x1.5. Downloaded overnight. Installed without asking.`, `Toute la production x1,5. Téléchargée pendant la nuit. Installée sans demander.`] },
     { id: `dualsim`, cost: 1.8e12, g: 1.5, t: [`Dual SIM`, `Double SIM`], d: [`All production x1.5. Two numbers. The dev ignores both.`, `Toute la production x1,5. Deux numéros. Le dev les ignore tous les deux.`] },
-    { id: `screen`, cost: 30000, c: 2, t: [`Bigger screen: iBrick 6`, `Écran plus grand : iBrick 6`], d: [`Clicks x2. 4.7 inches, flat design, aluminium. It bends a little in your pocket.`, `Clics x2. 4,7 pouces, design plat, aluminium. Il plie un peu dans la poche.`] },
-    { id: `screen2`, cost: 2.4e8, c: 2, t: [`Edge-to-edge screen: iBrick X`, `Écran bord à bord : iBrick X`], d: [`Clicks x2. No more home button. A notch instead. Swipe up. Forever.`, `Clics x2. Plus de bouton home. Une encoche à la place. Balaie vers le haut. Pour toujours.`] },
+    { id: `screen`, cost: 30000, c: 2, t: [`Bigger screen: iBrick 6`, `Écran plus grand : iBrick 6`], d: [`Clicks x2. 4.7 inches, flat design, aluminum. It bends a little in your pocket.`, `Clics x2. 4,7 pouces, design plat, aluminium. Il plie un peu dans la poche.`] },
+    { id: `screen2`, cost: 2.4e8, c: 2, t: [`Edge-to-edge screen: iBrick X`, `Écran bord à bord : iBrick X`], d: [`Clicks x2. No more home button. A notch instead. Swipe up. Forever.`, `Clics x2. Plus de bouton home. Une encoche à la place. Glisse vers le haut. Pour toujours.`] },
     { id: `screen3`, cost: 2.5e10, c: 2, t: [`Huge screen: iSlab`, `Écran géant : iSlab`], d: [`Clicks x2. A brick, but flat and huge. Two apps side by side. Fits in no pocket at all.`, `Clics x2. Une brique, mais plate et géante. Deux applis côte à côte. Ne rentre dans aucune poche.`] },
     { id: `auto1`, cost: 50000, req: `auto`, m: [`auto`, 2], t: [`Tap Tap Pro`, `Tap Tap Pro`], d: [`Tap Tap x2. 0.99 px. Worth it.`, `Tap Tap x2. 0,99 px. Ça les vaut.`] },
     { id: `charger`, cost: 100000, f: `fastcharge`, t: [`Fast charger`, `Chargeur rapide`], d: [`Charges twice as fast. Gets warm. That's normal. Probably.`, `Charge deux fois plus vite. Chauffe. C'est normal. Sûrement.`] },
@@ -87,7 +87,7 @@ ERA[5] = {
     { id: `night`, cost: 2.1e6, f: `noupdate`, t: [`Update at night`, `Mise à jour la nuit`], d: [`Apps no longer stop to update while you play.`, `Les applis ne s'arrêtent plus pour se mettre à jour pendant que tu joues.`] },
     { id: `auto2`, cost: 3e6, req: `auto`, m: [`auto`, 3], t: [`Tap Tap Gold`, `Tap Tap Gold`], d: [`Tap Tap x3.`, `Tap Tap x3.`] },
     { id: `offline`, cost: 4.5e6, req: `clock`, f: `offline`, t: [`Background refresh`, `Actualisation en arrière-plan`], d: [`Offline progress at 100% instead of 50%.`, `Progression hors ligne à 100 % au lieu de 50 %.`] },
-    { id: `optcharge`, cost: 3e7, f: `optcharge`, t: [`Optimized charging`, `Recharge optimisée`], d: [`Charging stops at 80%. You can leave it plugged in without wearing the battery.`, `La charge s'arrête à 80 %. Tu peux le laisser branché sans user la batterie.`] },
+    { id: `optcharge`, cost: 3e7, f: `optcharge`, t: [`Optimized charging`, `Recharge optimisée`], d: [`Charging stops at 80%. You can leave it plugged in without wearing out the battery.`, `La charge s'arrête à 80 %. Tu peux le laisser branché sans user la batterie.`] },
     { id: `low`, cost: 9e6, f: `lowpower`, t: [`Low Power Mode`, `Mode économie d'énergie`], d: [`Every app drains 40% less battery. The screen is a bit yellow.`, `Toutes les applis consomment 40 % de batterie en moins. L'écran est un peu jaune.`] },
     { id: `farm2`, cost: 1.8e7, req: `farm`, m: [`farm`, 3], t: [`Tractor (in-app purchase)`, `Tracteur (achat intégré)`], d: [`Pixel Farm x3.`, `Pixel Farm x3.`] },
     { id: `magnet`, cost: 4e7, f: `magnet`, t: [`Spam filter`, `Filtre anti-spam`], d: [`Bad stray pixels can't steal anymore.`, `Les mauvais pixels égarés ne volent plus rien.`] },
@@ -115,7 +115,7 @@ ERA[5] = {
     flash: [`Clicks x2 while it runs. Drains the battery like crazy.`, `Clics x2 tant qu'elle tourne. Vide la batterie comme jamais.`],
     farm: [`+1500 px/s. Grows pixels. Asks you to come back every hour.`, `+1500 px/s. Fait pousser des pixels. Te demande de revenir toutes les heures.`],
     hack: [`Guess passwords. Rewards pixels and secrets.`, `Devine des mots de passe. Rapporte des pixels et des secrets.`],
-    saver: [`Production x3 when you don't move the mouse for 20 s. Easy on the battery.`, `Production x3 quand tu ne bouges pas la souris pendant 20 s. Doux pour la batterie.`],
+    saver: [`Production x3 when you don't move the mouse for 20 s. Easy on the battery.`, `Production x3 quand tu ne bouges pas la souris pendant 20 s. Économe en batterie.`],
     birds: [`+25000 px/s. Throw pixels at pigs.`, `+25000 px/s. Lance des pixels sur des cochons.`],
     tok: [`+300000 px/s. Short pixel videos. Eats the battery alive.`, `+300000 px/s. Des vidéos de pixels. Dévore la batterie.`],
     crush: [`+3.5 million px/s. Match three pixels. Forever.`, `+3,5 millions px/s. Aligne trois pixels. Pour toujours.`],
@@ -127,11 +127,11 @@ ERA[5] = {
     score: [`the dev: the score is an app now. everything is an app. my toaster has an app.`, `le dev : le score est une appli maintenant. tout est une appli. mon grille-pain a une appli.`],
     notes: [`the dev: texts! no more emails. 160 characters max. perfect, i never finish my sentences any`, `le dev : des SMS ! fini les mails. 160 caractères max. parfait, je ne finis jamais mes phr`],
     auto: [`the dev: Tap Tap taps for you. on a phone. which you hold. while it taps. the future is weird`, `le dev : Tap Tap tape à ta place. sur un téléphone. que tu tiens. pendant qu'il tape. le futur est bizarre`],
-    help: [`the dev: Tips app. tip #1: charge your phone. tip #2: charge your phone.`, `le dev : appli Astuces. astuce n°1 : charge ton téléphone. astuce n°2 : charge ton téléphone.`],
+    help: [`the dev: Tips app. tip #1: charge your phone. tip #2: charge your phone.`, `le dev : appli Astuces. astuce n° 1 : charge ton téléphone. astuce n° 2 : charge ton téléphone.`],
     trophy: [`the dev: trophies made it to a phone. they're unstoppable.`, `le dev : les trophées ont survécu jusqu'au téléphone. rien ne les arrête.`],
     clock: [`the dev: the phone knows the time. it sets itself. no more 1900. i miss Y2K a bit`, `le dev : le téléphone connaît l'heure. tout seul. fini 1900. l'an 2000 me manque un peu`],
     calc: [`the dev: calculator. turn the phone sideways for scientific mode. i dropped it. 1.2 kg on my foot`, `le dev : calculatrice. tourne le téléphone pour le mode scientifique. je l'ai lâché. 1,2 kg sur le pied`],
-    flash: [`the dev: Flashlight. the most downloaded app of 2007. it doubles your taps. and halves your battery`, `le dev : Lampe torche. l'appli la plus téléchargée de 2007. elle double tes taps. et divise ta batterie`],
+    flash: [`the dev: Flashlight. the most downloaded app of 2007. it doubles your taps. and halves your battery`, `le dev : Lampe torche. l'appli la plus téléchargée de 2007. elle double tes taps. et divise ta batterie par deux`],
     farm: [`the dev: Pixel Farm. it sends notifications at 3 am. my crops were ready. i was not.`, `le dev : Pixel Farm. ça envoie des notifs à 3 h du mat. mes récoltes étaient prêtes. pas moi.`],
     hack: [`the dev: a terminal on a phone. like the very beginning. we've come full circle. kind of`, `le dev : un terminal sur un téléphone. comme au tout début. la boucle est bouclée. en gros`],
     saver: [`the dev: Night Shift makes the screen orange. it helps you sleep. i still don't sleep`, `le dev : Night Shift rend l'écran orange. ça aide à dormir. je ne dors toujours pas`],
@@ -147,7 +147,7 @@ ERA[5] = {
     dead: [`the dev: it died. the iBrick died. it does that. it's charging. we wait. together.`, `le dev : il est mort. l'iBrick est mort. il fait ça. il charge. on attend. ensemble.`],
     upd: [`the dev: apps want to update ALL THE TIME. you can say "later". they'll ask again. they always ask again`, `le dev : les applis veulent se mettre à jour TOUT LE TEMPS. tu peux dire « plus tard ». elles redemanderont. elles redemandent toujours`],
     r12: [`the dev: 384 MB in a phone. my first computer had 3 KB. i'm not crying. it's the screen brightness`, `le dev : 384 Mo dans un téléphone. mon premier ordi avait 3 Ko. je ne pleure pas. c'est la luminosité`],
-    r16: [`the dev: 512 MB. more apps in the background. they're all asking for notifications`, `le dev : 512 Mo. plus d'applis en arrière-plan. elles demandent toutes les notifications`],
+    r16: [`the dev: 512 MB. more apps in the background. they're all asking for notifications`, `le dev : 512 Mo. plus d'applis en arrière-plan. elles demandent toutes à envoyer des notifications`],
     r24: [`the dev: 768 MB. the phone is faster than my old PC. and it's in my pocket. my very big pocket`, `le dev : 768 Mo. le téléphone est plus rapide que mon vieux PC. et il est dans ma poche. ma très grande poche`],
     r32: [`the dev: 1 GB in a phone. 1 GB! i'm calling my mom. on the phone. obviously`, `le dev : 1 Go dans un téléphone. 1 Go ! j'appelle ma mère. avec le téléphone. évidemment`],
     r48: [`the dev: 1.5 GB. the iBrick is heavier. i think memory has weight. don't fact-check that`, `le dev : 1,5 Go. l'iBrick est plus lourd. je crois que la mémoire a un poids. ne vérifie pas`],
@@ -155,12 +155,12 @@ ERA[5] = {
     bat1200: [`the dev: 1200 mAh. lasts a whole morning now`, `le dev : 1200 mAh. ça tient toute une matinée maintenant`],
     bat1600: [`the dev: 1600 mAh. it's 100 g heavier. worth it`, `le dev : 1600 mAh. 100 g de plus. ça vaut le coup`],
     bat2000: [`the dev: 2000 mAh. i can watch PixTok on the bus. i don't take the bus. i'm at home. always`, `le dev : 2000 mAh. je peux regarder PixTok dans le bus. je ne prends pas le bus. je suis chez moi. toujours`],
-    bat2600: [`the dev: 2600 mAh. the iBrick could stop a door. it does stop a door. that's where i keep it`, `le dev : 2600 mAh. l'iBrick pourrait caler une porte. il cale une porte. c'est là que je le range`],
+    bat2600: [`the dev: 2600 mAh. the iBrick could be a doorstop. it is a doorstop. that's where i keep it`, `le dev : 2600 mAh. l'iBrick pourrait caler une porte. il cale une porte. c'est là que je le range`],
     bat3200: [`the dev: 3200 mAh. lasts all day. i still charge it every hour. anxiety`, `le dev : 3200 mAh. ça tient toute la journée. je le charge quand même toutes les heures. l'angoisse`],
     bat4000: [`the dev: 4000 mAh. the knocking again. it sounds metallic. i'll check tomorrow`, `le dev : 4000 mAh. encore ces coups à la porte. ça sonne métallique. je vérifierai demain`],
     m1m: [`the dev: a million pixels on a phone. PIXCORP wants a "mobile version" of the game. it IS the mobile version`, `le dev : un million de pixels sur un téléphone. PIXCORP veut une « version mobile » du jeu. c'EST la version mobile`],
     m1b: [`the dev: a billion. PIXCORP wants in-app purchases. "buy a pixel for 0.99". the game is a pixel. i said no`, `le dev : un milliard. PIXCORP veut des achats intégrés. « achetez un pixel pour 0,99 ». le jeu est un pixel. j'ai dit non`],
-    m1t: [`the dev: a trillion. they say there's AI coming. it'll write code. it'll finish games. i'm not worried. i'm a little worried`, `le dev : mille milliards. on dit qu'une IA arrive. elle écrira du code. elle finira des jeux. je ne m'inquiète pas. je m'inquiète un peu`],
+    m1t: [`the dev: a trillion. they say AI is coming. it'll write code. it'll finish games. i'm not worried. i'm a little worried`, `le dev : mille milliards. on dit qu'une IA arrive. elle écrira du code. elle finira des jeux. je ne m'inquiète pas. je m'inquiète un peu`],
   },
   HELP: [
     [`One app on screen at a time. The round button goes back home. Running apps keep working in the background.`, `Une appli à l'écran à la fois. Le bouton rond revient à l'accueil. Les applis lancées continuent en arrière-plan.`],
@@ -175,7 +175,7 @@ ERA[5] = {
     [`PIXCORP MOBILE STRATEGY: "Step 1: put the pixel on a phone. Step 2: ??? Step 3: profit."`, `STRATÉGIE MOBILE PIXCORP : « Étape 1 : mettre le pixel sur un téléphone. Étape 2 : ??? Étape 3 : profit. »`],
     [`APP STORE REVIEW: "1 star. It's just a pixel." Reply from the dev: "Thank you for your feedback."`, `AVIS APP STORE : « 1 étoile. C'est juste un pixel. » Réponse du dev : « Merci pour votre retour. »`],
     [`THE DEV'S NOTES APP: "things to do: 1. finish the game. 2. charge phone. 3. answer the door?"`, `APPLI NOTES DU DEV : « à faire : 1. finir le jeu. 2. charger le téléphone. 3. ouvrir la porte ? »`],
-    [`SECURITY CAMERA, 03:12: "Motion detected at the front door. Object: robot. Carrying: an old computer."`, `CAMÉRA DE SÉCURITÉ, 03h12 : « Mouvement détecté à la porte. Objet : robot. Porte : un vieil ordinateur. »`],
+    [`SECURITY CAMERA, 03:12: "Motion detected at the front door. Object: robot. Carrying: an old computer."`, `CAMÉRA DE SÉCURITÉ, 03 h 12 : « Mouvement détecté à la porte. Objet : robot. Transporte : un vieil ordinateur. »`],
   ],
   // ----- era mechanics -----
   enter() { S.x.bat = 100; S.bought.settings = 1; note(N(`bat`)); },
@@ -319,7 +319,6 @@ ERA[5] = {
     // the terminal as an iOS app: a locked file, passcode dots for the tries, the words as keys,
     // the bracket pairs as hint chips and the guesses as a list
     hack() {
-      const fr = S.lang === `fr`;
       if (!(H && H.era)) {
         const wait = S.hackCd > 0;
         return `<div class="ilock"><div class="ilk">🔒</div><b>${T(X5.hkTitle)}</b><p>${T(X5.hkIntro)}</p>${wait ? `<p class="dim">${fill(T(X5.hkWait), { s: Math.ceil(S.hackCd) })}</p>` : `<button class="ibtn" data-act="hack">${T(X5.hkOpen)}</button>`}</div>${S.lastLog ? `<div class="igrp"><div class="ihd">${T(X5.hkLast)}</div><div class="irow">${esc(T(S.lastLog))}</div></div>` : ``}`;
@@ -335,12 +334,12 @@ ERA[5] = {
         + `<div class="ikeys">${keys}</div>`
         + `<div class="igrp"><div class="ihd">${T(X5.hkHints)}</div><div class="ichips">${chips}</div></div>`
         + (rows ? `<div class="igrp"><div class="ihd">${fill(T(X5.hkHist), { n: len })}</div>${rows}</div>` : ``)
-        + `<button class="ibtn ghost" data-act="hexit">${fr ? `Annuler` : `Cancel`}</button>`;
+        + `<button class="ibtn ghost" data-act="hexit">${U().cancel}</button>`;
     },
     settings() {
       const u = U(), items = [[`save`, u.save], [`exp`, u.exp], [`imp`, u.imp], [`lang`, u.lang], [`sci`, (S.opt.sci ? `[x] ` : `[ ] `) + u.sci], [`anim`, (S.opt.anim ? `[x] ` : `[ ] `) + u.anim], ...(S.run.help ? [[`tip`, u.tip]] : []), [`about`, u.about], [`hard`, u.hard]];
       const hp = Math.floor(S.x.health ?? 100), th = ERA[5].throttle();
-      const bat = `<div class="row"><span>${fill(T(X5.health), { n: hp })}${th < 1 ? `<small>${fill(T(X5.throttled), { n: th.toFixed(2).replace(`.`, S.lang === `fr` ? `,` : `.`) })}</small>` : ``}</span>${hp < 100 ? `<button class="btn" data-act="newbat">${fill(T(X5.newbat), { c: fmt(ERA[5].batCost()) })}</button>` : ``}</div>`;
+      const bat = `<div class="row"><span>${fill(T(X5.health), { n: hp })}${th < 1 ? `<small>${fill(T(X5.throttled), { n: th.toFixed(2).replace(`.`, decP()) })}</small>` : ``}</span>${hp < 100 ? `<button class="btn" data-act="newbat">${fill(T(X5.newbat), { c: fmt(ERA[5].batCost()) })}</button>` : ``}</div>`;
       return bat + items.map(([a, t]) => `<div class="row"><span>${t}</span><button class="btn" data-act="${a}">&gt;</button></div>`).join(``);
     },
   },

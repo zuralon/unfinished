@@ -4,7 +4,7 @@
 const UI = {
   en: {
     file: `File`, edit: `Edit`, help: `Help`, save: `Save`, exp: `Export save`, imp: `Import save`, hard: `Hard reset`,
-    lang: `Français`, sci: `Scientific notation`, anim: `Animations and transitions`, helpOff: `Help (not installed)`, about: `About`,
+    lang: `Language`, sci: `Scientific notation`, anim: `Animations and transitions`, helpOff: `Help (not installed)`, about: `About`,
     saved: `Saved.`, expQ: `Copy this code to keep your save:`, impQ: `Paste a save code:`, badImp: `That code is not a save.`, resetQ: `Erase EVERYTHING and start over?`,
     tabs: [`Programs`, `Patches`, `Hardware`], buy: c => `${c} px`, open: `open`, running: `running`, installing: n => `Installing ${n}`,
     oom: `Not enough memory.\nClose a program (X) to make room.`, ok: `OK`, ram: (u, t, f) => `${u} / ${t}` + (f ? `  (${f} fragmented)` : ``),
@@ -26,7 +26,7 @@ const UI = {
   },
   fr: {
     file: `Fichier`, edit: `Édition`, help: `Aide`, save: `Sauvegarder`, exp: `Exporter la sauvegarde`, imp: `Importer une sauvegarde`, hard: `Tout effacer`,
-    lang: `English`, sci: `Notation scientifique`, anim: `Animations et transitions`, helpOff: `Aide (non installée)`, about: `À propos`,
+    lang: `Langue`, sci: `Notation scientifique`, anim: `Animations et transitions`, helpOff: `Aide (non installée)`, about: `À propos`,
     saved: `Sauvegardé.`, expQ: `Copie ce code pour garder ta sauvegarde :`, impQ: `Colle un code de sauvegarde :`, badImp: `Ce code n'est pas une sauvegarde.`, resetQ: `Tout effacer et recommencer ?`,
     tabs: [`Programmes`, `Patchs`, `Matériel`], buy: c => `${c} px`, open: `ouvrir`, running: `lancé`, installing: n => `Installation de ${n}`,
     oom: `Mémoire insuffisante.\nFerme un programme (X) pour faire de la place.`, ok: `OK`, ram: (u, t, f) => `${u} / ${t}` + (f ? `  (${f} fragmentés)` : ``),
@@ -100,7 +100,7 @@ const TERM = {
   ach: [`> ACHIEVEMENT UNLOCKED: {n} (+1% PRODUCTION)`, `> SUCCÈS DÉBLOQUÉ : {n} (+1 % DE PRODUCTION)`],
   bought: [`> {n} INSTALLED.`, `> {n} INSTALLÉ.`],
   memOk: [`> MEMORY: {n} KB. THE FAN SOUNDS WORRIED.`, `> MÉMOIRE : {n} KO. LE VENTILATEUR A L'AIR INQUIET.`],
-  sys: [`SYSTEM`, `SYSTÈME`], langSw: [`FRANÇAIS`, `ENGLISH`], anim: [`ANIMATIONS: ON`, `ANIMATIONS : OUI`], animOff: [`ANIMATIONS: OFF`, `ANIMATIONS : NON`], exp: [`EXPORT`, `EXPORTER`], imp: [`IMPORT`, `IMPORTER`], reset: [`RESET`, `EFFACER`], exit: [`EXIT`, `QUITTER`],
+  sys: [`SYSTEM`, `SYSTÈME`], langSw: [`LANGUAGE`, `LANGUE`], anim: [`ANIMATIONS: ON`, `ANIMATIONS : OUI`], animOff: [`ANIMATIONS: OFF`, `ANIMATIONS : NON`], exp: [`EXPORT`, `EXPORTER`], imp: [`IMPORT`, `IMPORTER`], reset: [`RESET`, `EFFACER`], exit: [`EXIT`, `QUITTER`],
   // tutorial messages, shown once each
   tut: {
     start: [`> GAME.EXE LOADED. CLICK THE BLOCK TO GENERATE PIXELS.`, `> GAME.EXE CHARGÉ. CLIQUE SUR LE BLOC POUR GÉNÉRER DES PIXELS.`],
@@ -112,7 +112,7 @@ const TERM = {
     patch: [`> PATCHES IMPROVE PROGRAMS FOREVER. THEY USE NO MEMORY. FINALLY SOMETHING FREE. (IT IS NOT FREE.)`, `> LES PATCHS AMÉLIORENT LES PROGRAMMES POUR TOUJOURS. ILS N'UTILISENT PAS DE MÉMOIRE. ENFIN UN TRUC GRATUIT. (CE N'EST PAS GRATUIT.)`],
     memUp: [`> MEMORY MODULE AVAILABLE. MORE ROOM, MORE PROGRAMS.`, `> MODULE MÉMOIRE DISPONIBLE. PLUS DE PLACE, PLUS DE PROGRAMMES.`],
     stray: [`> WARNING: STRAY PIXEL DETECTED (*). CLICK IT BEFORE IT LEAVES. SOME ARE GOOD. SOME ARE NOT.`, `> ALERTE : PIXEL ÉGARÉ DÉTECTÉ (*). CLIQUE DESSUS AVANT QU'IL PARTE. CERTAINS SONT BONS. D'AUTRES NON.`],
-    hack: [`> LOCKED FILE FOUND: DEV_LOG.TXT. PASSWORD REQUIRED. LIKENESS = LETTERS IN THE RIGHT PLACE. CLICK A BRACKET PAIR LIKE (..) OR [..] FOR HELP.`, `> FICHIER VERROUILLÉ TROUVÉ : DEV_LOG.TXT. MOT DE PASSE REQUIS. CORRESPONDANCE = LETTRES BIEN PLACÉES. CLIQUE SUR UNE PAIRE COMME (..) OU [..] POUR T'AIDER.`],
+    hack: [`> LOCKED FILE FOUND: DEV_LOG.TXT. PASSWORD REQUIRED. LIKENESS = LETTERS IN THE RIGHT PLACE. CLICK A BRACKET PAIR LIKE (..) OR [..] FOR HELP.`, `> FICHIER VERROUILLÉ TROUVÉ : DEV_LOG.TXT. MOT DE PASSE REQUIS. CORRESPONDANCE = LETTRES BIEN PLACÉES. CLIQUE SUR UNE PAIRE DE SYMBOLES COMME (..) OU [..] POUR T'AIDER.`],
     os1: [`> SOMETHING SLID UNDER THE DOOR: A PUNCHED CARD. 80 COLUMNS. NO RETURN ADDRESS.`, `> QUELQUE CHOSE A GLISSÉ SOUS LA PORTE : UNE CARTE PERFORÉE. 80 COLONNES. PAS D'EXPÉDITEUR.`],
   },
 };
@@ -171,8 +171,8 @@ const PA1 = [
   { id: `zbot`, cost: 120000, z: [`bot`, 2], req: `bot`, t: [`clickbot.zip`, `clickbot.zip`], d: [`clickbot.exe uses 2 KB instead of 4.`, `clickbot.exe utilise 2 Ko au lieu de 4.`] },
   { id: `render1`, cost: 150000, m: [`render`, 2], req: `render`, t: [`render cache`, `Cache de rendu`], d: [`Renders x2.`, `Rendus x2.`] },
   { id: `bot2`, cost: 250000, m: [`bot`, 3], req: `bot`, t: [`clickbot v2.0`, `clickbot v2.0`], d: [`Clickbots x3.`, `Clickbots x3.`] },
-  { id: `click3`, cost: 300000, c: 4, t: [`Second hand`, `Deuxième main`], d: [`Clicks x4. Where did it come from? Don't ask.`, `Clics x4. D'où elle sort ? Ne demande pas.`] },
-  { id: `magnet`, cost: 500000, f: `magnet`, t: [`Stray antivirus`, `Antivirus à pixels`], d: [`Bad stray pixels can't steal anymore.`, `Les mauvais pixels égarés ne volent plus rien.`] },
+  { id: `click3`, cost: 300000, c: 4, t: [`Second hand`, `Seconde main`], d: [`Clicks x4. Where did it come from? Don't ask.`, `Clics x4. D'où elle sort ? Ne demande pas.`] },
+  { id: `magnet`, cost: 500000, f: `magnet`, t: [`Pixel antivirus`, `Antivirus à pixels`], d: [`Bad stray pixels can't steal anymore.`, `Les mauvais pixels égarés ne volent plus rien.`] },
   { id: `zrender`, cost: 900000, z: [`render`, 5], req: `render`, t: [`render.zip`, `render.zip`], d: [`render.exe uses 5 KB instead of 8.`, `render.exe utilise 5 Ko au lieu de 8.`] },
   { id: `render2`, cost: 1500000, m: [`render`, 3], req: `render`, t: [`render v2.0`, `render v2.0`], d: [`Renders x3.`, `Rendus x3.`] },
   { id: `comp1`, cost: 2500000, m: [`comp`, 2], req: `comp`, t: [`Optimized compiler`, `Compilateur optimisé`], d: [`Compilers x2.`, `Compilateurs x2.`] },
@@ -193,7 +193,7 @@ const D1 = {
   saver: [`Production x3 when you don't move the mouse for 20 s.`, `Production x3 quand tu ne bouges pas la souris pendant 20 s.`],
   defrag: [`Repairs fragmented memory while it runs.`, `Répare la mémoire fragmentée tant qu'il tourne.`],
   hack: [`Terminal password minigame. Rewards pixels and dev logs.`, `Mini-jeu du mot de passe. Rapporte des pixels et des journaux du développeur.`],
-  render: [`+140 px/s. Renders pixels in advance. Nobody asked.`, `+140 px/s. Calcule des pixels à l'avance. Personne n'a demandé.`],
+  render: [`+140 px/s. Renders pixels in advance. Nobody asked.`, `+140 px/s. Calcule des pixels à l'avance. Personne n'a rien demandé.`],
   comp: [`+1300 px/s. Compiles pixels from scratch.`, `+1300 px/s. Compile des pixels à partir de rien.`],
 };
 const N1 = {
@@ -209,12 +209,12 @@ const N1 = {
   calc: [`calc.exe: does the math. I failed math. calc.exe did not.`, `calc.exe : fait les calculs. J'ai raté mes maths. Pas calc.exe.`],
   bot: [`clickbot.exe: an autoclick that went to college. 4 KB. Never shuts up about it.`, `clickbot.exe : un autoclic qui a fait des études. 4 Ko. Il en parle tout le temps.`],
   saver: [`screensaver.scr: when you stop moving, it takes over. It works better than you. Don't take it personally.`, `screensaver.scr : quand tu arrêtes de bouger, il prend le relais. Il travaille mieux que toi. Ne le prends pas mal.`],
-  defrag: [`defrag.exe: puts your memory back in order. I wish it worked on my apartment.`, `defrag.exe : remet ta mémoire en ordre. J'aimerais qu'il marche sur mon appartement.`],
+  defrag: [`defrag.exe: puts your memory back in order. I wish it worked on my apartment.`, `defrag.exe : remet ta mémoire en ordre. J'aimerais qu'il marche aussi pour mon appartement.`],
   hack: [`hack.exe: the old terminal password trick, in a window. Don't tell PIXCORP.`, `hack.exe : le vieux coup du mot de passe, dans une fenêtre. Ne le dis pas à PIXCORP.`],
-  render: [`render.exe: renders pixels in advance. Nobody asked it to. It does it anyway.`, `render.exe : calcule des pixels à l'avance. Personne ne lui a demandé. Il le fait quand même.`],
+  render: [`render.exe: renders pixels in advance. Nobody asked it to. It does it anyway.`, `render.exe : calcule des pixels à l'avance. Personne ne lui a rien demandé. Il le fait quand même.`],
   comp: [`compiler.exe: 16 KB. My first computer had less than that. So does yours, probably.`, `compiler.exe : 16 Ko. Mon premier ordinateur avait moins que ça. Le tien aussi, sûrement.`],
   oom: [`Your memory is full. You'll have to choose. I wanted more memory too. I wanted a lot of things.`, `Ta mémoire est pleine. Il va falloir choisir. Moi aussi, je voulais plus de mémoire. Je voulais plein de choses.`],
-  shopClosed: [`You closed the shop to make room. Respect. Its icon is on the desktop.`, `Tu as fermé la boutique pour faire de la place. Respect. Son icône est sur le bureau.`],
+  shopClosed: [`You closed the store to make room. Respect. Its icon is on the desktop.`, `Tu as fermé la boutique pour faire de la place. Respect. Son icône est sur le bureau.`],
   blind: [`You closed the score. Brave. The pixels still count. You just don't know how many.`, `Tu as fermé le score. Courageux. Les pixels comptent toujours. Tu ne sais juste plus combien.`],
   frag: [`Your memory is fragmenting. Little holes everywhere. Like my sleep schedule. defrag.exe can fix it.`, `Ta mémoire se fragmente. Des petits trous partout. Comme mes nuits. defrag.exe peut réparer ça.`],
   stray: [`Known bug: pixels escape game.exe. Some are worth a lot. Some steal. Without colors, good luck telling which.`, `Bug connu : des pixels s'échappent de game.exe. Certains valent cher. D'autres volent. Sans couleurs, bonne chance pour savoir lesquels.`],
@@ -226,7 +226,7 @@ const N1 = {
   r64: [`64 KB. Maximum memory for this OS. To go further, you need a new one. I'm working on it. Sort of.`, `64 Ko. Le maximum pour cet OS. Pour aller plus loin, il en faut un nouveau. J'y travaille. En quelque sorte.`],
   m1k: [`1,000 pixels. In 1984, that was a whole screen. Today it's a start.`, `1 000 pixels. En 1984, c'était un écran entier. Aujourd'hui, c'est un début.`],
   m100k: [`100,000 pixels. I don't know where you're keeping them all.`, `100 000 pixels. Je ne sais pas où tu les ranges tous.`],
-  m1m: [`One million pixels. PIXCORP sent me a card. It's blank. They couldn't afford the ink.`, `Un million de pixels. PIXCORP m'a envoyé une carte. Elle est vierge. Ils n'avaient pas les moyens pour l'encre.`],
+  m1m: [`One million pixels. PIXCORP sent me a card. It's blank. They couldn't afford the ink.`, `Un million de pixels. PIXCORP m'a envoyé une carte. Elle est vierge. Ils n'avaient pas les moyens de payer l'encre.`],
 };
 const HELP = [
   [`Close programs (X) to free memory. Everything costs memory. Even knowing your score.`, `Ferme des programmes (X) pour libérer de la mémoire. Tout coûte de la mémoire. Même connaître ton score.`],
@@ -234,9 +234,9 @@ const HELP = [
   [`.zip patches make programs smaller. Same power, more room.`, `Les patchs .zip rendent les programmes plus petits. Même puissance, plus de place.`],
   [`With cga.drv, good stray pixels are cyan and bad ones magenta. Without it, it's a gamble.`, `Avec cga.drv, les bons pixels égarés sont cyan et les mauvais magenta. Sans lui, c'est un pari.`],
   [`clock.exe must be running when you leave, or the computer won't notice time passing.`, `clock.exe doit tourner quand tu pars, sinon l'ordinateur ne remarque pas que le temps passe.`],
-  [`screensaver.scr: stop moving the mouse for 20 s and production goes x3. Go make a coffee.`, `screensaver.scr : ne bouge plus la souris pendant 20 s et la production passe x3. Va te faire un café.`],
+  [`screensaver.scr: stop moving the mouse for 20 s and production triples. Go make some coffee.`, `screensaver.scr : ne bouge plus la souris pendant 20 s et la production passe à x3. Va te faire un café.`],
   [`hack.exe: LIKENESS is the number of letters in the right place.`, `hack.exe : la CORRESPONDANCE, c'est le nombre de lettres bien placées.`],
-  [`hack.exe: click a bracket pair like (..) or [..]. It removes a wrong word, or gives your tries back.`, `hack.exe : clique sur une paire comme (..) ou [..]. Ça retire un mauvais mot, ou ça rend tes essais.`],
+  [`hack.exe: click a bracket pair like (..) or [..]. It removes a wrong word, or gives your tries back.`, `hack.exe : clique sur une paire de symboles comme (..) ou [..]. Ça retire un mauvais mot, ou ça rend tes essais.`],
   [`Have you tried turning it off and on again? Don't. It's not implemented yet.`, `Tu as essayé d'éteindre et de rallumer ? Ne le fais pas. Ce n'est pas encore codé.`],
 ];
 
@@ -246,7 +246,7 @@ const DELIVERY = [
     [`READING CARD... 80 COLUMNS, 12 ROWS, 341 HOLES.`, `LECTURE DE LA CARTE... 80 COLONNES, 12 LIGNES, 341 TROUS.`],
     [`MESSAGE DECODED:`, `MESSAGE DÉCODÉ :`],
     [`"TO WHOEVER FINDS THIS: COMPUTING IS ABOUT TO CHANGE.`, `« À QUI TROUVERA CECI : L'INFORMATIQUE VA CHANGER.`],
-    [`SOON, NOBODY WILL READ GREEN LINES. YOU WILL POINT AT PICTURES.`, `BIENTÔT, PLUS PERSONNE NE LIRA DE LIGNES VERTES. ON MONTRERA DES IMAGES DU DOIGT.`],
+    [`SOON, NOBODY WILL READ GREEN LINES. YOU WILL POINT AT PICTURES.`, `BIENTÔT, PLUS PERSONNE NE LIRA DE LIGNES VERTES. ON POINTERA DES IMAGES.`],
     [`WITH A SMALL BOX ON WHEELS. WE WILL CALL IT A MOUSE. STOP LAUGHING.`, `AVEC UNE PETITE BOÎTE À ROULETTES. ON L'APPELLERA UNE SOURIS. ARRÊTE DE RIRE.`],
     [`THE PICTURES WILL LIVE IN WINDOWS. YOU WILL CLOSE THEM. A LOT.`, `LES IMAGES VIVRONT DANS DES FENÊTRES. TU LES FERMERAS. BEAUCOUP.`],
     [`64 KB SHOULD BE ENOUGH FOR ANYBODY."`, `64 KO DEVRAIENT SUFFIRE À TOUT LE MONDE. »`],
@@ -259,7 +259,7 @@ const DELIVERY = [
     [`Inside: MINO-DOS. Hard drives. Modems. Sixteen colors.`, `Dedans : MINO-DOS. Des disques durs. Des modems. Seize couleurs.`],
   ] },
   { os: `Winbows 95`, item: [`3.5" floppy disk`, `Disquette 3,5"`], text: [
-    [`Another floppy. 3.5 inch this time. Progress.`, `Encore une disquette. 3,5 pouces cette fois. Le progrès.`],
+    [`Another floppy. 3.5-inch this time. Progress.`, `Encore une disquette. 3,5 pouces cette fois. Le progrès.`],
     [`Label: "IDM - PROJECT WINBOWS 95 - TOP SECRET - DO NOT SHOW MINOSOFT". Minosoft has seen it. Minosoft has already sold it.`, `Étiquette : « IDM - PROJET WINBOWS 95 - TOP SECRET - NE PAS MONTRER À MINOSOFT ». Minosoft l'a vue. Minosoft l'a déjà vendue.`],
     [`Inside: a Start button. To shut down the computer, you click Start. Nobody at IDM could explain why.`, `Dedans : un bouton Démarrer. Pour éteindre l'ordinateur, on clique sur Démarrer. Personne chez IDM n'a su expliquer pourquoi.`],
   ] },
@@ -267,10 +267,10 @@ const DELIVERY = [
     [`A CD-ROM fell through the ceiling. It's still warm.`, `Un CD-ROM est tombé du plafond. Il est encore chaud.`],
     [`Date printed on it: 2001. Today is 1999.`, `Date imprimée dessus : 2001. On est en 1999.`],
     [`It contains a technology that connects every computer in the world to every other computer. What could possibly go wrong.`, `Il contient une technologie qui relie chaque ordinateur du monde à tous les autres. Qu'est-ce qui pourrait mal tourner.`],
-    [`Also on the CD: 500 free hours. Nobody knows of what.`, `Aussi sur le CD : 500 heures gratuites. Personne ne sait de quoi.`],
+    [`Also on the CD: 500 free hours. Nobody knows of what.`, `Également sur le CD : 500 heures gratuites. Personne ne sait de quoi.`],
   ] },
-  { os: `iBrick`, item: [`A heavy parcel`, `Un colis lourd`], text: [
-    [`A parcel. Heavy. Inside: a brick.`, `Un colis. Lourd. Dedans : une brique.`],
+  { os: `iBrick`, item: [`A heavy package`, `Un colis lourd`], text: [
+    [`A package. Heavy. Inside: a brick.`, `Un colis. Lourd. Dedans : une brique.`],
     [`Instructions: "YOUR NEW COMPUTER. IN YOUR POCKET."`, `Notice : « VOTRE NOUVEL ORDINATEUR. DANS VOTRE POCHE. »`],
     [`It doesn't fit in your pocket. The instructions say: "Get bigger pockets."`, `Elle ne rentre pas dans ta poche. La notice dit : « Prenez des poches plus grandes. »`],
     [`Battery: 2 days. Then 1 day. Then you will carry the charger everywhere. Forever.`, `Batterie : 2 jours. Puis 1 jour. Puis tu porteras le chargeur partout. Pour toujours.`],
@@ -305,7 +305,7 @@ const ACH = [
   [`stray20`, [`Pixel hunter`, `Chasseur de pixels`], [`Catch 20 good stray pixels.`, `Attraper 20 bons pixels égarés.`]],
   [`strayBad`, [`Oops`, `Oups`], [`Catch a bad stray pixel.`, `Attraper un mauvais pixel égaré.`]],
   [`gui`, [`Graphical`, `Graphique`], [`Install PIXEL-OS 1.`, `Installer PIXEL-OS 1.`]],
-  [`shop`, [`Window shopping`, `Lèche-vitrines`], [`Close the shop to make room.`, `Fermer la boutique pour faire de la place.`]],
+  [`shop`, [`Window shopping`, `Lèche-vitrines`], [`Close the store to make room.`, `Fermer la boutique pour faire de la place.`]],
   [`auto5`, [`Assembly line`, `Travail à la chaîne`], [`Run 5 autoclicks at once.`, `Lancer 5 autoclics en même temps.`]],
   [`cga`, [`Four colors`, `Quatre couleurs`], [`Install cga.drv.`, `Installer cga.drv.`]],
   [`saver`, [`Gone fishing`, `Parti pêcher`], [`Let the screensaver start.`, `Laisser l'économiseur d'écran se lancer.`]],

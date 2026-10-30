@@ -35,7 +35,7 @@ const TNODES = [
   { id: `r8`, x: 2, y: 3, ic: `torch`, max: 3, c: 3, req: [`r3`], k: `bat`, v: 0.15, t: [`Endless battery`, `Batterie sans fin`], d: [`The iBrick's battery drains 15% slower per level.`, `La batterie de l'iBrick se vide 15 % moins vite par niveau.`] },
   // ----- Chaos: everything else (left) -----
   { id: `q1`, x: -1, y: 0, ic: `shield`, max: 1, c: 1, req: [`core`], k: `stray`, v: 1, t: [`Pixel magnet`, `Aimant à pixels`], d: [`Good stray pixels x3, and the bad ones can't steal anymore.`, `Bons pixels égarés x3, et les mauvais ne volent plus rien.`] },
-  { id: `q2`, x: -2, y: -1, ic: `star`, max: 4, c: 2, req: [`q1`], k: `strayF`, v: 0.25, t: [`Stray everywhere`, `Égarés partout`], d: [`Stray pixels show up 25% more often per level.`, `Les pixels égarés passent 25 % plus souvent par niveau.`] },
+  { id: `q2`, x: -2, y: -1, ic: `star`, max: 4, c: 2, req: [`q1`], k: `strayF`, v: 0.25, t: [`Strays everywhere`, `Égarés partout`], d: [`Stray pixels show up 25% more often per level.`, `Les pixels égarés passent 25 % plus souvent par niveau.`] },
   { id: `q3`, x: -2, y: 1, ic: `note`, max: 5, c: 2, req: [`q1`], k: `tk`, v: 0.5, t: [`Golden post-it`, `Post-it doré`], d: [`+50% post-it rewards per level.`, `+50 % de récompense du post-it par niveau.`] },
   { id: `q4`, x: -3, y: -1, ic: `term`, max: 4, c: 3, req: [`q2`], k: `hack`, v: 1, t: [`Hacker`, `Hacker`], d: [`+100% terminal rewards per level, and the terminal unlocks faster.`, `+100 % de récompense du terminal par niveau, et il se déverrouille plus vite.`] },
   { id: `q5`, x: -3, y: 1, ic: `help`, max: 4, c: 3, req: [`q3`], k: `ev`, v: 0.5, t: [`Rigged dilemmas`, `Dilemmes truqués`], d: [`+50% dilemma rewards per level.`, `+50 % de récompense des dilemmes par niveau.`] },
@@ -51,7 +51,7 @@ const TNODES = [
   { id: `x2`, x: 3.9, y: 3.9, ic: `floppy`, max: 2, c: 4, ng: 10, req: [`cK`, `rK`], k: `ramlv`, v: 2, t: [`SSD`, `Disque SSD`], d: [`BEYOND. Every act starts with 2 more memory upgrades per level.`, `AU-DELÀ. Chaque acte commence avec 2 améliorations de mémoire de plus par niveau.`] },
   { id: `x3`, x: -3.9, y: 3.9, ic: `note`, max: 2, c: 3, ng: 10, req: [`rK`, `qK`], k: `tk`, v: 1, t: [`Laminated post-it`, `Post-it plastifié`], d: [`BEYOND. +100% post-it rewards per level.`, `AU-DELÀ. +100 % de récompense du post-it par niveau.`] },
   { id: `x4`, x: -3.9, y: -3.9, ic: `atom`, max: 2, c: 5, ng: 10, req: [`qK`, `pK`], k: `ng`, v: 0.25, t: [`Meta-prestige`, `Méta-prestige`], d: [`BEYOND. Each New Game+ gives +0.25 more per level.`, `AU-DELÀ. Chaque Nouvelle partie+ donne +0,25 de plus par niveau.`] },
-  { id: `x5`, x: 0, y: -7.4, ic: `pixel`, max: 1, c: 10, ks: 1, ng: 10, req: [`x1`, `x2`, `x3`, `x4`], draw: [`x1`, `x4`], k: `p2`, v: 1, t: [`The second pixel`, `Le deuxième pixel`], d: [`KEYSTONE. Opens PIXEL-OS 2: a new game, next to this one. Needs the whole crown.`, `PIERRE ANGULAIRE. Ouvre PIXEL-OS 2 : un nouveau jeu, à côté de celui-ci. Nécessite toute la couronne.`] },
+  { id: `x5`, x: 0, y: -7.4, ic: `pixel`, max: 1, c: 10, ks: 1, ng: 10, req: [`x1`, `x2`, `x3`, `x4`], draw: [`x1`, `x4`], k: `p2`, v: 1, t: [`The second pixel`, `Le deuxième pixel`], d: [`KEYSTONE. Opens PIXEL-OS 2: a new game, next to this one. Needs all four BEYOND skills.`, `PIERRE ANGULAIRE. Ouvre PIXEL-OS 2 : un nouveau jeu, à côté de celui-ci. Nécessite toute la couronne.`] },
   { id: `s4`, x: -1.25, y: 1.25, ic: `atom`, max: 2, c: 8, req: [`q1`, `r1`], k: `ng`, v: 0.25, t: [`Prestige++`, `Prestige++`], d: [`Each New Game+ gives +0.25 more per level (x2 becomes x2.25...).`, `Chaque Nouvelle partie+ donne +0,25 de plus par niveau (x2 devient x2,25...).`] },
 ];
 const TBR = [[`FACTORY`, `USINE`, 0, -6.3], [`FINGER`, `DOIGT`, 6.4, 0], [`SHORTCUTS`, `RACCOURCIS`, 0, 6.3], [`CHAOS`, `CHAOS`, -6.4, 0], [`BEYOND`, `AU-DELÀ`, 0, -8.3, 10]];
@@ -100,7 +100,7 @@ function treeHtml() {
     const l = tlv(n.id), st = l >= n.max ? `max` : l ? `part` : tneeds(n) ? (treeLeft() >= tcost(n) ? `can` : `av`) : `lock`;
     return `<div class="tnd ${st}${n.ks ? ` ks` : ``}${TV.sel === n.id ? ` sel` : ``}" style="left:${n.x * TU}px;top:${n.y * TU}px;--p:${l / n.max * 100}%" data-act="tsel:${n.id}"><i style="background-image:url('${iconUrl(n.ic, `w11`)}')"></i>${n.max > 1 ? `<em>${l}/${n.max}</em>` : ``}</div>`;
   };
-  const brs = TBR.filter(b => !b[4] || (S.ng || 0) >= b[4]).map(b => `<div class="tbr" style="left:${b[2] * TU}px;top:${b[3] * TU}px">${b[L()]}</div>`).join(``);
+  const brs = TBR.filter(b => !b[4] || (S.ng || 0) >= b[4]).map(b => `<div class="tbr" style="left:${b[2] * TU}px;top:${b[3] * TU}px">${T([b[0], b[1]])}</div>`).join(``);
   return `<svg class="tsv" viewBox="-800 -800 1600 1600" width="1600" height="1600">${lines}</svg>${brs}${TNODES.filter(tvis).map(node).join(``)}`;
 }
 function treeSide() {

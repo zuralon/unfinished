@@ -34,11 +34,11 @@ const P3MAP = [
 const P3HOME = [30, 5];
 const P3PRICE = [
   { p: 0, conv: 3, mood: -0.2, ads: 1, t: [`Free (ads)`, `Gratuit (pubs)`] },
-  { p: 1, conv: 1.7, mood: 0.2, t: [`1 €`, `1 €`] },
-  { p: 5, conv: 1, mood: 0, t: [`5 €`, `5 €`] },
-  { p: 15, conv: 0.55, mood: -0.2, t: [`15 €`, `15 €`] },
-  { p: 30, conv: 0.3, mood: -0.5, t: [`30 €`, `30 €`] },
-  { p: 70, conv: 0.12, mood: -1.2, t: [`70 €`, `70 €`] },
+  { p: 1, conv: 1.7, mood: 0.2, t: [`$1`, `1 €`] },
+  { p: 5, conv: 1, mood: 0, t: [`$5`, `5 €`] },
+  { p: 15, conv: 0.55, mood: -0.2, t: [`$15`, `15 €`] },
+  { p: 30, conv: 0.3, mood: -0.5, t: [`$30`, `30 €`] },
+  { p: 70, conv: 0.12, mood: -1.2, t: [`$70`, `70 €`] },
 ];
 const P3PLAT = [
   { id: `pc`, market: 3000, cost: 0, ch: 0, t: [`PC`, `PC`], d: [`Where it all started.`, `Là où tout a commencé.`] },
@@ -51,7 +51,7 @@ const P3PLAT = [
   { id: `cats`, market: 4e9, cost: 5e9, ch: 8, t: [`Universe 7 (the cats)`, `Univers 7 (les chats)`], d: [`Paws are big. The pixel is small. They manage.`, `Les pattes sont grosses. Le pixel est petit. Ils se débrouillent.`] },
 ];
 const P3HIRE = [
-  { id: `dev`, c0: 60, k: 1.16, t: [`Developer`, `Développeur`], d: [`+1 dev hour per second, and fixes bugs alone.`, `+1 heure de dev par seconde, et corrige des bugs tout seul.`] },
+  { id: `dev`, c0: 60, k: 1.16, t: [`Developer`, `Développeur`], d: [`+1 dev hour per second, and fixes bugs on their own.`, `+1 heure de dev par seconde, et corrige des bugs tout seul.`] },
   { id: `srv`, c0: 100, k: 1.5, t: [`Server`, `Serveur`], d: [`+60% player capacity.`, `+60 % de places pour les joueurs.`] },
   { id: `qa`, c0: 4000, k: 1.9, max: 10, ch: 1, t: [`Tester`, `Testeur`], d: [`12% fewer bugs.`, `12 % de bugs en moins.`] },
   { id: `cm`, c0: 9000, k: 1.9, max: 8, ch: 2, t: [`Community manager`, `Community manager`], d: [`Better reviews, and the trolls get an answer.`, `De meilleurs avis, et les trolls ont une réponse.`] },
@@ -60,12 +60,12 @@ const P3PATCH = [
   { id: `fix`, h: 40, ch: 0, bugs: 0.7, life: 1.15, t: [`Day-one patch`, `Patch du premier jour`], d: [`Fixes what should have been fixed before. Fewer bugs.`, `Corrige ce qui aurait dû l'être avant. Moins de bugs.`] },
   { id: `dark`, h: 150, ch: 1, life: 1.3, t: [`Dark mode`, `Mode sombre`], d: [`The pixel is white. The rest is darker. Players stay longer.`, `Le pixel est blanc. Le reste est plus sombre. Les joueurs restent plus longtemps.`] },
   { id: `ach`, h: 500, ch: 1, life: 1.3, wom: 1.3, t: [`Achievements`, `Succès`], d: [`"Click once": 98% of players have it. They talk about it.`, `« Cliquer une fois » : 98 % des joueurs l'ont. Ils en parlent.`] },
-  { id: `lang`, h: 3000, ch: 2, reach: 2, t: [`Translated in 40 languages`, `Traduit en 40 langues`], d: [`Including Klingon. The word for pixel is the same.`, `Dont le klingon. Le mot pour pixel est le même.`] },
-  { id: `multi`, h: 6000, ch: 2, life: 1.6, wom: 1.6, bugs: 1.3, t: [`Multiplayer`, `Multijoueur`], d: [`Two people, one pixel. More players talk about it, more bugs.`, `Deux personnes, un pixel. Plus de bouche-à-oreille, plus de bugs.`] },
+  { id: `lang`, h: 3000, ch: 2, reach: 2, t: [`Translated into 40 languages`, `Traduit en 40 langues`], d: [`Including Klingon. The word for pixel is the same.`, `Dont le klingon. Le mot pour pixel est le même.`] },
+  { id: `multi`, h: 6000, ch: 2, life: 1.6, wom: 1.6, bugs: 1.3, t: [`Multiplayer`, `Multijoueur`], d: [`Two people, one pixel. More word of mouth, more bugs.`, `Deux personnes, un pixel. Plus de bouche-à-oreille, plus de bugs.`] },
   { id: `px2`, h: 12000, ch: 3, life: 1.4, mood: 0.3, t: [`A second pixel`, `Un deuxième pixel`], d: [`The players asked. Better reviews.`, `Les joueurs l'ont demandé. Meilleurs avis.`] },
-  { id: `micro`, h: 15000, ch: 3, money: 2, mood: -0.4, t: [`Microtransactions`, `Microtransactions`], d: [`A golden pixel for 2 €. Money x2, and players online spend a little. Reviews hate it.`, `Un pixel doré à 2 €. Argent x2, et les joueurs en ligne dépensent un peu. Les avis détestent.`] },
-  { id: `br`, h: 25000, ch: 4, wom: 1.6, mood: -0.3, bugs: 1.5, burst: 6, t: [`Battle royale`, `Battle royale`], d: [`100 players, 1 pixel, the circle shrinks. Huge hype, more bugs, purists sulk.`, `100 joueurs, 1 pixel, le cercle se rétrécit. Énorme hype, plus de bugs, les puristes boudent.`] },
-  { id: `catmode`, h: 30000, ch: 5, life: 1.5, mood: 0.3, t: [`Cat mode`, `Mode chat`], d: [`You play the cat. You knock the pixel off the table.`, `Tu joues le chat. Tu fais tomber le pixel de la table.`] },
+  { id: `micro`, h: 15000, ch: 3, money: 2, mood: -0.4, t: [`Microtransactions`, `Microtransactions`], d: [`A golden pixel for $2. Money x2, and players online spend a little. Reviews hate it.`, `Un pixel doré à 2 €. Argent x2, et les joueurs en ligne dépensent un peu. Les avis détestent.`] },
+  { id: `br`, h: 25000, ch: 4, wom: 1.6, mood: -0.3, bugs: 1.5, burst: 6, t: [`Battle royale`, `Battle royale`], d: [`100 players, 1 pixel, the circle shrinks. Huge hype, more bugs, purists sulk.`, `100 joueurs, 1 pixel, le cercle rétrécit. Énorme hype, plus de bugs, les puristes boudent.`] },
+  { id: `catmode`, h: 30000, ch: 5, life: 1.5, mood: 0.3, t: [`Cat mode`, `Mode chat`], d: [`You play as the cat. You knock the pixel off the table.`, `Tu joues le chat. Tu fais tomber le pixel de la table.`] },
   { id: `vr`, h: 40000, ch: 5, life: 1.4, reach: 1.5, t: [`VR version`, `Version VR`], d: [`The pixel, in 3D. It's a cube. Nobody is happy. Everybody buys it.`, `Le pixel, en 3D. C'est un cube. Personne n'est content. Tout le monde l'achète.`] },
   { id: `copi`, h: 50000, ch: 6, life: 1.5, bugs: 0.6, t: [`Copixel as a sidekick`, `Copixel en compagnon`], d: [`He helps the players. He also fixes bugs. He's insufferable and useful.`, `Il aide les joueurs. Il corrige aussi des bugs. Il est insupportable et utile.`] },
   { id: `v1`, h: 70000, ch: 7, life: 2, mood: 0.5, t: [`Version 1.0 (finally)`, `Version 1.0 (enfin)`], d: [`The game leaves early access. After 44 years.`, `Le jeu sort de l'accès anticipé. Après 44 ans.`] },
@@ -74,7 +74,7 @@ const P3MKT = [
   { id: `tweet`, cd: 15, ch: 0, c: () => 0, h: o => 8 + o * 0.0005, t: [`Tweet from the dev`, `Tweet du dev`], d: [`Free. "i made a game. it's a pixel. please."`, `Gratuit. « j'ai fait un jeu. c'est un pixel. s'il vous plaît. »`] },
   { id: `trailer`, cd: 60, ch: 1, c: ch => 400 * 5 ** ch, h: o => 60 + o * 0.002, t: [`Trailer`, `Bande-annonce`], d: [`Epic music over a still pixel.`, `Une musique épique sur un pixel immobile.`] },
   { id: `stream`, cd: 150, ch: 2, c: ch => 4000 * 5 ** ch, h: o => 400 + o * 0.006, t: [`Pay a streamer`, `Payer un streamer`], d: [`Big hype. Sometimes the streamer hates it, live.`, `Grosse hype. Parfois le streamer déteste, en direct.`] },
-  { id: `expo`, cd: 300, ch: 4, c: ch => 2e5 * 5 ** ch, h: o => 4000 + o * 0.015, t: [`Game show booth`, `Stand au salon du jeu vidéo`], d: [`A booth with one pixel on a giant screen. The queue goes around the block.`, `Un stand avec un pixel sur un écran géant. La queue fait le tour du bâtiment.`] },
+  { id: `expo`, cd: 300, ch: 4, c: ch => 2e5 * 5 ** ch, h: o => 4000 + o * 0.015, t: [`Game convention booth`, `Stand au salon du jeu vidéo`], d: [`A booth with one pixel on a giant screen. The line goes around the block.`, `Un stand avec un pixel sur un écran géant. La queue fait le tour du bâtiment.`] },
 ];
 // chapters: owners to reach
 const P3CH = [100, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9, 8e9];
@@ -84,7 +84,7 @@ const X9 = {
   intro: [
     [`THE DEV: the game is finished. really finished. it even has two pixels now. and nine paintings.`, `LE DEV : le jeu est fini. vraiment fini. il a même deux pixels, maintenant. et neuf tableaux.`],
     [`THE DEV: now people have to play it. they say it's the hardest part.`, `LE DEV : maintenant il faut que des gens y jouent. il paraît que c'est la partie la plus dure.`],
-    [`THE DEV: i put it on PixStore. price: 5 €. players: 0. reviews: none. i don't dare look.`, `LE DEV : je l'ai mis sur PixStore. prix : 5 €. joueurs : 0. avis : aucun. je n'ose pas regarder.`],
+    [`THE DEV: i put it on PixStore. price: $5. players: 0. reviews: none. i don't dare look.`, `LE DEV : je l'ai mis sur PixStore. prix : 5 €. joueurs : 0. avis : aucun. je n'ose pas regarder.`],
     [`THE DEV: could you tweet for me? i can't. i'm scared.`, `LE DEV : tu peux tweeter pour moi ? moi je n'y arrive pas. j'ai peur.`],
   ],
   chap: [
@@ -135,7 +135,7 @@ const X9 = {
     star: [`A famous streamer plays your game. Without being paid. Hype +{n}.`, `Une streameuse célèbre joue à ton jeu. Sans être payée. Hype +{n}.`],
     bomb: [`REVIEW BOMBING: Copixel fans don't like the pixel.`, `REVIEW BOMBING : les fans de Copixel n'aiment pas le pixel.`],
     bombStop: [`REVIEW BOMBING: your community managers answered everyone. It stopped.`, `REVIEW BOMBING : tes community managers ont répondu à tout le monde. C'est fini.`],
-    sale: [`SALE: the store puts the game at -50% for 60 s. More buyers.`, `SOLDES : la boutique met le jeu à -50 % pendant 60 s. Plus d'acheteurs.`],
+    sale: [`SALE: the store puts the game at 50% off for 60 s. More buyers.`, `SOLDES : la boutique met le jeu à -50 % pendant 60 s. Plus d'acheteurs.`],
     cat: [`The cat walked on the keyboard and shipped a patch. It works. Nobody knows what it does.`, `Le chat a marché sur le clavier et a publié un patch. Il marche. Personne ne sait ce qu'il fait.`],
   },
   bugs: [
@@ -143,25 +143,25 @@ const X9 = {
     [`The game starts in Klingon.`, `Le jeu se lance en klingon.`], [`Clicking too fast heats up the mouse.`, `Cliquer trop vite fait chauffer la souris.`],
     [`The universe 7 cat shows up in the menu.`, `Le chat de l'univers 7 apparaît dans le menu.`], [`Achievements unlock before you earn them.`, `Les succès se débloquent avant qu'on les gagne.`],
     [`The Score shows the time.`, `Le Score affiche l'heure.`], [`The game is finished (that's not normal).`, `Le jeu est fini (ce n'est pas normal).`],
-    [`The pixel moved by one pixel.`, `Le pixel s'est décalé d'un pixel.`], [`The music plays backwards on Tuesdays.`, `La musique joue à l'envers le mardi.`],
+    [`The pixel moved by one pixel.`, `Le pixel s'est décalé d'un pixel.`], [`The music plays backwards on Tuesdays.`, `La musique passe à l'envers le mardi.`],
     [`The Quit button starts a New Game+.`, `Le bouton Quitter lance une Nouvelle partie+.`], [`The cursor is afraid of the pixel.`, `Le curseur a peur du pixel.`],
     [`The save saves too much.`, `La sauvegarde sauvegarde trop.`], [`"Memory full" in the Memory menu.`, `« Mémoire pleine » dans le menu Mémoire.`],
     [`The blue screen is green.`, `L'écran bleu est vert.`], [`The post-it is stuck upside down.`, `Le post-it est collé à l'envers.`],
-    [`Copixel answers the bug reports. Wrongly.`, `Copixel répond aux rapports de bug. À côté.`], [`The modem screeches in 4K.`, `Le modem grésille en 4K.`],
+    [`Copixel answers the bug reports. Wrongly.`, `Copixel répond aux rapports de bug. À côté.`], [`The modem screeches in 4K.`, `Le modem crie en 4K.`],
     [`The battery drains when you look at it.`, `La batterie se vide quand on la regarde.`], [`Two pixels overlap: it's one pixel.`, `Deux pixels se superposent : ça fait un pixel.`],
   ],
   names: [`xX_Clicker_Xx`, `Mamie Josette`, `PixelLover84`, `the_cat`, `KevinDu57`, `Hélène, 62`, `speedrunner_px`, `NoLifeGamer`, `un_dev_jaloux`, `Bip (retired)`, `Modem_Krrr`, `LaCritique`, `Doigt_d_or`, `Yannick`, `gamer_maman`, `Léa`, `pixelpurist`, `Sam`, `Copixel (bot)`, `Mehdi`, `ZZZ_idle`, `Nour`, `ProGamer2028`, `le_voisin`],
   rev: {
-    5: [[`10/10. There's a pixel. Exactly what was promised.`, `10/10. Il y a un pixel. Exactement ce qui était promis.`], [`I cried at the cat painting.`, `J'ai pleuré au tableau du chat.`], [`My son and my grandpa play together. They don't talk anymore.`, `Mon fils et mon grand-père y jouent ensemble. Ils ne se parlent plus.`], [`Game of the year. Maybe of the decade. The pixel is beautiful.`, `Jeu de l'année. Peut-être de la décennie. Le pixel est magnifique.`], [`4,000 hours. Still not finished. That's the point, I think.`, `4 000 heures. Toujours pas fini. C'est le but, je crois.`], [`The best pixel I've ever clicked. And I've clicked a lot of pixels.`, `Le meilleur pixel que j'ai jamais cliqué. Et j'en ai cliqué beaucoup.`], [`I bought it twice by mistake. No regrets.`, `Je l'ai acheté deux fois par erreur. Aucun regret.`]],
+    5: [[`10/10. There's a pixel. Exactly what was promised.`, `10/10. Il y a un pixel. Exactement ce qui était promis.`], [`I cried at the cat painting.`, `J'ai pleuré devant le tableau du chat.`], [`My son and my grandpa play together. They don't talk anymore.`, `Mon fils et mon grand-père y jouent ensemble. Ils ne se parlent plus.`], [`Game of the year. Maybe of the decade. The pixel is beautiful.`, `Jeu de l'année. Peut-être de la décennie. Le pixel est magnifique.`], [`4,000 hours. Still not finished. That's the point, I think.`, `4 000 heures. Toujours pas fini. C'est le but, je crois.`], [`The best pixel I've ever clicked. And I've clicked a lot of pixels.`, `Le meilleur pixel que j'aie jamais cliqué. Et j'en ai cliqué beaucoup.`], [`I bought it twice by mistake. No regrets.`, `Je l'ai acheté deux fois par erreur. Aucun regret.`]],
     4: [[`Very good. I'd like a second pixel. Oh, there is one?`, `Très bon. J'aimerais un deuxième pixel. Ah, il y en a un ?`], [`Addictive. My mouse will never recover.`, `Addictif. Ma souris ne s'en remettra pas.`], [`Great, but the cat is judging me.`, `Super, mais le chat me juge.`], [`Lovely. The screensavers alone are worth it.`, `Adorable. Rien que les économiseurs d'écran valent le coup.`], [`Good game. Too short. 200 hours.`, `Bon jeu. Trop court. 200 heures.`]],
     3: [[`Fine. The pixel is a bit small.`, `Correct. Le pixel est un peu petit.`], [`Not bad, but Copixel keeps offering to finish it for me.`, `Pas mal, mais Copixel propose sans arrêt de le finir à ma place.`], [`OK. I preferred the terminal era.`, `Ça va. Je préférais l'époque du terminal.`], [`Average. Like a pixel. Neither big nor small.`, `Moyen. Comme un pixel. Ni grand ni petit.`]],
-    2: [[`The pixel disappeared twice. Then it came back. I don't trust it anymore.`, `Le pixel a disparu deux fois. Puis il est revenu. Je ne lui fais plus confiance.`], [`Too many bugs. The music plays backwards. It's Tuesday.`, `Trop de bugs. La musique joue à l'envers. On est mardi.`], [`Nothing new since forever. Bored.`, `Rien de nouveau depuis une éternité. Je m'ennuie.`]],
+    2: [[`The pixel disappeared twice. Then it came back. I don't trust it anymore.`, `Le pixel a disparu deux fois. Puis il est revenu. Je ne lui fais plus confiance.`], [`Too many bugs. The music plays backwards. It's Tuesday.`, `Trop de bugs. La musique passe à l'envers. On est mardi.`], [`Nothing new in forever. Bored.`, `Rien de nouveau depuis une éternité. Je m'ennuie.`]],
     1: [[`Refunded. It was a pixel.`, `Remboursé. C'était un pixel.`], [`Couldn't connect. 0.5/10.`, `Impossible de me connecter. 0,5/10.`], [`Too expensive for a pixel. Even a beautiful one.`, `Trop cher pour un pixel. Même très beau.`], [`An ad between every click. No.`, `Une pub entre chaque clic. Non.`]],
     sat: [[`Servers full. Waited 3 hours to click once.`, `Serveurs pleins. J'ai attendu 3 heures pour cliquer une fois.`], [`"Too many players". I am ONE player.`, `« Trop de joueurs ». Je suis UN joueur.`]],
     bug: [[`Bugs everywhere. The cursor is afraid of the pixel.`, `Des bugs partout. Le curseur a peur du pixel.`], [`It crashed on launch. Then it crashed on crash.`, `Ça plante au lancement. Puis ça plante au plantage.`]],
-    price: [[`Way too expensive for one pixel.`, `Beaucoup trop cher pour un pixel.`], [`70 € for a pixel. That's 70 € a pixel.`, `70 € pour un pixel. Ça fait 70 € le pixel.`]],
+    price: [[`Way too expensive for one pixel.`, `Beaucoup trop cher pour un pixel.`], [`$70 for a pixel. That's $70 a pixel.`, `70 € pour un pixel. Ça fait 70 € le pixel.`]],
     ads: [[`An ad between every click. No.`, `Une pub entre chaque clic. Non.`], [`I watched 40 ads. I clicked the pixel twice.`, `J'ai regardé 40 pubs. J'ai cliqué deux fois sur le pixel.`]],
-    micro: [[`A golden pixel for 2 €. Shame on you.`, `Un pixel doré à 2 €. Honte à vous.`]],
+    micro: [[`A golden pixel for $2. Shame on you.`, `Un pixel doré à 2 €. Honte à vous.`]],
     bomb: [[`Copixel's version is better. (I haven't played this one.)`, `La version de Copixel est mieux. (Je n'ai pas joué à celle-ci.)`], [`PIXEL∞ forever.`, `PIXEL∞ pour toujours.`]],
   },
   replies: [
@@ -222,7 +222,7 @@ function p3Tick(dt) {
   // the servers: who can't get in leaves, angry
   const cap = p3Cap();
   p.full = p.act > cap ? 3 : Math.max(0, (p.full || 0) - dt);
-  if (p.act > cap) { p.act = cap; if (!p.seen.full) { p.seen.full = 1; p3Say([`THE DEV: the servers are full! players can't get in and they write angry reviews. buy a server in the Studio, quick.`, `LE DEV : les serveurs sont pleins ! des joueurs restent dehors et écrivent des avis fâchés. achète un serveur dans le Studio, vite.`]); } }
+  if (p.act > cap) { p.act = cap; if (!p.seen.full) { p.seen.full = 1; p3Say([`THE DEV: the servers are full! players can't get in and they write angry reviews. buy a server in the Studio, quick.`, `LE DEV : les serveurs sont pleins ! des joueurs restent dehors et écrivent des avis furieux. achète un serveur dans le Studio, vite.`]); } }
   p.act = Math.min(p.act, p.owners);
   // bugs come with players; developers fix them alone
   const bugRate = 0.03 * (1 + Math.log10(p.act + 1)) * p3PatchSum(`bugs`, 1) * 0.88 ** p3n(`qa`);
@@ -378,7 +378,7 @@ function p3Mount() {
 </div>`);
 }
 const p3Stars = r => { let h = ``; for (let i = 1; i <= 5; i++) h += `<i class="${r >= i - 0.25 ? `f` : r >= i - 0.75 ? `h` : ``}">★</i>`; return `<span class="p3st">${h}</span>`; };
-const p3fmtM = n => fmt(n) + ` €`;
+const p3fmtM = n => (S.lang === `fr` ? fmt(n) + ` €` : `$` + fmt(n));
 const p3cdHtml = (id, tot) => { const c = S.p3.cd[id]; return c > 0 ? `<span class="p3cd" style="width:${c / tot * 100}%"></span>` : ``; };
 function p3Render() {
   const p = S.p3;
@@ -394,8 +394,8 @@ function p3Render() {
   ].map(([k, v, s]) => `<div class="p3kpi"><span>${T(k)}</span><b>${v}</b>${s ? `<small>${s}</small>` : ``}</div>`).join(``));
   // left: marketing, price, studio, platforms
   const mk = P3MKT.filter(m => m.ch <= p.ch).map(m => { const c = m.c(p.ch); return `<button class="p3act${p.cd[m.id] > 0 ? ` cool` : ``}${p.money < c ? ` poor` : ``}" data-act="p3mkt:${m.id}"><b>${T(m.t)}</b><em>${p.cd[m.id] > 0 ? `⏳ ${Math.ceil(p.cd[m.id])} s` : c ? p3fmtM(c) : T(X9.free)}</em><small>${T(m.d)}</small>${p3cdHtml(m.id, m.cd)}</button>`; }).join(``);
-  const prc = `<div class="p3seg">${P3PRICE.map((x, i) => `<button class="${p.price === i ? `on` : ``}" data-act="p3price:${i}">${x.p ? x.p + ` €` : T([`Free`, `Gratuit`])}</button>`).join(``)}</div><p class="p3dim">${p3Price().ads ? T([`Free with ads: more players, money from ads, reviews a bit worse.`, `Gratuit avec pubs : plus de joueurs, l'argent vient des pubs, avis un peu moins bons.`]) : T([`Cheaper sells more. Too expensive, reviews complain.`, `Moins cher vend plus. Trop cher, les avis râlent.`])}</p>`;
-  const hi = P3HIRE.filter(h => (h.ch || 0) <= p.ch).map(h => { const n = p3n(h.id), mx = h.max && n >= h.max, c = p3HireCost(h); return `<button class="p3row${mx ? ` done` : p.money < c ? ` poor` : ``}${h.id === `srv` && p.full > 0 ? ` hot` : ``}" data-act="p3hire:${h.id}"><div><b>${T(h.t)} <span class="p3n">×${n}</span></b><small>${h.id === `srv` ? fill(T([`+{n} places for players.`, `+{n} places pour les joueurs.`]), { n: fmt(p3Seats(n)) }) : T(h.d)}</small></div><em>${mx ? `max` : p3fmtM(c)}</em></button>`; }).join(``);
+  const prc = `<div class="p3seg">${P3PRICE.map((x, i) => `<button class="${p.price === i ? `on` : ``}" data-act="p3price:${i}">${x.p ? p3fmtM(x.p) : T([`Free`, `Gratuit`])}</button>`).join(``)}</div><p class="p3dim">${p3Price().ads ? T([`Free with ads: more players, money from ads, reviews a bit worse.`, `Gratuit avec pubs : plus de joueurs, l'argent vient des pubs, avis un peu moins bons.`]) : T([`Cheaper sells more. Too expensive and reviews complain.`, `Moins cher, ça vend plus. Trop cher, les avis râlent.`])}</p>`;
+  const hi = P3HIRE.filter(h => (h.ch || 0) <= p.ch).map(h => { const n = p3n(h.id), mx = h.max && n >= h.max, c = p3HireCost(h); return `<button class="p3row${mx ? ` done` : p.money < c ? ` poor` : ``}${h.id === `srv` && p.full > 0 ? ` hot` : ``}" data-act="p3hire:${h.id}"><div><b>${T(h.t)} <span class="p3n">×${n}</span></b><small>${h.id === `srv` ? fill(T([`+{n} player capacity.`, `+{n} places pour les joueurs.`]), { n: fmt(p3Seats(n)) }) : T(h.d)}</small></div><em>${mx ? `max` : p3fmtM(c)}</em></button>`; }).join(``);
   const pl = P3PLAT.filter(x => x.ch <= p.ch + 1).map(x => { const own = p.plat[x.id], lock = x.ch > p.ch; return `<button class="p3row${own ? ` done` : lock ? ` lock` : p.money < x.cost ? ` poor` : ``}" data-act="p3plat:${x.id}"><div><b>${T(x.t)} <span class="p3n">+${fmt(x.market)}</span></b><small>${lock ? fill(T(X9.locked), { n: fmt(P3CH[x.ch - 1]) }) : T(x.d)}</small></div><em>${own ? `✓` : lock ? `🔒` : p3fmtM(x.cost)}</em></button>`; }).join(``);
   setH(`p3left`, `<section class="p3card"><h3>${T(X9.mkt)}</h3>${mk}</section><section class="p3card"><h3>${T(X9.price)}</h3>${prc}</section><section class="p3card"><h3>${T(X9.studio)}</h3>${hi}</section><section class="p3card"><h3>${T(X9.plat)}</h3>${pl}</section>`);
   setH(`p3mapH`, T(X9.map));
@@ -416,7 +416,7 @@ function p3RevHtml() {
   const p = S.p3, R = p3Rating();
   const dist = [5, 4, 3, 2, 1].map(s => { const n = p.rev.filter(r => r.s === s).length; return `<div class="p3dist"><span>${s}★</span><div><i style="width:${n / Math.max(1, p.rev.length) * 100}%"></i></div></div>`; }).join(``);
   return `<div class="p3rsum"><b>${dec(R.toFixed(1))}</b>${p3Stars(R)}<small>${fmt(p.revN)} ${T([`reviews`, `avis`])}</small></div>${dist}`
-    + p.rev.slice().reverse().slice(0, 14).map(r => `<div class="p3rev s${r.s}"><div class="p3rh">${p3Stars(r.s)}<b>${esc(r.n)}</b><small>${fill(T(X9.hours), { h: String(r.h).replace(`.`, S.lang === `fr` ? `,` : `.`) })}</small></div><p>${esc(T(r.t))}</p>${r.rep ? `<p class="p3rep">${esc(T(r.rep))}</p>` : r.s <= 2 ? `<button class="p3mini${p.cd.reply > 0 ? ` cool` : ``}" data-act="p3reply:${r.k}">${T(X9.reply)}</button>` : ``}</div>`).join(``);
+    + p.rev.slice().reverse().slice(0, 14).map(r => `<div class="p3rev s${r.s}"><div class="p3rh">${p3Stars(r.s)}<b>${esc(r.n)}</b><small>${fill(T(X9.hours), { h: String(r.h).replace(`.`, decP()) })}</small></div><p>${esc(T(r.t))}</p>${r.rep ? `<p class="p3rep">${esc(T(r.rep))}</p>` : r.s <= 2 ? `<button class="p3mini${p.cd.reply > 0 ? ` cool` : ``}" data-act="p3reply:${r.k}">${T(X9.reply)}</button>` : ``}</div>`).join(``);
 }
 function p3BugHtml() {
   const p = S.p3;
@@ -432,13 +432,13 @@ function p3RoadHtml() {
 }
 function p3MsgHtml() {
   return S.p3.chat.slice().reverse().slice(0, 20).map(l => {
-    const t = T(l), m = /^([A-ZÀ-Ý ]+) ?: (.*)$/s.exec(t), who = m ? m[1] : ``, cls = /COPIXEL/.test(who) ? `cop` : /CHAT|CAT/.test(who) ? `cat` : m ? `dev` : `sys`;
+    const t = T(l), c = spk(l), m = c !== `sys` && SAY_RE.exec(t), who = m ? m[1] : ``, cls = [`cop`, `cat`, `sys`].includes(c) ? c : `dev`;
     return `<div class="p3msg ${cls}">${m ? `<b>${esc(who)}</b>${esc(m[2])}` : esc(t)}</div>`;
   }).join(``);
 }
 function p3OptHtml() {
   const o = (a, t) => `<button class="p3mi" data-act="${a}">${t}</button>`;
-  return `<div class="p3menu">` + o(`p3back`, `↩ ${T(X8.back)}`) + modeLinks(o, 9) + o(`save`, T([`Save`, `Sauvegarder`])) + o(`lang`, `English / Français`)
+  return `<div class="p3menu">` + o(`p3back`, `↩ ${T(X8.back)}`) + modeLinks(o, 9) + o(`save`, T([`Save`, `Sauvegarder`])) + o(`lang`, `🌐 ${U().lang}`)
     + o(`sci`, `[${S.opt.sci ? `x` : ` `}] ${T(X8.sci)}`) + o(`anim`, `[${S.opt.anim ? `x` : ` `}] ${T(X8.anim)}`)
     + o(`exp`, T([`Export the save`, `Exporter la sauvegarde`])) + o(`imp`, T([`Import a save`, `Importer une sauvegarde`]))
     + (S.p3.fin ? o(`p3fin`, T(X9.again)) : ``) + o(`p3about`, T([`About`, `À propos`])) + o(`hard`, T([`Erase everything`, `Tout effacer`])) + o(`p3close`, T(X8.close)) + `</div>`;
@@ -529,7 +529,7 @@ async function p3Final() {
   el.classList.add(`on`); box.innerHTML = ``;
   for (const l of X9.fin) {
     const d = document.createElement(`div`), t = T(l);
-    d.textContent = t; d.className = /^(THE DEV|LE DEV)/.test(t) ? `dev` : /^COPIXEL/.test(t) ? `cop` : /^(THE CAT|LE CHAT)/.test(t) ? `cat` : ``;
+    d.textContent = t; d.className = spk(l);
     box.appendChild(d); await wait(t.length * 35 + 900);
   }
   await wait(1200);

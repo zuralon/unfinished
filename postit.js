@@ -12,9 +12,9 @@ const PI = {
     [`Closed: works as intended.`, `Fermé : fonctionne comme prévu.`],
     [`Fixed. Well, moved somewhere else.`, `Corrigé. Enfin, déplacé ailleurs.`],
     [`Marked "won't fix". Paid anyway.`, `Marqué « ne sera pas corrigé ». Payé quand même.`],
-    [`Done. I'll take the credit.`, `Fait. Je prendrai le mérite.`],
+    [`Done. I'll take the credit.`, `Fait. Je m'en attribuerai le mérite.`],
     [`Ticket closed. Three new ones opened.`, `Ticket fermé. Trois nouveaux ouverts.`],
-    [`Thanks. You're in the credits now. Small print.`, `Merci. Tu es dans les crédits. En tout petit.`],
+    [`Thanks. You're in the credits now. Small print.`, `Merci. Tu es au générique. En tout petit.`],
     [`PIXCORP says thanks. PIXCORP never says thanks.`, `PIXCORP dit merci. PIXCORP ne dit jamais merci.`],
     [`Perfect. I'm putting this one on the fridge.`, `Parfait. Celui-là, je le colle sur le frigo.`],
     [`You work harder than me. Low bar, but still.`, `Tu bosses plus que moi. La barre est basse, mais quand même.`],
@@ -97,7 +97,7 @@ const EV = [
     a: [`Let it work`, `Le laisser bosser`], fa: { bet: [0.6, { b: [`p`, 3, 60], m: [`The cat found an optimization. Production x3 for 60 s.`, `Le chat a trouvé une optimisation. Production x3 pendant 60 s.`] }, { lose: 0.05, m: [`The cat deleted something. You lost 5% of your pixels.`, `Le chat a supprimé un truc. Tu perds 5 % de tes pixels.`] }] },
     no: [`Shoo!`, `Ouste !`], fb: { g: 30, m: [`The cat leaves, offended. It drops a few pixels on the way.`, `Le chat part, vexé. Il fait tomber quelques pixels en route.`] } },
   { q: [`A rubber duck appeared next to the keyboard. It seems to want to talk.`, `Un canard en plastique est apparu à côté du clavier. Il a l'air de vouloir parler.`],
-    a: [`Explain your code to it`, `Lui expliquer ton code`], fa: { b: [`p`, 2, 120], m: [`Halfway through, you understand everything. Production x2 for 2 min. The duck takes no credit.`, `À mi-chemin, tu comprends tout. Production x2 pendant 2 min. Le canard ne demande rien.`] },
+    a: [`Explain your code to it`, `Lui expliquer ton code`], fa: { b: [`p`, 2, 120], m: [`Halfway through, you understand everything. Production x2 for 2 min. The duck takes no credit.`, `Au milieu de l'explication, tu comprends tout. Production x2 pendant 2 min. Le canard ne demande rien.`] },
     no: [`Ignore the duck`, `Ignorer le canard`], fb: { m: [`The duck is disappointed. You can feel it.`, `Le canard est déçu. Tu le sens.`] } },
   { q: [`Pizza delivery. Nobody ordered. It's already paid for.`, `Livraison de pizza. Personne n'a commandé. Elle est déjà payée.`],
     a: [`Eat it`, `La manger`], fa: { b: [`c`, 4, 90], m: [`Pizza power. Clicks x4 for 90 s.`, `La force de la pizza. Clics x4 pendant 90 s.`] },
@@ -115,8 +115,8 @@ const EV = [
     a: [`Tidy up`, `Ranger`], fa: { b: [`c`, 3, 120], m: [`You found a second mouse under the mess. Clicks x3 for 2 min.`, `Tu as trouvé une deuxième souris sous le bazar. Clics x3 pendant 2 min.`] },
     no: [`It's organized chaos`, `C'est un chaos organisé`], fb: { b: [`p`, 1.5, 120], m: [`You know exactly where everything is. Production x1.5 for 2 min.`, `Tu sais exactement où est chaque chose. Production x1,5 pendant 2 min.`] } },
   { q: [`An unlabeled floppy is lying on the floor. It says nothing. That's suspicious.`, `Une disquette sans étiquette traîne par terre. Elle ne dit rien. C'est suspect.`], eras: [1, 2, 3],
-    a: [`Insert it`, `L'insérer`], fa: { bet: [0.5, { g: 300, m: [`It's full of pixels! +5 min of production.`, `Elle est pleine de pixels ! +5 min de production.`] }, { lose: 0.08, m: [`It's the dev's holiday photos. 8% of your pixels died of embarrassment.`, `Ce sont les photos de vacances du dev. 8 % de tes pixels sont morts de gêne.`] }] },
-    no: [`Throw it away`, `La jeter`], fb: { m: [`It goes in the bin. It will haunt you a little.`, `Elle part à la poubelle. Elle va te hanter un peu.`] } },
+    a: [`Insert it`, `L'insérer`], fa: { bet: [0.5, { g: 300, m: [`It's full of pixels! +5 min of production.`, `Elle est pleine de pixels ! +5 min de production.`] }, { lose: 0.08, m: [`It's the dev's vacation photos. 8% of your pixels died of embarrassment.`, `Ce sont les photos de vacances du dev. 8 % de tes pixels sont morts de gêne.`] }] },
+    no: [`Throw it away`, `La jeter`], fb: { m: [`It goes in the trash. It will haunt you a little.`, `Elle part à la poubelle. Elle va te hanter un peu.`] } },
   { q: [`A USB stick found in the parking lot. It's labeled "SALARIES 2026".`, `Une clé USB trouvée sur le parking. Étiquette : « SALAIRES 2026 ».`], eras: [4, 5, 6],
     a: [`Plug it in`, `La brancher`], fa: { bet: [0.5, { g: 300, m: [`Jackpot, pixels everywhere! +5 min of production.`, `Jackpot, des pixels partout ! +5 min de production.`] }, { lose: 0.08, m: [`It was a trap. Of course it was. -8% pixels.`, `C'était un piège. Évidemment. -8 % de pixels.`] }] },
     no: [`Call IT`, `Appeler le service info`], fb: { g: 60, m: [`IT is impressed. They send you pixels and a sticker.`, `Le service info est impressionné. Il t'envoie des pixels et un autocollant.`] } },
@@ -130,7 +130,7 @@ const EV = [
     a: [`Forward it`, `Le transférer`], fa: { g: 120, m: [`Your 10 friends hate you now. +2 min of production, though.`, `Tes 10 amis te détestent. Mais +2 min de production.`] },
     no: [`Delete`, `Supprimer`], fb: { m: [`Nothing vanished. Suspicious.`, `Rien n'a disparu. Suspect.`] } },
   { q: [`PIXCORP sends a satisfaction survey. 140 questions. Mandatory. Optional.`, `PIXCORP envoie un questionnaire de satisfaction. 140 questions. Obligatoire. Facultatif.`],
-    a: [`Fill it in`, `Le remplir`], fa: { g: 150, m: [`They pay you in pixels. And send another survey.`, `Ils te paient en pixels. Et envoient un autre questionnaire.`] },
+    a: [`Fill it out`, `Le remplir`], fa: { g: 150, m: [`They pay you in pixels. And send another survey.`, `Ils te paient en pixels. Et envoient un autre questionnaire.`] },
     no: [`Answer "very satisfied" everywhere`, `Répondre « très satisfait » partout`], fb: { b: [`c`, 3, 60], m: [`That took 4 seconds. Clicks x3 for 60 s with the time you saved.`, `Ça a pris 4 secondes. Clics x3 pendant 60 s avec le temps gagné.`] } },
 ];
 
@@ -178,7 +178,7 @@ function piRender() {
       h += `<p class="pd">${fill(T(PI.reward), { n: fmt(tkRew(c.t.r)) })}</p>`;
     }
   }
-  for (const k in x.boost || {}) h += `<p class="pb">${fill(T(PI.boost[k]), { m: String(x.boost[k].m).replace(`.`, S.lang === `fr` ? `,` : `.`), s: Math.ceil(x.boost[k].s) })}</p>`;
+  for (const k in x.boost || {}) h += `<p class="pb">${fill(T(PI.boost[k]), { m: String(x.boost[k].m).replace(`.`, decP()), s: Math.ceil(x.boost[k].s) })}</p>`;
   setH(`postit`, h);
   el.classList.toggle(`ready`, !!(c && c.done));
   if (c && c.done) el.dataset.act = `pclaim`; else delete el.dataset.act;

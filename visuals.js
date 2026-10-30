@@ -163,7 +163,7 @@ const VIZ = {
   seti(x, w, h, t) {
     box(x, `#000`, 0, 0, w, h);
     for (let i = 0; i < 24; i++) for (let j = 0; j < 6; j++) { const v = Math.abs(Math.sin(i * 0.6 + j + t * 2)) * 30 * (j / 6 + 0.3), X = 10 + i * ((w - 60) / 24) + j * 6, Y = h - 14 - j * 6; box(x, `hsl(${200 + j * 25},90%,${40 + v}%)`, X, Y - v, 3, v); }
-    say(x, `SETI@Pixel`, 6, 10, 11, `#9cf`, `left`, true); say(x, `${T(VT.data)} : ${Math.floor(fr(t / 30) * 100)} %`, w - 6, 10, 10, `#9cf`, `right`);
+    say(x, `SETI@Pixel`, 6, 10, 11, `#9cf`, `left`, true); say(x, `${T(VT.data)}${colon()}${pct(Math.floor(fr(t / 30) * 100))}`, w - 6, 10, 10, `#9cf`, `right`);
   },
   weblog(x, w, h, t) {
     box(x, `#000`, 0, 0, w, h);
@@ -262,7 +262,7 @@ const VIZ = {
     const n = roll ? 1 + (t * 13 | 0) % 6 : 1 + Math.min(5, Math.round(diceM() * 2)), P = { 1: [[0, 0]], 2: [[-1, -1], [1, 1]], 3: [[-1, -1], [0, 0], [1, 1]], 4: [[-1, -1], [1, -1], [-1, 1], [1, 1]], 5: [[-1, -1], [1, -1], [0, 0], [-1, 1], [1, 1]], 6: [[-1, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [1, 1]] }[n];
     for (const [a, b] of P) ball(x, a * 9, b * 9, 3.2, `#fff`);
     x.restore();
-    say(x, `x${String(diceM()).replace(`.`, S.lang === `fr` ? `,` : `.`)}`, cx + 40, cy, 22, `#ffd166`, `left`, true);
+    say(x, `x${String(diceM()).replace(`.`, decP())}`, cx + 40, cy, 22, `#ffd166`, `left`, true);
   },
   // a miner walks into a wall and comes out the other side, without a hole
   tunnel(x, w, h, t) {
@@ -300,7 +300,7 @@ const VIZ = {
       x.globalAlpha = 0.8; box(x, `#ffd166`, cx + Math.cos(a) * d - 1.5, cy + Math.sin(a) * d * 0.45 - 1.5, 3, 3);
     }
     x.globalAlpha = 1; x.strokeStyle = `#ff8c1a`; x.lineWidth = 2; x.beginPath(); x.ellipse(cx, cy, r + 8, (r + 8) * 0.35, 0, 0, 7); x.stroke();
-    ball(x, cx, cy, r, `#000`); say(x, `x${(Math.round(holeM() * 100) / 100).toString().replace(`.`, S.lang === `fr` ? `,` : `.`)}`, w - 10, 14, 11, `#ff8c1a`, `right`, true);
+    ball(x, cx, cy, r, `#000`); say(x, `x${(Math.round(holeM() * 100) / 100).toString().replace(`.`, decP())}`, w - 10, 14, 11, `#ff8c1a`, `right`, true);
   },
   qubit(x, w, h, t) {
     box(x, `#0b1023`, 0, 0, w, h);

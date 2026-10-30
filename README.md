@@ -42,7 +42,7 @@ Tu commences dans un terminal vert, tu trouves une carte perforée, puis tu trav
 - **PIXEL-OS 2 : le deuxième pixel**, un nouveau jeu qui s'ouvre avec la toute dernière compétence de l'arbre. On y peint neuf tableaux, un par époque, case par case, en suivant un modèle. Chaque couleur a sa règle (le phosphore aime les lignes, le bleu plante, le gris est une batterie, Copixel peint à ta place, les qubits jouent aux dés), et il y a des bugs à écraser. On peut aller et revenir entre les deux jeux à tout moment.
 - **PIXEL-OS 3 : la sortie**, qui s'ouvre une fois PIXEL-OS 2 fini. Le jeu est fini, il faut maintenant le sortir : tableau de bord de boutique, prix, tweets, streamers, serveurs qui saturent, bugs à corriger, avis à lire (et à qui répondre), mises à jour à publier, nouvelles plateformes (consoles, téléphones, frigos, la Lune…). La carte du monde s'allume au fil des joueurs, jusqu'à 8 milliards.
 - **PIXEL-OS 4 : l'aventure du pixel**, qui s'ouvre une fois PIXEL-OS 3 fini. Le mot FIN veut s'écrire sur le jeu pour toujours : le Pixel part l'arrêter à travers les neuf mondes de la saga, dans un RPG automatique aux menus de vieux jeu de rôle. Monstres (bugs, pop-ups, abonnements…), boss (le Curseur Clignotant, Maman au téléphone, l'Écran Bleu de la Mort, PIXEL∞, le Chat de Schrödinger…), compagnons qui t'accompagnent à l'écran (Bip, le chat, le dev, Copixel), compétences (Ctrl+Z, Copier-coller…) et une récompense à choisir après chaque boss.
-- Environ 10 heures pour la première partie, en français et en anglais.
+- Environ 10 heures pour la première partie, en 14 langues : anglais, français, espagnol, allemand, portugais (Brésil), italien, néerlandais, polonais, turc, russe, japonais, coréen, chinois simplifié et chinois traditionnel.
 - Sauvegarde automatique, plus export et import d'une sauvegarde dans les menus.
 
 ### Jouer
@@ -69,6 +69,7 @@ Aucune installation ni compilation : c'est du HTML et du JavaScript sans dépend
 | `p2.js` | PIXEL-OS 2 : le deuxième pixel |
 | `p3.js` | PIXEL-OS 3 : la sortie |
 | `p4.js` | PIXEL-OS 4 : l'aventure du pixel |
+| `i18n/` | Les 12 langues ajoutées, chargées à la demande |
 
 Les textes sont stockés par paires `[anglais, français]` et affichés avec `T()`.
 
@@ -108,7 +109,7 @@ Start in a green terminal, find a punched card, then live through six operating 
 - **PIXEL-OS 2: the second pixel**, a new game opened by the very last skill of the tree. Paint nine pictures, one per era, cell by cell, following a model. Each colour has its own rule (phosphor loves lines, blue crashes, grey is a battery, Copixel paints for you, qubits roll dice), and there are bugs to squash. You can go back and forth between both games at any time.
 - **PIXEL-OS 3: the release**, opened once PIXEL-OS 2 is finished. The game is done, now it has to come out: a store dashboard, price, tweets, streamers, servers filling up, bugs to fix, reviews to read (and answer), patches to ship, new platforms (consoles, phones, fridges, the Moon…). The world map lights up as players arrive, up to 8 billion.
 - **PIXEL-OS 4: the Pixel's adventure**, opened once PIXEL-OS 3 is finished. The word FIN ("the end") wants to write itself over the game forever: the Pixel sets out to stop it through the saga's nine worlds, in an idle RPG with old-school menus. Monsters (bugs, pop-ups, subscriptions…), bosses (the Blinking Cursor, Mom on the Phone, the Blue Screen of Death, PIXEL∞, Schrödinger's Cat…), companions who walk with you on screen (Bip, the cat, the dev, Copixel), skills (Ctrl+Z, Copy-paste…) and a reward to pick after each boss.
-- About 10 hours for a first run, in English and French.
+- About 10 hours for a first run, in 14 languages: English, French, Spanish, German, Portuguese (Brazil), Italian, Dutch, Polish, Turkish, Russian, Japanese, Korean, Simplified Chinese and Traditional Chinese.
 - Saves automatically, with save export and import in the menus.
 
 ### Play
@@ -135,6 +136,7 @@ Nothing to install or build: it's plain HTML and JavaScript with no dependencies
 | `p2.js` | PIXEL-OS 2: the second pixel |
 | `p3.js` | PIXEL-OS 3: the release |
 | `p4.js` | PIXEL-OS 4: the Pixel's adventure |
+| `i18n/` | The 12 added languages, loaded on demand |
 
 Texts are stored as `[english, french]` pairs and shown with `T()`.
 
