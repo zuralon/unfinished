@@ -1268,6 +1268,13 @@ body.p2 #dlg .title b,body.p3 #dlg .title b,body.p4 #dlg .title b{background:non
 body.p4 #dlg .body{padding:10px 14px}
 body.p4 #dlg .btn{font:20px 'VT323',monospace;color:#fff;background:linear-gradient(#2a3cb8,#121d73);border:2px solid #fff;border-radius:6px;padding:3px 14px}
 @media (max-width:1100px){.p4wins{grid-template-columns:1fr 1fr;height:auto;max-height:50vh;overflow:auto}}
+.p2menu,.p3menu,.p4menu{max-height:calc(100vh - 80px);overflow:auto}
+.achl{max-height:60vh;overflow:auto;margin-bottom:12px}
+/* phones: the board first, the header on two short rows, panels one under the other */
+@media (max-width:820px){.p2body{grid-auto-rows:max-content}.p2main{order:-1}.p2pal,.p2side{overflow:visible}.p2top{gap:6px 12px;padding:6px 10px}.p2logo b{font-size:22px}.p2money{flex:1;min-width:0;text-align:left}}
+@media (max-width:860px){.p3body{grid-auto-rows:max-content}.p3left{overflow:visible}.p3right{height:70vh}.p3mapc canvas,.p3chartc canvas{min-height:180px}}
+@media (max-width:640px){.p3top{gap:8px;padding:8px 10px}.p3logo span,.p3game{display:none}.p3top .p3btn{margin-left:auto}.p3kpis{order:3;flex:0 0 100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.p3kpi{padding:4px 8px}.p3kpi b{font-size:15px}.p3kpi span{font-size:10px}
+.p4top{gap:10px;padding:6px 10px}.p4logo{display:none}.p4where b{font-size:20px}.p4where span{font-size:15px}.p4gold b{font-size:22px}.p4wins{grid-template-columns:1fr}.p4pick div{flex-direction:column}}
 </style>
 </head>
 <body class="nocursor">
@@ -1300,22 +1307,22 @@ body.p4 #dlg .btn{font:20px 'VT323',monospace;color:#fff;background:linear-gradi
 <div id="boot"><div><i></i>PIXEL-OS 1<br><br><span class="dim">Welcome. Mostly.</span></div></div>
 <div id="dlg"><div class="win"><div class="title"><b id="dlgH">PIXEL-OS</b></div><div class="body"><div id="dlgT"></div><textarea id="dlgI" spellcheck="false"></textarea><div id="dlgB"></div></div></div></div>
 
-<script src="data.js?v=72"></script>
-<script src="era2.js?v=72"></script>
-<script src="era3.js?v=72"></script>
-<script src="era4.js?v=72"></script>
-<script src="era5.js?v=72"></script>
-<script src="era6.js?v=72"></script>
-<script src="era7.js?v=72"></script>
-<script src="icons.js?v=72"></script>
-<script src="savers.js?v=72"></script>
-<script src="visuals.js?v=72"></script>
-<script src="postit.js?v=72"></script>
-<script src="tree.js?v=72"></script>
-<script src="auto.js?v=72"></script>
-<script src="p2.js?v=72"></script>
-<script src="p3.js?v=72"></script>
-<script src="p4.js?v=72"></script>
-<script src="game.js?v=72"></script>
+<script src="data.js?v=73"></script>
+<script src="era2.js?v=73"></script>
+<script src="era3.js?v=73"></script>
+<script src="era4.js?v=73"></script>
+<script src="era5.js?v=73"></script>
+<script src="era6.js?v=73"></script>
+<script src="era7.js?v=73"></script>
+<script src="icons.js?v=73"></script>
+<script src="savers.js?v=73"></script>
+<script src="visuals.js?v=73"></script>
+<script src="postit.js?v=73"></script>
+<script src="tree.js?v=73"></script>
+<script src="auto.js?v=73"></script>
+<script src="p2.js?v=73"></script>
+<script src="p3.js?v=73"></script>
+<script src="p4.js?v=73"></script>
+<script src="game.js?v=73"></script>
 </body>
 </html>

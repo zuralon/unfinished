@@ -528,6 +528,9 @@ function modeSwitch(era) {
   Object.assign(S, eraFresh(era));
   restart(S);
 }
+// in the options of a side game: the other side games, and the achievements
+const modeLinks = (o, era) => [[8, `p2go`, `🎨 PIXEL-OS 2`, p2Unlocked], [9, `p3go`, `📈 PIXEL-OS 3`, p3Unlocked], [10, `p4go`, `⚔ PIXEL-OS 4`, p4Unlocked]]
+  .filter(m => m[0] !== era && m[3]()).map(m => o(m[1], m[2])).join(``) + o(`achp`, `🏆 ${T([`Achievements`, `Succès`])}`);
 function p2Leave() {
   const b = S.back;
   if (b) Object.assign(S, b); else Object.assign(S, eraFresh(0), { z: Object.assign(S.z, { paid: 1, seen: { boot: 1 } }) });
@@ -669,7 +672,7 @@ function p2InfoHtml() {
   if (c === `P`) return `<b>${fill(T(X8.cell), { x, y })}</b> · ${fill(T(X8.pixel), { n: fmtR(p2ClickPow()) })}`;
   let h = `<b>${fill(T(X8.cell), { x, y })}</b> · ${fill(T(X8.want), { a: t ? T(P2CI[t].t) : T(X8.none) })}`;
   if (c) {
-    h += ` · ${p2Swatch(c)} ${T(P2CI[c].t)} : ${fill(T(X8.makes), { n: fmtR(P2V.cell[i] || 0) })} (${T(t === c ? X8.ok : t ? X8.bad : X8.off)})`;
+    h += ` · ${p2Swatch(c)} ${T(P2CI[c].t)}${colon()}${fill(T(X8.makes), { n: fmtR(P2V.cell[i] || 0) })} (${T(t === c ? X8.ok : t ? X8.bad : X8.off)})`;
     if (c === `b` && p.crash[i] > 0) h += ` · ${T(X8.crashed)}`;
     if (c === `i`) h += ` · ${fill(T(X8.charge), { n: Math.round((p.bat[i] ?? 1) * 100) })}`;
   } else if (t && p2open(t)) h += ` · ${fmt(p2Cost(p2ColFor(i)))}`;
@@ -685,10 +688,10 @@ function p2GalHtml() {
 }
 function p2OptHtml() {
   const o = (a, t) => `<button class="p2mi" data-act="${a}">${t}</button>`;
-  return `<div class="p2box p2menu">` + o(`p2back`, `↩ ${T(X8.back)}`) + o(`save`, U().save || T([`Save`, `Sauvegarder`])) + o(`lang`, `English / Français`)
+  return `<div class="p2box p2menu">` + o(`p2back`, `↩ ${T(X8.back)}`) + modeLinks(o, 8) + o(`save`, U().save || T([`Save`, `Sauvegarder`])) + o(`lang`, `English / Français`)
     + o(`sci`, `[${S.opt.sci ? `x` : ` `}] ${T(X8.sci)}`) + o(`anim`, `[${S.opt.anim ? `x` : ` `}] ${T(X8.anim)}`)
     + o(`exp`, T([`Export the save`, `Exporter la sauvegarde`])) + o(`imp`, T([`Import a save`, `Importer une sauvegarde`]))
-    + (p3Unlocked() ? o(`p3go`, `📈 PIXEL-OS 3`) : ``) + (S.p2.fin ? o(`p2fin`, T(X8.again)) : ``) + o(`p2about`, T([`About`, `À propos`])) + o(`hard`, T([`Erase everything`, `Tout effacer`])) + o(`p2close`, T(X8.close)) + `</div>`;
+    + (S.p2.fin ? o(`p2fin`, T(X8.again)) : ``) + o(`p2about`, T([`About`, `À propos`])) + o(`hard`, T([`Erase everything`, `Tout effacer`])) + o(`p2close`, T(X8.close)) + `</div>`;
 }
 
 // ---------- the canvas ----------

@@ -190,7 +190,8 @@ function p4Kill() {
 function p4Fall(msg) {
   const p = S.p4;
   p.deaths++; p.hp = p4MaxHp(); p.en = null; p.walk = 1.5; p.kills = 0;
-  p.st = Math.max(1, p.st - 1);
+  // back one stage, but a world's boss stays beaten: no second reward, no second ending
+  p.st = Math.max(p.st - 1, Math.floor((p.st - 1) / 10) * 10 + 1);
   toast(T(msg));
   if (!p.seen.fall) { p.seen.fall = 1; p4Say(msg); }
 }
@@ -258,8 +259,6 @@ const P4A = {
   p4opt() { p4Panel = p4Panel === `opt` ? `` : `opt`; },
   p4close() { p4Panel = ``; },
   p4back() { p4Panel = ``; dlg(T(X8.backQ), { cancel: true, ok: p2Leave }); },
-  p4p2() { p4Panel = ``; p2Enter(); },
-  p4p3() { p4Panel = ``; p3Enter(); },
   p4about() { p4Panel = ``; dlg(T(X10.about)); },
   p4keep() { $(`p4end`).classList.remove(`on`); busy = false; S.p4.fin = 2; S.p4.adv = 1; },
   p4fin() { p4Panel = ``; busy = true; p4Credits(); },
@@ -271,7 +270,7 @@ function p4Start() {
   if (!S.p4) { S.p4 = p4Fresh(); for (const l of X10.intro) p4Say(l); p4Say(P4W[0].intro); S.st.p4 = 1; S.st.p4w = 0; }
   p4Mount();
   const p = S.p4;
-  if (p.fin === 1) p.fin = 2;
+  if (p.fin === 1) { p.fin = 2; p.st = 91; p.kills = 0; }
   p.en = null; p.walk = 1; p.hp = p4MaxHp();
   // away: the Pixel farmed the stage it was on, at half speed, up to 8 hours
   const away = (Date.now() - S.last) / 1000;
@@ -311,11 +310,11 @@ function p4Render() {
   setH(`p4where`, `<b>${p.st > 90 ? T(X10.after) : fill(T(X10.world), { w, n: T(wd.t) })}</b><span>${p.st > 90 ? fill(T([`Stage {s}`, `Étape {s}`]), { s: p.st - 90 }) : p4IsBoss() ? `<em class="p4boss">${T(X10.bossSt)}</em>` : fill(T(X10.stage), { s: p4InW() })}${!p4IsBoss() && p.st <= 90 ? ` · ${p.kills}/${P4K}` : ``}</span>`);
   setH(`p4gold`, `<b>◆ ${fmt(p.gold)}</b><small>${T(X10.gold)}</small>`);
   const mx = p4MaxHp();
-  setH(`p4hud`, `<button class="p4b p4adv${p.adv ? ` on` : ``}" data-act="p4adv">${T(X10.adv)} : ${T(p.adv ? X10.on : X10.off)}</button>` + (p.en && p.en.boss && p.st <= 90 ? `<div class="p4timer"><i style="width:${p.bossT / p4BossTime() * 100}%"></i><span>${Math.ceil(p.bossT)} s</span></div>` : ``));
+  setH(`p4hud`, `<button class="p4b p4adv${p.adv ? ` on` : ``}" data-act="p4adv">${T(X10.adv)}${colon()}${T(p.adv ? X10.on : X10.off)}</button>` + (p.en && p.en.boss && p.st <= 90 ? `<div class="p4timer"><i style="width:${p.bossT / p4BossTime() * 100}%"></i><span>${Math.ceil(p.bossT)} s</span></div>` : ``));
   setH(`p4pick`, p.pick ? `<b>${T(X10.pickH)}</b><div>${p.pick.map(id => { const k = P4PK.find(x => x.id === id); return `<button class="p4b" data-act="p4perk:${id}"><b>${T(k.t)}</b><small>${T(k.d)}</small></button>`; }).join(``)}</div>` : ``);
   $(`p4pick`).classList.toggle(`on`, !!p.pick);
   setH(`p4heroH`, `${T(X10.hero)}`);
-  const stat = `<div class="p4stats"><span>${T(X10.atk)} <b>${fmt(p4Atk())}</b></span><span>${T(X10.hp)} <b>${fmt(Math.max(0, p.hp))}/${fmt(mx)}</b></span><span>${T(X10.spd)} <b>${p4Spd().toFixed(2)}/s</b></span><span>${T(X10.critL)} <b>${Math.round(p4Crit() * 100)} %</b></span></div>`;
+  const stat = `<div class="p4stats"><span>${T(X10.atk)} <b>${fmt(p4Atk())}</b></span><span>${T(X10.hp)} <b>${fmt(Math.max(0, p.hp))}/${fmt(mx)}</b></span><span>${T(X10.spd)} <b>${dec(p4Spd().toFixed(2))}/s</b></span><span>${T(X10.critL)} <b>${pct(Math.round(p4Crit() * 100))}</b></span></div>`;
   setH(`p4hero`, stat + P4UP.map(u => { const l = p4lv(u.id), mx2 = u.max && l >= u.max, c = p4UpCost(u); return `<button class="p4row${mx2 ? ` done` : p.gold < c ? ` poor` : ``}" data-act="p4up:${u.id}"><span class="p4cur">▶</span><div><b>${T(u.t)} <small>${fill(T(X10.lv), { n: l })}</small></b><small>${T(u.d)}</small></div><em>${mx2 ? `MAX` : `◆ ` + fmt(c)}</em></button>`; }).join(``));
   setH(`p4compH`, T(X10.comp));
   setH(`p4comp`, P4C.map(c => { const lock = (S.st.p4w || 0) < c.w, l = p4cl(c.id), k = p4CompCost(c); return `<button class="p4row${lock ? ` lock` : p.gold < k ? ` poor` : ``}" data-act="p4comp:${c.id}"><span class="p4cur">▶</span><div><b>${lock ? `???` : T(c.t)} ${l ? `<small>${fill(T(X10.lv), { n: l })}</small>` : ``}</b><small>${lock ? fill(T(X10.locked), { w: c.w }) : T(c.d)}</small></div><em>${lock ? `🔒` : `◆ ` + fmt(k)}</em></button>`; }).join(``));
@@ -330,7 +329,7 @@ function p4Render() {
 }
 function p4OptHtml() {
   const o = (a, t) => `<button class="p4mi" data-act="${a}"><span class="p4cur">▶</span>${t}</button>`;
-  return `<div class="p4win p4menu">` + o(`p4back`, T(X8.back)) + o(`p4p2`, `PIXEL-OS 2`) + o(`p4p3`, `PIXEL-OS 3`) + o(`save`, T([`Save`, `Sauvegarder`])) + o(`lang`, `English / Français`)
+  return `<div class="p4win p4menu">` + o(`p4back`, `↩ ${T(X8.back)}`) + modeLinks(o, 10) + o(`save`, T([`Save`, `Sauvegarder`])) + o(`lang`, `English / Français`)
     + o(`sci`, `[${S.opt.sci ? `x` : ` `}] ${T(X8.sci)}`) + o(`anim`, `[${S.opt.anim ? `x` : ` `}] ${T(X8.anim)}`)
     + o(`exp`, T([`Export the save`, `Exporter la sauvegarde`])) + o(`imp`, T([`Import a save`, `Importer une sauvegarde`]))
     + (S.p4.fin ? o(`p4fin`, T(X10.again)) : ``) + o(`p4about`, T([`About`, `À propos`])) + o(`hard`, T([`Erase everything`, `Tout effacer`])) + o(`p4close`, T(X8.close)) + `</div>`;
@@ -515,7 +514,7 @@ function p4DrawFoe(x, sp, X, Y, s, t, e) {
   else if (sp === `phone`) { x.fillStyle = `#e8d9b5`; x.fillRect(X + u, Y + 4 * u, 8 * u, 6 * u); x.fillStyle = `#c0392b`; x.fillRect(X, Y + 2 * u, 10 * u, 2 * u); x.fillRect(X, Y + 1 * u, 2 * u, 2 * u); x.fillRect(X + 8 * u, Y + 1 * u, 2 * u, 2 * u); x.fillStyle = `#555`; for (let i = 0; i < 9; i++) x.fillRect(X + (2.4 + (i % 3) * 2) * u, Y + (5 + Math.floor(i / 3) * 1.6) * u, u, u); }
   else if (sp === `bsod`) { x.fillStyle = `#c0c0c0`; x.fillRect(X, Y, 10 * u, 8 * u); x.fillStyle = `#0000aa`; x.fillRect(X + 0.6 * u, Y + 0.6 * u, 8.8 * u, 6.8 * u); x.fillStyle = `#fff`; x.font = `${4 * u}px VT323`; x.textAlign = `center`; x.fillText(`:(`, X + 5 * u, Y + 5 * u); x.fillStyle = `#808080`; x.fillRect(X + 4 * u, Y + 8 * u, 2 * u, 1.2 * u); x.fillRect(X + 2.5 * u, Y + 9.2 * u, 5 * u, 0.8 * u); }
   else if (sp === `regen`) { x.fillStyle = `#ece9d8`; x.fillRect(X, Y + u, 10 * u, 8 * u); x.fillStyle = `#0a58ca`; x.fillRect(X, Y + u, 10 * u, 1.6 * u); x.fillStyle = `#e33`; x.fillRect(X + 8.4 * u, Y + 1.2 * u, 1.3 * u, 1.2 * u); x.fillStyle = `#111`; x.font = `${1.6 * u}px VT323`; x.textAlign = `center`; x.fillText(T([`YOU WON!!!`, `GAGNÉ !!!`]), X + 5 * u, Y + 5 * u); x.fillStyle = `#3c3`; x.fillRect(X + 3 * u, Y + 6 * u, 4 * u, 1.6 * u); }
-  else if (sp === `drain`) { x.strokeStyle = `#eee`; x.lineWidth = u * 0.6; x.strokeRect(X + u, Y + 3 * u, 7.6 * u, 4.4 * u); x.fillStyle = `#eee`; x.fillRect(X + 8.8 * u, Y + 4.4 * u, u, 1.6 * u); x.fillStyle = Math.sin(t * 6) > 0 ? `#ff3b30` : `#7a1712`; x.fillRect(X + 1.6 * u, Y + 3.6 * u, 0.7 * u, 3.2 * u); x.fillStyle = `#fff`; x.font = `${2 * u}px VT323`; x.textAlign = `center`; x.fillText(`1 %`, X + 5 * u, Y + 9.6 * u); }
+  else if (sp === `drain`) { x.strokeStyle = `#eee`; x.lineWidth = u * 0.6; x.strokeRect(X + u, Y + 3 * u, 7.6 * u, 4.4 * u); x.fillStyle = `#eee`; x.fillRect(X + 8.8 * u, Y + 4.4 * u, u, 1.6 * u); x.fillStyle = Math.sin(t * 6) > 0 ? `#ff3b30` : `#7a1712`; x.fillRect(X + 1.6 * u, Y + 3.6 * u, 0.7 * u, 3.2 * u); x.fillStyle = `#fff`; x.font = `${2 * u}px VT323`; x.textAlign = `center`; x.fillText(pct(1), X + 5 * u, Y + 9.6 * u); }
   else if (sp === `copy`) { x.fillStyle = `#ff8a1f`; x.fillRect(X + u, Y + u, 8 * u, 7 * u); x.fillStyle = `#fff`; x.font = `${3.4 * u}px VT323`; x.textAlign = `center`; x.fillText(`∞ ∞`, X + 5 * u, Y + 5 * u); x.fillStyle = `#2a1400`; x.fillRect(X + 3 * u, Y + 6 * u, 4 * u, 0.8 * u); x.fillStyle = `#3a5cff`; x.fillRect(X + 2 * u, Y + 8 * u, 6 * u, 2 * u); }
   else if (sp === `cat`) { x.fillStyle = `#b45cff`; x.beginPath(); x.moveTo(X + u, Y + 3 * u); x.lineTo(X + 2.5 * u, Y); x.lineTo(X + 4 * u, Y + 2.5 * u); x.lineTo(X + 6 * u, Y + 2.5 * u); x.lineTo(X + 7.5 * u, Y); x.lineTo(X + 9 * u, Y + 3 * u); x.lineTo(X + 9 * u, Y + 9 * u); x.lineTo(X + u, Y + 9 * u); x.fill(); x.fillStyle = `#38d4ff`; x.fillRect(X + 3 * u, Y + 4.5 * u, 1.2 * u, 1.2 * u); x.fillRect(X + 5.8 * u, Y + 4.5 * u, 1.2 * u, 1.2 * u); x.fillStyle = `#fff`; x.fillRect(X + 4.6 * u, Y + 6.2 * u, 0.8 * u, 0.6 * u); }
   else if (sp === `fin`) { x.fillStyle = `#111`; x.font = `italic ${7 * u}px Georgia, serif`; x.textAlign = `center`; x.fillText(e.ph >= 3 ? `F I N .` : `FIN`, X + 5 * u, Y + 8 * u); x.fillStyle = `rgba(0,0,0,.12)`; x.fillText(`FIN`, X + 5 * u + Math.sin(t * 3) * 6, Y + 8 * u + 4); }

@@ -60,14 +60,18 @@ function save() {
   try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {}
 }
 
+// what differs between English and French numbers: 1.5 / 1,5, 5% / 5 %, Attack: / Attaque :
+const dec = s => S.lang === `fr` ? s.replace(`.`, `,`) : s;
+const pct = n => n + (S.lang === `fr` ? ` %` : `%`);
+const colon = () => S.lang === `fr` ? ` : ` : `: `;
 const SUF = [``, `K`, `M`, `B`, `T`, `Qa`, `Qi`, `Sx`, `Sp`, `Oc`, `No`, `Dc`, `UDc`, `DDc`, `TDc`, `QaDc`, `QiDc`];
 function fmt(n) {
   n = Math.floor(n);
   // French groups digits with a narrow no-break space that pixel fonts lack: use a plain no-break space
   if (n < 1e6) return n.toLocaleString(loc()).replace(/\u202f/g, `\u00a0`);
-  if (S.opt.sci) return n.toExponential(2).replace(`e+`, `e`);
+  if (S.opt.sci) return dec(n.toExponential(2)).replace(`e+`, `e`);
   const e = Math.min(Math.floor(Math.log10(n) / 3), SUF.length - 1);
-  return (n / 1000 ** e).toFixed(2) + SUF[e];
+  return dec((n / 1000 ** e).toFixed(2)) + SUF[e];
 }
 // "+300000 px/s" written in a description follows the number format chosen in the options
 const PS_RE = /^\+[\d.,]+( (?:million|milliard|billion|trillion)s?)? px\/s/;
@@ -509,8 +513,7 @@ const BODY = {
   help: () => `<div class="notes">${E().HELP.map(t => `<p>- ${esc(T(t))}</p>`).join(``)}</div>`,
   cursor: () => `<div class="dim">${T(E().D.cursor)}</div>`,
   trophy() {
-    const list = ACH.filter(a => (a[4] || 1) <= S.era);
-    return `<div class="h">${U().achs(S.ach.length, ACH.length)}</div>` + list.map(([id, n, d]) => `<div class="row ${S.ach.includes(id) ? `` : `got`}"><span>${T(n)}<small>${T(d)}</small></span><span>${S.ach.includes(id) ? `[x]` : `[ ]`}</span></div>`).join(``);
+    return `<div class="h">${U().achs(S.ach.length, ACH.length)}</div>` + achList().map(([id, n, d]) => `<div class="row ${S.ach.includes(id) ? `` : `got`}"><span>${T(n)}<small>${T(d)}</small></span><span>${S.ach.includes(id) ? `[x]` : `[ ]`}</span></div>`).join(``);
   },
   clock() {
     const d = new Date();
@@ -548,6 +551,8 @@ function winBody(id) {
   if (h !== W[id].h) { W[id].h = h; $(`b-` + id).innerHTML = h; }
 }
 
+// achievements: those of a side game show up as soon as that game has started
+const achList = () => ACH.filter(a => (a[4] || 1) <= S.era || S.ach.includes(a[0]) || S[`p${a[4] - 6}`]);
 const MENU = {
   file: u => [[`save`, u.save], [`exp`, u.exp], [`imp`, u.imp], ...(treeOpen() ? [[`tree`, T(TRT.title), `sepi`]] : []), ...(autoOpen() ? [[`auto`, T(AUT.title)]] : []), ...(p2Unlocked() ? [[`p2go`, `PIXEL-OS 2`]] : []), ...(p3Unlocked() ? [[`p3go`, `PIXEL-OS 3`]] : []), ...(p4Unlocked() ? [[`p4go`, `PIXEL-OS 4`]] : []), [`hard`, u.hard, `sepi`]],
   edit: u => [[`lang`, u.lang], [`sci`, (S.opt.sci ? `[x] ` : `[ ] `) + u.sci], [`anim`, (S.opt.anim ? `[x] ` : `[ ] `) + u.anim]],
@@ -750,6 +755,12 @@ const A = {
     } });
   },
   hard() { dlg(U().resetQ, { cancel: true, ok: () => restart(null) }); },
+  // the side games have no trophy window: same list, in the panel of the automation
+  achp() {
+    if (!$(`autop`)) document.body.insertAdjacentHTML(`beforeend`, `<div id="autop"></div>`);
+    $(`autop`).innerHTML = `<div class="rp"><h2>${T([`Achievements`, `Succès`])}</h2><p>${U().achs(S.ach.length, ACH.length)}</p><div class="achl">${achList().map(([id, n, d]) => `<div class="ar ${S.ach.includes(id) ? `` : `lock`}"><div><b>${T(n)}</b><span>${T(d)}</span></div><span>${S.ach.includes(id) ? `[x]` : `[ ]`}</span></div>`).join(``)}</div><button class="btn" data-act="aclose">${T(X8.close)}</button></div>`;
+    $(`autop`).classList.add(`on`);
+  },
   lang() { S.lang = S.lang === `fr` ? `en` : `fr`; document.documentElement.lang = S.lang; for (const k in cache) delete cache[k]; for (const id in W) { W[id].h = ``; W[id].el.querySelector(`.title b`).textContent = prog(id).file; } },
   sci() { S.opt.sci = S.opt.sci ? 0 : 1; },
   anim() { S.opt.anim = S.opt.anim ? 0 : 1; },

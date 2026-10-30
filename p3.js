@@ -343,7 +343,6 @@ const P3A = {
   p3opt() { p3Panel = p3Panel === `opt` ? `` : `opt`; },
   p3close() { p3Panel = ``; },
   p3back() { p3Panel = ``; dlg(T(X8.backQ), { cancel: true, ok: p2Leave }); },
-  p3p2() { p3Panel = ``; p2Enter(); },
   p3about() { p3Panel = ``; dlg(T(X9.about)); },
   p3keep() { $(`p3end`).classList.remove(`on`); busy = false; S.p3.fin = 2; },
   p3fin() { p3Panel = ``; busy = true; p3Credits(); },
@@ -368,7 +367,7 @@ function p3Start() {
 function p3Mount() {
   if ($(`p3`)) return;
   document.body.insertAdjacentHTML(`beforeend`, `<div id="p3">
-<header class="p3top"><div class="p3logo"><i></i><b>PIXSTORE</b><span>${T([`Partners`, `Partenaires`])}</span></div><div class="p3game"><b>PIXEL-OS</b><span id="p3ver"></span></div><div class="p3kpis" id="p3kpis"></div><button class="p3btn" data-act="p3opt">⋯</button></header>
+<header class="p3top"><div class="p3logo"><i></i><b>PIXSTORE</b><span id="p3pn"></span></div><div class="p3game"><b>PIXEL-OS</b><span id="p3ver"></span></div><div class="p3kpis" id="p3kpis"></div><button class="p3btn" data-act="p3opt">⋯</button></header>
 <div class="p3body">
 <aside class="p3left" id="p3left"></aside>
 <main class="p3mid"><section class="p3card p3mapc"><div class="p3ch"><h3 id="p3mapH"></h3><span id="p3capT"></span></div><canvas id="p3map"></canvas><div id="p3goal"></div></section><section class="p3card p3chartc"><div class="p3ch"><h3 id="p3chartH"></h3><span id="p3hypeT"></span></div><canvas id="p3chart"></canvas></section></main>
@@ -390,7 +389,7 @@ function p3Render() {
     [X9.k.money, p3fmtM(p.money), ``],
     [X9.k.owners, fmt(p.owners), `+${fmtR(P3F.nw)}/s`],
     [X9.k.online, `<em class="p3dot${p.full > 0 ? ` red` : ``}"></em>${fmt(p.act)}`, ``],
-    [X9.k.rating, `${p3Stars(R)} ${R.toFixed(1).replace(`.`, S.lang === `fr` ? `,` : `.`)}`, ``],
+    [X9.k.rating, `${p3Stars(R)} ${dec(R.toFixed(1))}`, ``],
     [X9.k.dh, fmt(p.dh), `+${fmtR(p3n(`dev`) + 0.2)}/s`],
   ].map(([k, v, s]) => `<div class="p3kpi"><span>${T(k)}</span><b>${v}</b>${s ? `<small>${s}</small>` : ``}</div>`).join(``));
   // left: marketing, price, studio, platforms
@@ -402,9 +401,10 @@ function p3Render() {
   setH(`p3mapH`, T(X9.map));
   setH(`p3capT`, p.full > 0 ? `<b class="p3red">${T(X9.full)}</b>` : fill(T(X9.cap), { a: fmt(p.act), b: fmt(cap) }));
   const g = P3CH[Math.min(p.ch, P3CH.length - 1)], prev = p.ch ? P3CH[p.ch - 1] : 0, pc = p.ch >= P3CH.length ? 100 : Math.max(0, Math.min(100, Math.log10(1 + p.owners - prev) / Math.log10(1 + g - prev) * 100));
+  setH(`p3pn`, T([`Partners`, `Partenaires`]));
   setH(`p3goal`, `<div class="p3gbar"><span>${p.ch >= P3CH.length ? T(X9.goalEnd) : fill(T(X9.goal), { n: fmt(g) })}</span><div><i style="width:${pc}%"></i></div></div>`);
   setH(`p3chartH`, T(X9.chart));
-  setH(`p3hypeT`, `${T(X9.k.hype)} <b>${fmt(p.hype)}</b>` + (p.ev.sale > 0 ? ` · <b class="p3gold">-50 %</b>` : ``) + (p.ev.clone > 0 ? ` · <b class="p3red">PIXEL∞</b>` : ``) + (p.ev.down > 0 ? ` · <b class="p3red">${T([`OUTAGE`, `PANNE`])}</b>` : ``));
+  setH(`p3hypeT`, `${T(X9.k.hype)} <b>${fmt(p.hype)}</b>` + (p.ev.sale > 0 ? ` · <b class="p3gold">${pct(-50)}</b>` : ``) + (p.ev.clone > 0 ? ` · <b class="p3red">PIXEL∞</b>` : ``) + (p.ev.down > 0 ? ` · <b class="p3red">${T([`OUTAGE`, `PANNE`])}</b>` : ``));
   // right: tabs
   const tb = (id, extra = ``) => `<button class="${p.tab === id ? `on` : ``}" data-act="p3tab:${id}">${T(X9.tabs[id])}${extra}</button>`;
   setH(`p3tabs`, tb(`rev`) + tb(`bug`, p.bugN ? ` <span class="p3badge">${p.bugN > 99 ? `99+` : p.bugN}</span>` : ``) + tb(`road`) + tb(`msg`, p.unread ? ` <span class="p3badge b">${p.unread}</span>` : ``));
@@ -415,7 +415,7 @@ function p3Render() {
 function p3RevHtml() {
   const p = S.p3, R = p3Rating();
   const dist = [5, 4, 3, 2, 1].map(s => { const n = p.rev.filter(r => r.s === s).length; return `<div class="p3dist"><span>${s}★</span><div><i style="width:${n / Math.max(1, p.rev.length) * 100}%"></i></div></div>`; }).join(``);
-  return `<div class="p3rsum"><b>${R.toFixed(1).replace(`.`, S.lang === `fr` ? `,` : `.`)}</b>${p3Stars(R)}<small>${fmt(p.revN)} ${T([`reviews`, `avis`])}</small></div>${dist}`
+  return `<div class="p3rsum"><b>${dec(R.toFixed(1))}</b>${p3Stars(R)}<small>${fmt(p.revN)} ${T([`reviews`, `avis`])}</small></div>${dist}`
     + p.rev.slice().reverse().slice(0, 14).map(r => `<div class="p3rev s${r.s}"><div class="p3rh">${p3Stars(r.s)}<b>${esc(r.n)}</b><small>${fill(T(X9.hours), { h: String(r.h).replace(`.`, S.lang === `fr` ? `,` : `.`) })}</small></div><p>${esc(T(r.t))}</p>${r.rep ? `<p class="p3rep">${esc(T(r.rep))}</p>` : r.s <= 2 ? `<button class="p3mini${p.cd.reply > 0 ? ` cool` : ``}" data-act="p3reply:${r.k}">${T(X9.reply)}</button>` : ``}</div>`).join(``);
 }
 function p3BugHtml() {
@@ -438,10 +438,10 @@ function p3MsgHtml() {
 }
 function p3OptHtml() {
   const o = (a, t) => `<button class="p3mi" data-act="${a}">${t}</button>`;
-  return `<div class="p3menu">` + o(`p3back`, `↩ ${T(X8.back)}`) + o(`p3p2`, `🎨 PIXEL-OS 2`) + o(`save`, T([`Save`, `Sauvegarder`])) + o(`lang`, `English / Français`)
+  return `<div class="p3menu">` + o(`p3back`, `↩ ${T(X8.back)}`) + modeLinks(o, 9) + o(`save`, T([`Save`, `Sauvegarder`])) + o(`lang`, `English / Français`)
     + o(`sci`, `[${S.opt.sci ? `x` : ` `}] ${T(X8.sci)}`) + o(`anim`, `[${S.opt.anim ? `x` : ` `}] ${T(X8.anim)}`)
     + o(`exp`, T([`Export the save`, `Exporter la sauvegarde`])) + o(`imp`, T([`Import a save`, `Importer une sauvegarde`]))
-    + (p4Unlocked() ? o(`p4go`, `⚔ PIXEL-OS 4`) : ``) + (S.p3.fin ? o(`p3fin`, T(X9.again)) : ``) + o(`p3about`, T([`About`, `À propos`])) + o(`hard`, T([`Erase everything`, `Tout effacer`])) + o(`p3close`, T(X8.close)) + `</div>`;
+    + (S.p3.fin ? o(`p3fin`, T(X9.again)) : ``) + o(`p3about`, T([`About`, `À propos`])) + o(`hard`, T([`Erase everything`, `Tout effacer`])) + o(`p3close`, T(X8.close)) + `</div>`;
 }
 
 // ---------- the map and the chart ----------
@@ -538,7 +538,7 @@ async function p3Final() {
 function p3Credits() {
   const p = S.p3, el = $(`p3end`);
   el.classList.add(`on`);
-  el.querySelector(`.p3et`).innerHTML = `<div class="big">${T(X9.thanks)}</div><pre>${esc(fill(T(X9.credits), { n: fmt(p.owners), r: fmt(p.revN), b: fmt(p.fixed), s: p3Rating().toFixed(1).replace(`.`, S.lang === `fr` ? `,` : `.`), t: dur(S.time) }))}</pre><div class="fb"><button class="p3btn on" data-act="p3keep">${T(X9.keep)}</button>${p4Unlocked() ? `<button class="p3btn on" data-act="p4go">PIXEL-OS 4 →</button>` : ``}<button class="p3btn" data-act="p3back">${T(X8.back)}</button></div>`;
+  el.querySelector(`.p3et`).innerHTML = `<div class="big">${T(X9.thanks)}</div><pre>${esc(fill(T(X9.credits), { n: fmt(p.owners), r: fmt(p.revN), b: fmt(p.fixed), s: dec(p3Rating().toFixed(1)), t: dur(S.time) }))}</pre><div class="fb"><button class="p3btn on" data-act="p3keep">${T(X9.keep)}</button>${p4Unlocked() ? `<button class="p3btn on" data-act="p4go">PIXEL-OS 4 →</button>` : ``}<button class="p3btn" data-act="p3back">${T(X8.back)}</button></div>`;
 }
 
 // ---------- era 9 ----------
