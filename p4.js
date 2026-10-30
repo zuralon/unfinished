@@ -54,6 +54,14 @@ const P4C = [
   { id: `dev`, w: 4, c0: 2e5, t: [`The dev`, `Le dev`], d: [`+25% bytes per level. He picks up what falls.`, `+25 % d'octets par niveau. Il ramasse ce qui tombe.`] },
   { id: `copi`, w: 6, c0: 2e7, t: [`Copixel`, `Copixel`], d: [`Attacks too: 40% of the Pixel's attack per second per level. Takes all the credit.`, `Attaque aussi : 40 % de l'attaque du Pixel par seconde par niveau. S'attribue tout le mérite.`] },
 ];
+// what they say during the walk
+const P4TALK = {
+  bip: [[`It looks like you're fighting!`, `On dirait que tu te bats !`], [`Need help with that?`, `Besoin d'aide ?`], [`Did you save?`, `Tu as sauvegardé ?`], [`Bip is here! Sadly.`, `Bip est là ! Hélas.`]],
+  cat: [[`meow`, `miaou`], [`...`, `...`], [`(both alive and asleep)`, `(à la fois vivant et endormi)`], [`I was never here.`, `Je n'ai jamais été là.`]],
+  dev: [[`works on my machine`, `chez moi ça marche`], [`TODO: finish this`, `TODO : finir ça`], [`not a bug, a feature`, `c'est pas un bug, c'est une fonctionnalité`], [`I'll fix it tomorrow`, `je corrige demain`]],
+  copi: [[`That was me.`, `C'était moi.`], [`You're welcome.`, `De rien.`], [`I did everything.`, `J'ai tout fait.`], [`Put me in the credits.`, `Mets-moi au générique.`]],
+};
+const p4Talk = id => { const l = P4TALK[id]; p4Bub = { id, t: l[Math.random() * l.length | 0], left: 3.5 }; };
 // rewards: after each world boss, pick one of three
 const P4PK = [
   { id: `pa`, t: [`Sharp edges`, `Bords tranchants`], d: [`Attack x1.5.`, `Attaque x1,5.`] },
@@ -145,7 +153,9 @@ function p4Spawn() {
 }
 
 // ---------- the fight ----------
-const P4FX = [];
+const P4FX = [], P4FLY = [];
+const p4Ev = { cat: 0, dev: 0, copi: 0, bip: 0, talk: 15 };
+let p4Bub = null;
 function p4Num(txt, col, big) { if (S.opt.anim) P4FX.push({ txt, col, t: 0, big, x: 0.68 + Math.random() * 0.08, y: 0.42 + Math.random() * 0.1 }); }
 function p4Hit(dmg, crit, src) {
   const p = S.p4, e = p.en;
@@ -160,7 +170,7 @@ function p4Hit(dmg, crit, src) {
 function p4Kill() {
   const p = S.p4, e = p.en, g = e.gold * p4GoldMul();
   p.gold += g; p.killed++; S.st.p4kill = p.killed; p4Num(`+${fmt(g)} ◆`, `#ffd166`);
-  p.en = null; p.walk = 0.45;
+  p.en = null; p.walk = 0.45; if (p4cl(`dev`)) p4Ev.dev = 0.6;
   if (e.boss) {
     const w = p4World();
     if (w === 9) return p4Final();
@@ -204,7 +214,7 @@ function p4Tick(dt) {
       p.atkT--;
       let d = p4Atk() * dmgMul, cr = Math.random() < p4Crit();
       if (cr) d *= 3;
-      if (p4cl(`cat`) && Math.random() < Math.min(0.25, 0.04 + 0.01 * (p4cl(`cat`) - 1))) { d *= 10; p4Num(`🐱 x10`, `#c88cff`); }
+      if (p4cl(`cat`) && Math.random() < Math.min(0.25, 0.04 + 0.01 * (p4cl(`cat`) - 1))) { d *= 10; p4Num(`🐱 x10`, `#c88cff`); p4Ev.cat = 0.6; }
       p4Hit(d, cr);
     }
   }
@@ -227,7 +237,7 @@ function p4Tick(dt) {
 // ---------- actions ----------
 const P4A = {
   p4up(id) { const u = P4UP.find(x => x.id === id), p = S.p4; if (!u || (u.max && p4lv(id) >= u.max)) return; const c = p4UpCost(u); if (p.gold < c) return; p.gold -= c; p.up[id] = p4lv(id) + 1; },
-  p4comp(id) { const c = P4C.find(x => x.id === id), p = S.p4; if (!c || (S.st.p4w || 0) < c.w) return; const k = p4CompCost(c); if (p.gold < k) return; p.gold -= k; p.comp[id] = p4cl(id) + 1; },
+  p4comp(id) { const c = P4C.find(x => x.id === id), p = S.p4; if (!c || (S.st.p4w || 0) < c.w) return; const k = p4CompCost(c); if (p.gold < k) return; p.gold -= k; p.comp[id] = p4cl(id) + 1; p4Talk(id); },
   p4skill(id) {
     const s = P4S.find(x => x.id === id), p = S.p4;
     if (!s || (S.st.p4w || 0) < s.w || p.cd[id] > 0) return;
@@ -357,6 +367,7 @@ function p4Frame(now) {
   // the Pixel
   const s = Math.max(28, Math.round(H * 0.13)), hx = Math.round(W * 0.26), bob = p.en ? 0 : Math.abs(Math.sin(t * 8)) * 4;
   const lunge = p.en && p.atkT > 0.8 ? (p.atkT - 0.8) * 60 : 0;
+  p4Friends(x, W, gy, s, hx, t, dt, p);
   p4DrawHero(x, hx + lunge, gy - s - bob, s, t, p);
   if (p.dbl > 0) { x.globalAlpha = 0.45; p4DrawHero(x, hx - s * 1.3, gy - s - bob, s, t, p); x.globalAlpha = 1; }
   p4Bar(x, hx - 10, gy - s - 22, s + 20, Math.max(0, p.hp) / p4MaxHp(), `#3ddc84`);
@@ -389,8 +400,80 @@ function p4Frame(now) {
   if (p.mute > 0 || p.stun > 0) { x.font = `20px VT323, monospace`; x.fillStyle = `#ff5a6e`; x.fillText(p.mute > 0 ? `☎ ...` : `:(`, hx + s / 2, gy - s - 34); }
 }
 function p4Bar(x, X, Y, w, f, col) { x.fillStyle = `rgba(0,0,0,.55)`; x.fillRect(X - 1, Y - 1, w + 2, 8); x.fillStyle = col; x.fillRect(X, Y, w * Math.max(0, Math.min(1, f)), 6); }
-function p4DrawHero(x, X, Y, s, t, p) {
-  x.save(); x.shadowColor = `#fff`; x.shadowBlur = 14; x.fillStyle = `#fff`; x.fillRect(X, Y, s, s); x.restore();
+// the companions: only those you hired, each with its own little life
+const P4CAT = {
+  walk: [[`.......#.#`, `.......###`, `.......o#o`, `..#######.`, `.########.`, `.########.`, `.#.#...#.#`, `.#.....#..`], [`.......#.#`, `.......###`, `.......o#o`, `..#######.`, `.########.`, `.########.`, `..#.#.#.#.`, `....#...#.`]],
+  sit: [`....#.#.`, `....###.`, `....o#o.`, `....###.`, `...####.`, `..#####.`, `..#####.`, `..##.##.`],
+};
+function p4Fly(x0, y0, x1, y1, d, col, c, arc) { P4FLY.push({ x0, y0, x1, y1, d, col, c, arc, t: 0 }); }
+function p4Friends(x, W, gy, s, hx, t, dt, p) {
+  const live = S.opt.anim, walking = !p.en, u = s / 10;
+  const hurt = p.hp < p4MaxHp(), spot = {};
+  if (live) for (const k of [`cat`, `dev`, `copi`, `bip`]) p4Ev[k] = Math.max(0, p4Ev[k] - dt);
+  // the dev, furthest back: walks with a laptop, types during fights, jumps when bytes come in
+  if (p4cl(`dev`)) {
+    const hop = p4Ev.dev > 0 ? Math.sin(Math.PI * p4Ev.dev / 0.6) * s * 0.35 : walking ? Math.abs(Math.sin(t * 8 + 2)) * 3 : 0;
+    const X = hx - s * 2.1, Y = gy - s * 1.35 - hop, step = walking ? Math.sin(t * 8 + 2) * u : 0;
+    x.fillStyle = `#2b3350`; x.fillRect(X + 2.6 * u, Y + 10.4 * u, 1.7 * u, 3.1 * u + hop + step); x.fillRect(X + 5 * u, Y + 10.4 * u, 1.7 * u, 3.1 * u + hop - step);
+    x.fillStyle = `#4a5578`; x.fillRect(X + 1.8 * u, Y + 4.8 * u, 5.8 * u, 6 * u);
+    x.fillStyle = `#f0c9a0`; x.fillRect(X + 2.4 * u, Y + 0.8 * u, 4.6 * u, 4 * u);
+    x.fillStyle = `#3b2a1a`; x.fillRect(X + 2.2 * u, Y, 5 * u, 1.4 * u);
+    x.fillStyle = `#111`; x.fillRect(X + 3.2 * u, Y + 2 * u, u, u); x.fillRect(X + 5.4 * u, Y + 2 * u, u, u); x.fillRect(X + 4.2 * u, Y + 2.3 * u, 1.2 * u, 0.3 * u);
+    x.fillStyle = `#c0c6d8`; x.fillRect(X + 5.6 * u, Y + 7.6 * u, 4.6 * u, 0.9 * u);
+    x.fillStyle = `#20263a`; x.fillRect(X + 8.7 * u, Y + 4.6 * u, 1.5 * u, 3 * u);
+    x.fillStyle = `#3dff7a`; if (!walking && Math.sin(t * 20) > 0) x.fillRect(X + 6.4 * u + (Math.floor(t * 9) % 3) * u, Y + 7 * u, 0.6 * u, 0.5 * u);
+    spot.dev = [X + 4.5 * u, Y];
+    if (live && p4Ev.dev > 0.56) p4Fly(W * 0.72, gy - s, X + 4.5 * u, Y + 2 * u, 0.5, `#ffd166`, `◆`, s * 1.6);
+  }
+  // the cat: walks, sits and waves its tail during fights, pounces on x10 hits
+  if (p4cl(`cat`)) {
+    const b = p4Ev.cat / 0.6, jump = b > 0 ? Math.sin(Math.PI * b) : 0, cs = s * 0.62, X = hx - s * 1.0 + jump * (W * 0.72 - s * 1.4 - hx), Y = gy - cs - jump * s * 1.5;
+    const eye = `#38d4ff`, col = `#b45cff`, tail = Math.sin(t * (walking ? 9 : 3));
+    x.fillStyle = col;
+    const tx = walking || jump ? X : X + cs * 0.1, ty = Y + cs * 0.55;
+    for (let i = 0; i < 4; i++) x.fillRect(tx - i * cs * 0.09, ty - i * cs * 0.13 + tail * i * cs * 0.05, cs * 0.12, cs * 0.14);
+    p4Sprite(x, walking || jump ? P4CAT.walk[Math.floor(t * 8) % 2] : P4CAT.sit, X, Y, cs, col, Math.sin(t * 1.7) > 0.96 ? col : eye);
+    spot.cat = [X + cs / 2, Y];
+  }
+  // Bip floats over the Pixel's shoulder and sends it health
+  if (p4cl(`bip`)) {
+    const X = hx - s * 0.75, Y = gy - s * 1.85 + Math.sin(t * 2.6) * s * 0.1 + (hurt ? Math.sin(t * 16) * 1.5 : 0);
+    const light = [`mac`, `fin`].includes(P4W[p4World() - 1].bg);
+    x.strokeStyle = light ? `#b57a00` : `#ffd166`; x.lineWidth = Math.max(2, u * 0.7); x.beginPath(); x.roundRect(X, Y, s * 0.42, s * 0.62, [s * 0.2, s * 0.2, s * 0.06, s * 0.06]); x.stroke();
+    x.beginPath(); x.roundRect(X + s * 0.1, Y + s * 0.26, s * 0.22, s * 0.28, [s * 0.1, s * 0.1, 0, 0]); x.stroke();
+    x.fillStyle = light ? `#111` : `#fff`; if (Math.sin(t * 2.3 + 1) < 0.97) { x.fillRect(X + s * 0.09, Y + s * 0.11, u * 0.9, u * 0.9); x.fillRect(X + s * 0.25, Y + s * 0.11, u * 0.9, u * 0.9); }
+    spot.bip = [X + s * 0.2, Y];
+    if (live && hurt && !p4Ev.bip) { p4Ev.bip = 0.45; p4Fly(X + s * 0.2, Y + s * 0.6, hx + s * 0.5, gy - s * 0.5, 0.45, `#3ddc84`, `+`, 0); }
+  }
+  // Copixel stands right in front, to be seen, and fires small copies at the enemy
+  if (p4cl(`copi`)) {
+    const cs = s * 0.7, X = hx + s * 1.3, Y = gy - cs - (walking ? Math.abs(Math.sin(t * 8 + 1)) * 4 : 0);
+    p4DrawHero(x, X + (p4Ev.copi > 0.2 ? 3 : 0), Y, cs, t, p, `#ff8a1f`);
+    spot.copi = [X + cs / 2, Y];
+    if (live && p.en && !p.stun && !p4Ev.copi) { p4Ev.copi = 0.4; p4Fly(X + cs, Y + cs / 2, W * 0.72, gy - s * 0.8, 0.28, `#ff8a1f`, `■`, 0); }
+  }
+  if (!live) return;
+  // flying bits: bytes, health, Copixel's shots
+  x.textAlign = `center`; x.font = `${Math.round(s * 0.42)}px VT323, monospace`;
+  for (let i = P4FLY.length - 1; i >= 0; i--) {
+    const f = P4FLY[i]; f.t += dt;
+    if (f.t >= f.d) { P4FLY.splice(i, 1); continue; }
+    const k = f.t / f.d;
+    x.fillStyle = f.col; x.fillText(f.c, f.x0 + (f.x1 - f.x0) * k, f.y0 + (f.y1 - f.y0) * k - Math.sin(Math.PI * k) * f.arc);
+  }
+  // someone speaks from time to time; never all at once
+  const who = P4C.filter(c => p4cl(c.id)).map(c => c.id);
+  if ((p4Ev.talk -= dt) <= 0) { p4Ev.talk = 14 + Math.random() * 12; if (who.length) p4Talk(who[Math.random() * who.length | 0]); }
+  if (p4Bub && spot[p4Bub.id]) {
+    if ((p4Bub.left -= dt) <= 0) { p4Bub = null; return; }
+    const txt = T(p4Bub.t); x.font = `17px VT323, monospace`;
+    const bw = x.measureText(txt).width + 14, [cx, cy] = spot[p4Bub.id], bx = Math.max(4, Math.min(W - bw - 4, cx - bw / 2)), by = Math.max(4, cy - 34);
+    x.fillStyle = `#ffffe1`; x.strokeStyle = `#000`; x.lineWidth = 2; x.beginPath(); x.roundRect(bx, by, bw, 24, 6); x.fill(); x.stroke();
+    x.fillStyle = `#111`; x.textAlign = `left`; x.fillText(txt, bx + 7, by + 17);
+  }
+}
+function p4DrawHero(x, X, Y, s, t, p, col = `#fff`) {
+  x.save(); x.shadowColor = col; x.shadowBlur = 14; x.fillStyle = col; x.fillRect(X, Y, s, s); x.restore();
   // on the white worlds, an outline so the Pixel stays visible
   if ([`mac`, `fin`].includes(P4W[p4World() - 1].bg)) { x.strokeStyle = `#111`; x.lineWidth = 2; x.strokeRect(X + 1, Y + 1, s - 2, s - 2); }
   const u = s / 8, blink = Math.sin(t * 2.3) > 0.97;
