@@ -54,6 +54,17 @@ const P4C = [
   { id: `dev`, w: 4, c0: 2e5, t: [`The dev`, `Le dev`], d: [`+25% bytes per level. He picks up what falls.`, `+25 % d'octets par niveau. Il ramasse ce qui tombe.`] },
   { id: `copi`, w: 6, c0: 2e7, t: [`Copixel`, `Copixel`], d: [`Attacks too: 40% of the Pixel's attack per second per level. Takes all the credit.`, `Attaque aussi : 40 % de l'attaque du Pixel par seconde par niveau. S'attribue tout le mérite.`] },
 ];
+// rewards: after each world boss, pick one of three
+const P4PK = [
+  { id: `pa`, t: [`Sharp edges`, `Bords tranchants`], d: [`Attack x1.5.`, `Attaque x1,5.`] },
+  { id: `ph`, t: [`Extra layer`, `Couche en plus`], d: [`Health x1.5.`, `Vie x1,5.`] },
+  { id: `pg`, t: [`Byte rain`, `Pluie d'octets`], d: [`Bytes x1.5.`, `Octets x1,5.`] },
+  { id: `ps`, t: [`Turbo button`, `Bouton turbo`], d: [`Attack speed +15%.`, `Vitesse d'attaque +15 %.`] },
+  { id: `pc`, t: [`Lucky pixel`, `Pixel chanceux`], d: [`Critical chance +5%.`, `Chance de critique +5 %.`] },
+  { id: `pk`, t: [`Heavy finger`, `Doigt lourd`], d: [`Your clicks hit x2.`, `Tes clics frappent x2.`] },
+  { id: `pt`, t: [`Patient bosses`, `Boss patients`], d: [`Bosses give you 10 more seconds.`, `Les boss te laissent 10 secondes de plus.`] },
+  { id: `pr`, t: [`Self-repair`, `Auto-réparation`], d: [`Heals 1% health per second.`, `Soigne 1 % de vie par seconde.`] },
+];
 const P4S = [
   { id: `undo`, w: 0, cd: 30, t: [`Ctrl+Z`, `Ctrl+Z`], d: [`Undo: heals 60% of health.`, `Annuler : soigne 60 % de la vie.`] },
   { id: `bsod`, w: 3, cd: 40, t: [`Blue screen`, `Écran bleu`], d: [`The enemy freezes for 5 s.`, `L'ennemi se fige pendant 5 s.`] },
@@ -82,6 +93,7 @@ const X10 = {
   ],
   thanks: [`NOT FINISHED. NEVER.`, `PAS FINI. JAMAIS.`],
   credits: [`PIXEL-OS 4\nThe Pixel's adventure\n\nA game by zuralon\nAnd a pixel, very brave\n\nMonsters beaten: {k}\nFalls: {d}\nTime played: {t}`, `PIXEL-OS 4\nL'aventure du pixel\n\nUn jeu de zuralon\nEt d'un pixel, très courageux\n\nMonstres vaincus : {k}\nChutes : {d}\nTemps de jeu : {t}`],
+  pickH: [`Boss beaten! Pick a reward:`, `Boss battu ! Choisis une récompense :`], picked: [`> Reward: {r}`, `> Récompense : {r}`],
   keep: [`Keep adventuring`, `Continuer l'aventure`], again: [`See the ending again`, `Revoir la fin`],
   unlock: [`Everyone has played... and the word FIN wants to end the game forever. PIXEL-OS 4 is open.`, `Tout le monde a joué... et le mot FIN veut finir le jeu pour toujours. PIXEL-OS 4 est ouvert.`],
   about: [`PIXEL-OS 4\nThe Pixel's adventure\n\nA game by zuralon.\nNot finished. Never.`, `PIXEL-OS 4\nL'aventure du pixel\n\nUn jeu de zuralon.\nPas fini. Jamais.`],
@@ -90,7 +102,7 @@ const X10 = {
   adv: [`Advance`, `Avancer`], on: [`ON`, `OUI`], off: [`OFF`, `NON`],
   atk: [`Attack`, `Attaque`], hp: [`Health`, `Vie`], spd: [`Speed`, `Vitesse`], critL: [`Critical`, `Critique`],
   lv: [`lv {n}`, `niv. {n}`], locked: [`After world {w}`, `Après le monde {w}`], ready: [`Ready`, `Prêt`], hire: [`Recruit`, `Recruter`],
-  died: [`The Pixel fell. Back one stage to grow stronger. Turn "Advance" back on when ready.`, `Le Pixel est tombé. Retour d'une étape pour devenir plus fort. Remets « Avancer » quand tu es prêt.`],
+  died: [`The Pixel fell. Back one stage to grow stronger, then it moves on by itself.`, `Le Pixel est tombé. Retour d'une étape pour devenir plus fort, puis il repart tout seul.`],
   timeUp: [`Too slow! The boss chased the Pixel away. Grow stronger and try again.`, `Trop lent ! Le boss a chassé le Pixel. Deviens plus fort et réessaie.`],
   clickHint: [`Click the enemy to hit it too.`, `Clique sur l'ennemi pour le frapper aussi.`],
   phone: [`Mom picked up the phone! Connection lost...`, `Maman a décroché ! Connexion perdue...`],
@@ -102,30 +114,33 @@ const X10 = {
 // ---------- state ----------
 const p4Unlocked = () => !!S.st.p3fin || !!S.p4;
 function p4Tell() { if (S.era === 9 && p4Unlocked() && !S.st.p4told && S.p3 && S.p3.fin === 2) { S.st.p4told = 1; dlg(T(X10.unlock), { cancel: true, okT: `PIXEL-OS 4 →`, ok: () => p4Enter() }); } }
-const p4Fresh = () => ({ gold: 0, st: 1, best: 1, kills: 0, adv: 1, up: {}, comp: {}, cd: {}, hp: 0, en: null, walk: 1, atkT: 0, enT: 0, bossT: 0, stun: 0, frz: 0, mute: 0, dbl: 0, chat: [], killed: 0, deaths: 0, fin: 0, seen: {} });
+const p4Fresh = () => ({ gold: 0, st: 1, best: 1, kills: 0, adv: 1, up: {}, comp: {}, cd: {}, hp: 0, en: null, walk: 1, atkT: 0, enT: 0, bossT: 0, stun: 0, frz: 0, mute: 0, dbl: 0, chat: [], killed: 0, deaths: 0, fin: 0, seen: {}, perk: {}, pick: null });
 const p4lv = id => S.p4.up[id] || 0;
 const p4cl = id => S.p4.comp[id] || 0;
+const p4pk = id => (S.p4.perk || {})[id] || 0;
 const p4World = () => Math.min(9, Math.ceil(S.p4.st / 10));
 const p4InW = () => ((S.p4.st - 1) % 10) + 1;
 const p4IsBoss = () => S.p4.st <= 90 && p4InW() === 10;
 function p4Say(l) { const c = S.p4.chat; c.push(l); if (c.length > 30) c.shift(); }
 // hero stats
-const p4Atk = () => 5 * 1.1 ** p4lv(`atk`) * 2 ** Math.floor(p4lv(`atk`) / 25);
-const p4MaxHp = () => 60 * 1.1 ** p4lv(`hp`) * 2 ** Math.floor(p4lv(`hp`) / 25);
-const p4Spd = () => 1 + 0.08 * p4lv(`spd`);
-const p4Crit = () => 0.05 + 0.02 * p4lv(`crit`);
-const p4GoldMul = () => (1 + 0.15 * p4lv(`gold`)) * (1 + 0.25 * p4cl(`dev`));
-const p4ClickDmg = () => p4Atk() * (0.4 + 0.2 * p4lv(`click`));
+const p4Atk = () => 5 * 1.1 ** p4lv(`atk`) * 2 ** Math.floor(p4lv(`atk`) / 25) * 1.5 ** p4pk(`pa`);
+const p4MaxHp = () => 60 * 1.1 ** p4lv(`hp`) * 2 ** Math.floor(p4lv(`hp`) / 25) * 1.5 ** p4pk(`ph`);
+const p4Spd = () => (1 + 0.08 * p4lv(`spd`)) * (1 + 0.15 * p4pk(`ps`));
+const p4Crit = () => 0.05 + 0.02 * p4lv(`crit`) + 0.05 * p4pk(`pc`);
+const p4GoldMul = () => (1 + 0.15 * p4lv(`gold`)) * (1 + 0.25 * p4cl(`dev`)) * 1.5 ** p4pk(`pg`);
+const p4ClickDmg = () => p4Atk() * (0.4 + 0.2 * p4lv(`click`)) * 2 ** p4pk(`pk`);
 const p4UpCost = u => Math.ceil(u.c0 * u.k ** p4lv(u.id));
 const p4CompCost = c => Math.ceil(c.c0 * 1.6 ** p4cl(c.id));
-// monsters grow with every stage
+// monsters grow with every stage; P4K monsters per stage
+const P4K = 5;
+const p4BossTime = () => 30 + 10 * p4pk(`pt`);
 let P4G = 1.235, P4E = 1.22, P4GG = 1.12;
 function p4Spawn() {
   const p = S.p4, s = p.st, w = P4W[p4World() - 1], boss = p4IsBoss();
   const e = boss ? { n: w.boss.n, k: w.boss.k, sp: w.boss.k } : (() => { const x = w.en[Math.random() * w.en.length | 0]; return { n: [x[0], x[1]], sp: x[2] }; })();
-  const hp = 14 * P4G ** (s - 1) * (boss ? 9 : 1);
-  p.en = Object.assign(e, { hp, max: hp, atk: 2.2 * P4E ** (s - 1) * (boss ? 1.8 : 1), boss, gold: 3 * P4GG ** (s - 1) * (boss ? 15 : 1), t: 0, ph: 0, hit: 0 });
-  p.bossT = boss ? 30 : 0; p.enT = 0;
+  const hp = 14 * P4G ** (s - 1) * (boss ? 7 : 1);
+  p.en = Object.assign(e, { hp, max: hp, atk: 1.8 * P4E ** (s - 1) * (boss ? 1.8 : 1), boss, gold: 4.8 * P4GG ** (s - 1) * (boss ? 15 : 1), t: 0, ph: 0, hit: 0 });
+  p.bossT = boss ? p4BossTime() : 0; p.enT = 0;
   if (boss && !p.seen[`b` + s]) { p.seen[`b` + s] = 1; }
 }
 
@@ -145,7 +160,7 @@ function p4Hit(dmg, crit, src) {
 function p4Kill() {
   const p = S.p4, e = p.en, g = e.gold * p4GoldMul();
   p.gold += g; p.killed++; S.st.p4kill = p.killed; p4Num(`+${fmt(g)} ◆`, `#ffd166`);
-  p.en = null; p.walk = 0.9;
+  p.en = null; p.walk = 0.45;
   if (e.boss) {
     const w = p4World();
     if (w === 9) return p4Final();
@@ -153,17 +168,18 @@ function p4Kill() {
     for (const c of P4C) if (c.w === w && !p.seen[`c` + c.id]) { p.seen[`c` + c.id] = 1; p4Say([`> ${c.t[0]} joins the adventure!`, `> ${c.t[1]} rejoint l'aventure !`]); }
     for (const s of P4S) if (s.w === w && !p.seen[`s` + s.id]) { p.seen[`s` + s.id] = 1; p4Say([`> New skill: ${s.t[0]}`, `> Nouvelle compétence : ${s.t[1]}`]); }
     p.st++; p.kills = 0; p.best = Math.max(p.best, p.st); S.st.p4w = Math.max(S.st.p4w || 0, w);
+    p.pick = shuffle(P4PK.map(k => k.id)).slice(0, 3);
     p4Say(P4W[w].intro);
     return;
   }
-  if (++p.kills >= 8) {
+  if (++p.kills >= P4K) {
     p.kills = 0;
     if (p.adv) { p.st++; p.best = Math.max(p.best, p.st); }
   }
 }
 function p4Fall(msg) {
   const p = S.p4;
-  p.deaths++; p.hp = p4MaxHp(); p.en = null; p.walk = 1.5; p.adv = 0; p.kills = 0;
+  p.deaths++; p.hp = p4MaxHp(); p.en = null; p.walk = 1.5; p.kills = 0;
   p.st = Math.max(1, p.st - 1);
   toast(T(msg));
   if (!p.seen.fall) { p.seen.fall = 1; p4Say(msg); }
@@ -173,7 +189,7 @@ function p4Tick(dt) {
   if (!p || p.fin === 1) return;
   const mx = p4MaxHp();
   if (!(p.hp > 0)) p.hp = mx;
-  p.hp = Math.min(mx, p.hp + mx * 0.015 * p4cl(`bip`) * dt);
+  p.hp = Math.min(mx, p.hp + mx * (0.015 * p4cl(`bip`) + 0.01 * p4pk(`pr`)) * dt);
   for (const k in p.cd) if ((p.cd[k] -= dt) <= 0) delete p.cd[k];
   for (const k of [`stun`, `frz`, `mute`, `dbl`]) if (p[k] > 0) p[k] = Math.max(0, p[k] - dt);
   if (!p.en) { if ((p.walk -= dt) <= 0) p4Spawn(); return; }
@@ -223,6 +239,12 @@ const P4A = {
     else if (id === `defrag`) p4Hit(p4Atk() * 25, false, `big`);
   },
   p4adv() { S.p4.adv = S.p4.adv ? 0 : 1; },
+  p4perk(id) {
+    const p = S.p4, k = P4PK.find(x => x.id === id);
+    if (!k || !p.pick || !p.pick.includes(id)) return;
+    p.perk = p.perk || {}; p.perk[id] = (p.perk[id] || 0) + 1; p.pick = null;
+    p4Say([fill(X10.picked[0], { r: k.t[0] }), fill(X10.picked[1], { r: k.t[1] })]);
+  },
   p4opt() { p4Panel = p4Panel === `opt` ? `` : `opt`; },
   p4close() { p4Panel = ``; },
   p4back() { p4Panel = ``; dlg(T(X8.backQ), { cancel: true, ok: p2Leave }); },
@@ -245,7 +267,7 @@ function p4Start() {
   const away = (Date.now() - S.last) / 1000;
   if (away > 60 && p.killed > 0) {
     const kps = Math.min(1 / 1.5, p4Spd() * p4Atk() / (14 * P4G ** (p.st - 1))), n = Math.floor(kps * Math.min(away, 8 * 3600) * 0.5);
-    if (n > 0) { const g = n * 3 * P4GG ** (p.st - 1) * p4GoldMul(); p.gold += g; dlg(fill(T([`While you were away ({t}), the Pixel beat {n} monsters: +{g} bytes.`, `Pendant ton absence ({t}), le Pixel a battu {n} monstres : +{g} octets.`]), { t: dur(away), n: fmt(n), g: fmt(g) })); }
+    if (n > 0) { const g = n * 4.8 * P4GG ** (p.st - 1) * p4GoldMul(); p.gold += g; dlg(fill(T([`While you were away ({t}), the Pixel beat {n} monsters: +{g} bytes.`, `Pendant ton absence ({t}), le Pixel a battu {n} monstres : +{g} octets.`]), { t: dur(away), n: fmt(n), g: fmt(g) })); }
   }
 }
 
@@ -254,7 +276,7 @@ function p4Mount() {
   if ($(`p4`)) return;
   document.body.insertAdjacentHTML(`beforeend`, `<div id="p4">
 <header class="p4top"><div class="p4logo"><i></i><b>PIXEL-OS 4</b></div><div class="p4where" id="p4where"></div><div class="p4gold" id="p4gold"></div><button class="p4b" data-act="p4opt">≡</button></header>
-<section class="p4stage"><canvas id="p4cv"></canvas><div class="p4hud" id="p4hud"></div></section>
+<section class="p4stage"><canvas id="p4cv"></canvas><div class="p4hud" id="p4hud"></div><div class="p4pick" id="p4pick"></div></section>
 <div class="p4wins">
 <div class="p4win"><h3 id="p4heroH"></h3><div id="p4hero"></div></div>
 <div class="p4win"><h3 id="p4compH"></h3><div id="p4comp"></div></div>
@@ -276,10 +298,12 @@ function p4Render() {
   const p = S.p4;
   if (!p || !$(`p4`)) return;
   const w = p4World(), wd = P4W[w - 1];
-  setH(`p4where`, `<b>${p.st > 90 ? T(X10.after) : fill(T(X10.world), { w, n: T(wd.t) })}</b><span>${p.st > 90 ? fill(T([`Stage {s}`, `Étape {s}`]), { s: p.st - 90 }) : p4IsBoss() ? `<em class="p4boss">${T(X10.bossSt)}</em>` : fill(T(X10.stage), { s: p4InW() })}${!p4IsBoss() && p.st <= 90 ? ` · ${p.kills}/8` : ``}</span>`);
+  setH(`p4where`, `<b>${p.st > 90 ? T(X10.after) : fill(T(X10.world), { w, n: T(wd.t) })}</b><span>${p.st > 90 ? fill(T([`Stage {s}`, `Étape {s}`]), { s: p.st - 90 }) : p4IsBoss() ? `<em class="p4boss">${T(X10.bossSt)}</em>` : fill(T(X10.stage), { s: p4InW() })}${!p4IsBoss() && p.st <= 90 ? ` · ${p.kills}/${P4K}` : ``}</span>`);
   setH(`p4gold`, `<b>◆ ${fmt(p.gold)}</b><small>${T(X10.gold)}</small>`);
   const mx = p4MaxHp();
-  setH(`p4hud`, `<button class="p4b p4adv${p.adv ? ` on` : ``}" data-act="p4adv">${T(X10.adv)} : ${T(p.adv ? X10.on : X10.off)}</button>` + (p.en && p.en.boss && p.st <= 90 ? `<div class="p4timer"><i style="width:${p.bossT / 30 * 100}%"></i><span>${Math.ceil(p.bossT)} s</span></div>` : ``));
+  setH(`p4hud`, `<button class="p4b p4adv${p.adv ? ` on` : ``}" data-act="p4adv">${T(X10.adv)} : ${T(p.adv ? X10.on : X10.off)}</button>` + (p.en && p.en.boss && p.st <= 90 ? `<div class="p4timer"><i style="width:${p.bossT / p4BossTime() * 100}%"></i><span>${Math.ceil(p.bossT)} s</span></div>` : ``));
+  setH(`p4pick`, p.pick ? `<b>${T(X10.pickH)}</b><div>${p.pick.map(id => { const k = P4PK.find(x => x.id === id); return `<button class="p4b" data-act="p4perk:${id}"><b>${T(k.t)}</b><small>${T(k.d)}</small></button>`; }).join(``)}</div>` : ``);
+  $(`p4pick`).classList.toggle(`on`, !!p.pick);
   setH(`p4heroH`, `${T(X10.hero)}`);
   const stat = `<div class="p4stats"><span>${T(X10.atk)} <b>${fmt(p4Atk())}</b></span><span>${T(X10.hp)} <b>${fmt(Math.max(0, p.hp))}/${fmt(mx)}</b></span><span>${T(X10.spd)} <b>${p4Spd().toFixed(2)}/s</b></span><span>${T(X10.critL)} <b>${Math.round(p4Crit() * 100)} %</b></span></div>`;
   setH(`p4hero`, stat + P4UP.map(u => { const l = p4lv(u.id), mx2 = u.max && l >= u.max, c = p4UpCost(u); return `<button class="p4row${mx2 ? ` done` : p.gold < c ? ` poor` : ``}" data-act="p4up:${u.id}"><span class="p4cur">▶</span><div><b>${T(u.t)} <small>${fill(T(X10.lv), { n: l })}</small></b><small>${T(u.d)}</small></div><em>${mx2 ? `MAX` : `◆ ` + fmt(c)}</em></button>`; }).join(``));
